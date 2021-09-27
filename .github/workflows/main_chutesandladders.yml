@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'chutesandladders'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BE12F3A12A234035B0275FBA045C2B18 }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
