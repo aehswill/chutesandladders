@@ -1,10 +1,8 @@
-FROM mcr.microsoft.com/appsvc/node:10-lts
+FROM node:alpine
 
-ENV HOST 0.0.0.0
-ENV PORT 8080
-EXPOSE 8080
+WORKDIR /usr/app
 
-COPY . /app
-WORKDIR /app
+COPY . .
 RUN npm install
-ENTRYPOINT ["npm", "start"]
+
+CMD ["npm", "start"]
