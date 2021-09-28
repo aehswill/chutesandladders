@@ -1,4 +1,4 @@
-FROM node:current
+FROM node:lastest
 COPY . /app
 WORKDIR /app
 RUN npm install
