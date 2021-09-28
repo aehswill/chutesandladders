@@ -1,56 +1,27 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+on: [push]
 
-name: Build and deploy Node.js app to Azure Web App - chutesandladders
-
-on:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
+name: Linux_Container_Node_Workflow
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
+    # checkout the repo
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@master
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14.x'
+    - uses: azure/docker-login@v1
+      with:
+        login-server: chutesandladders.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
 
-      - name: npm install, build, and test
-        run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+    - run: |
+        docker build . -t chutesandladders.azurecr.io/nodejs:${{ github.sha }}
+        docker push chutesandladders.azurecr.io/nodejs:${{ github.sha }} 
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: node-app
-          path: .
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: node-app
-
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'chutesandladders'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: .
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'chutesandladders'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        images: 'chutesandladders.azurecr.io/nodejs:${{ github.sha }}'
