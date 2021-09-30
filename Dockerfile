@@ -14,6 +14,7 @@ COPY sshd_config /etc/ssh/
 # Open port 2222 for SSH access
 EXPOSE 2222 80
 EXPOSE 22
-RUN /etc/init.d/ssh start
+RUN rc-update add sshd
+RUN rc-service sshd start
 
 CMD ["npm", "start"]
