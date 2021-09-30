@@ -16,4 +16,5 @@ COPY sshd_config /etc/ssh/
 EXPOSE 2222 80
 EXPOSE 22
 
+RUN chmod 0755 /usr/app/startup.sh
 ENTRYPOINT ["/usr/app/startup.sh"]
