@@ -14,6 +14,11 @@ COPY sshd_config /etc/ssh/
 # Open port 2222 for SSH access
 EXPOSE 80 2222
 
+WORKDIR /etc/ssh
+RUN ssh-keygen -A
+
+RUN /etc/init.d/ssh start
+
 RUN /usr/sbin/sshd
 
 CMD ["npm", "start"]
