@@ -16,6 +16,4 @@ COPY sshd_config /etc/ssh/
 EXPOSE 2222 80
 EXPOSE 22
 
-RUN mkdir /opt/startup
-COPY startup.sh /opt/startup
-ENTRYPOINT ["/opt/startup/startup.sh"]
+ENTRYPOINT ["/usr/app/startup.sh"]
