@@ -4,4 +4,4 @@ npm start
 cd /etc/ssh
 ssh-keygen -A
 
-/usr/sbin/sshd start
+/usr/sbin/sshd
