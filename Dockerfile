@@ -1,8 +1,21 @@
 FROM node:alpine
 
 WORKDIR /usr/app
-
 COPY . .
 RUN npm install
 
-CMD ["npm", "start"]
+# Install OpenSSH and set the password for root to "Docker!". In this example, "apk add" is the install instruction for an Alpine Linux-based image.
+RUN apk update
+RUN apk add openssh openrc \
+     && mkdir -p /run/openrc \
+     && touch /run/openrc/softlevel \
+     && echo "root:Docker!" | chpasswd 
+
+# Copy the sshd_config file to the /etc/ssh/ directory
+COPY sshd_config /etc/ssh/
+
+# Open port 2222 for SSH access
+EXPOSE 2222 80 22
+
+RUN chmod +rwx /usr/app/startup.sh
+ENTRYPOINT ["/usr/app/startup.sh"]
