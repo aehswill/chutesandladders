@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 npm start
 
 cd /etc/ssh
 ssh-keygen -A
 
-/usr/sbin/sshd
+/usr/sbin/sshd start

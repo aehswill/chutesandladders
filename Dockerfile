@@ -13,8 +13,7 @@ RUN apk add openssh \
 COPY sshd_config /etc/ssh/
 
 # Open port 2222 for SSH access
-EXPOSE 2222 80
-EXPOSE 22
+EXPOSE 2222 80 22
 
-RUN chmod 0755 /usr/app/startup.sh
+RUN chmod +rwx /usr/app/startup.sh
 ENTRYPOINT ["/usr/app/startup.sh"]
