@@ -17,8 +17,7 @@ EXPOSE 80 2222
 WORKDIR /etc/ssh
 RUN ssh-keygen -A
 
-RUN /etc/init.d/ssh start
-
+WORKDIR /usr/app
 RUN /usr/sbin/sshd
 
 CMD ["npm", "start"]
