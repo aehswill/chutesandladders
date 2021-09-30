@@ -1,7 +1,12 @@
 #!/bin/sh
-npm start
-
+rc-status
 cd /etc/ssh
 ssh-keygen -A
 
-/usr/sbin/sshd
+
+cd /usr/sbin/
+rc-update add sshd
+rc-service sshd start
+
+cd /usr/app
+npm start
