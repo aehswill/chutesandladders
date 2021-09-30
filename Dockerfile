@@ -12,7 +12,7 @@ RUN apk add openssh \
 COPY sshd_config /etc/ssh/
 
 # Open port 2222 for SSH access
-EXPOSE 80 2222
+EXPOSE 2222 80
 
 WORKDIR /etc/ssh
 RUN ssh-keygen -A
