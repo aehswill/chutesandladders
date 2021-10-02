@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/play', getPlayPage);
-router.get('/users', getUsers);
+// router.get('/users', getUsers);
 
 
 module.exports = router;
