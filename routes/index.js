@@ -5,7 +5,7 @@ const { getUsers } = require('./users');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Chutes and Ladders' });
 });
 
 router.get('/play', getPlayPage);
