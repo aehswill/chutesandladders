@@ -1,46 +1,14 @@
 import React from "react"
-import styled from "styled-components"
-import logo from './logo.svg';
 import axios from "axios"
-import './App.css';
+import './css/App.css';
+import TextBox from './components/TextBox'
+import StartButton from './components/StartButton'
+import LobbyTable from "./components/LobbyTable";
+
 
 const api = axios.create({
   baseURL: 'http://localhost:5000'
 })
-const theme = {
-  blue: {
-    default: "#3f51b5",
-    hover: "#283593"
-  },
-  pink: {
-    default: "#e91e63",
-    hover: "#ad1457"
-  }
-};
-
-const Button = styled.button`
-  background-color: ${(props) => theme[props.theme].default};
-  color: white;
-  padding: 5px 15px;
-  border-radius: 5px;
-  outline: 0;
-  text-transform: uppercase;
-  margin: 10px 0px;
-  cursor: pointer;
-  box-shadow: 0px 2px 2px lightgray;
-  transition: ease background-color 250ms;
-  &:hover {
-    background-color: ${(props) => theme[props.theme].hover};
-  }
-  &:disabled {
-    cursor: default;
-    opacity: 0.7;
-  }
-`;
-
-Button.defaultProps = {
-  theme: "blue"
-};
 
 function clickMe() {
   api.get('/')
@@ -52,27 +20,29 @@ function clickMe() {
     console.log(error);
   })
 };
-
+//TODO: implement flexbox in main layout instead of grid
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <div>
-          <Button onClick={clickMe}>TEST API</Button>
-          </div>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="main-title">
+        <header className="main-title-text">Puzzling Pipes</header>
+      </div>
+      <div className="host-game">
+        <h1>Host a New Game</h1>
+        <TextBox placeholder="Lobby Nickname"/>
+        <StartButton text="START"/>
+      </div>
+      <div className="dev-test">
+      </div>
+      <div className="join-specific">
+        <h1>Join a Game</h1>
+        <TextBox placeholder="Lobby ID"/>
+        <StartButton text="JOIN"/>
+      </div>
+      <div className="join-existing">
+        <h1>Join an Open Game</h1>
+        <LobbyTable></LobbyTable>
+      </div>
     </div>
   );
 }
