@@ -21,7 +21,7 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
     - run: |
-        docker build . -t chutesandladders.azurecr.io/pipes:frontend
-        docker build . -t chutesandladders.azurecr.io/pipes:backend
+        docker build ./client -t chutesandladders.azurecr.io/pipes:frontend
+        docker build ./server -t chutesandladders.azurecr.io/pipes:backend
         docker push chutesandladders.azurecr.io/pipes:frontend
         docker push chutesandladders.azurecr.io/pipes:backend 

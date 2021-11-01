@@ -5,14 +5,15 @@ import LobbyTable from "./components/LobbyTable";
 import HostGameGroup from "./components/HostGameGroup";
 import JoinSpecifc from "./components/JoinSpecificGroup";
 
-
-const api = axios.create({
-  baseURL: 'http://localhost:5000'
-})
-
 function clickMe() {
-  api.get('/')
-  .then(function(response){
+  const res =  axios.get('http://localhost:5000/', {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+  });
+  
+  res.then(function(response){
     alert('Backend API says: '+response.data.message);
     console.log(response.data.message);
   })
