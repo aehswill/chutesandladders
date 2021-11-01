@@ -1,7 +1,6 @@
 on:
   push:
     branches:
-    - master
     - docker-compose
 
 name: Docker_Compose_Azure_Workflow
@@ -12,7 +11,7 @@ jobs:
     steps:
     # checkout the repo
     - name: 'Checkout Github Action'
-      uses: actions/checkout@master
+      uses: actions/checkout@docker-compose
 
     - uses: azure/docker-login@v1
       with:
