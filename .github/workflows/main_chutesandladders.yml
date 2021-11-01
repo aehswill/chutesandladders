@@ -11,7 +11,7 @@ jobs:
     steps:
     # checkout the repo
     - name: 'Checkout Github Action'
-      uses: actions/checkout@docker-compose
+      uses: actions/checkout@master
 
     - uses: azure/docker-login@v1
       with:
@@ -21,6 +21,8 @@ jobs:
 
     - run: |
         docker build ./client -t chutesandladders.azurecr.io/pipes:frontend
-        docker build ./server -t chutesandladders.azurecr.io/pipes:backend
         docker push chutesandladders.azurecr.io/pipes:frontend
+        
+    - run: |
+        docker build ./server -t chutesandladders.azurecr.io/pipes:backend
         docker push chutesandladders.azurecr.io/pipes:backend 
