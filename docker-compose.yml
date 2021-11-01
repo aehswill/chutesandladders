@@ -1,11 +1,15 @@
+version: "3"
 services:
-  backend:
+  azure-backend:
     build:
       context: ./server
-    ports:
-      - "5000:5000"
-  frontend:
+    image: chutesandladders.azurecr.io/pipes:backend
+    container_name: azure-backend
+
+  azure-frontend:
     build:
       context: ./client
-    ports: 
-      - "80:3000"
+    image: chutesandladders.azurecr.io/pipes:frontend
+    container_name: azure-frontend
+    ports:
+        - "80:3000"

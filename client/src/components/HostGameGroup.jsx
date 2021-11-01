@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 import TextBox from './TextBox'
 import StartButton from './StartButton'
 

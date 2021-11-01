@@ -34,14 +34,14 @@ const Table = styled.table`
 const TableRow = styled.tr`
 `;
 
-const TableHeader = styled.th`
+/*const TableHeader = styled.th`
   background-color: white;
   height: 45px;
   border-top: 2px solid black;
   border-left: 2px solid black;
   border-right: 2px solid black;
   border-radius: 4px;
-`;
+`; */
 
 // add API query to get list of lobbies (maybe just the lobby controller?)
 
@@ -57,11 +57,13 @@ class LobbyTable extends React.Component{
                 {/* <tr>
                     <TableHeader>Lobby</TableHeader>
                 </tr> */}
+                <tbody>
                 {(lobbies).map(lobby => (
                     <TableRow>
                         <LobbyTableEntry lobbyName={lobby.name} lobbyID={lobby.id} players={lobby.players}/>
                     </TableRow>
                 ))}
+                </tbody>
             </Table>
         )
     }
