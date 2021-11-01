@@ -1,9 +1,9 @@
 import React from "react"
 import axios from "axios"
 import './css/App.css';
-import TextBox from './components/TextBox'
-import StartButton from './components/StartButton'
 import LobbyTable from "./components/LobbyTable";
+import HostGameGroup from "./components/HostGameGroup";
+import JoinSpecifc from "./components/JoinSpecificGroup";
 
 
 const api = axios.create({
@@ -13,7 +13,7 @@ const api = axios.create({
 function clickMe() {
   api.get('/')
   .then(function(response){
-    alert(response.data.message);
+    alert('Backend API says: '+response.data.message);
     console.log(response.data.message);
   })
   .catch(function(error){
@@ -27,18 +27,11 @@ function App() {
       <div className="main-title">
         <header className="main-title-text">Puzzling Pipes</header>
       </div>
-      <div className="host-game">
-        <h1>Host a New Game</h1>
-        <TextBox placeholder="Lobby Nickname"/>
-        <StartButton text="START"/>
-      </div>
+      <HostGameGroup/>
       <div className="dev-test">
+        <button onClick={clickMe}>API TEST</button>
       </div>
-      <div className="join-specific">
-        <h1>Join a Game</h1>
-        <TextBox placeholder="Lobby ID"/>
-        <StartButton text="JOIN"/>
-      </div>
+      <JoinSpecifc />
       <div className="join-existing">
         <h1>Join an Open Game</h1>
         <LobbyTable></LobbyTable>

@@ -17,7 +17,7 @@ const Entry = styled.button`
   border-radius: 4px;
   box-shadow: 0px 6px 10px rgba(0,0,0,0.14), 0px 1px 18px rgba(0,0,0,0.12), 0px 3px 5px rgba(0,0,0,0.2);
   &:hover{
-    border: 6px solid #FFE424;
+    border: 3px solid #FFE424;
     box-shadow: 0px 16px 24px rgba(0,0,0,0.14), 0px 6px 30px rgba(0,0,0,0.12), 0px 8px 10px rgba(0,0,0,0.2);
   }
   `;

@@ -17,9 +17,13 @@ const Input = styled.input`
   border-radius: 2px;
   font-family: Poppins;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 300;
   font-size: 30px;
   line-height: 45px;
+  &:focus{
+    outline: 1px solid white;
+    box-shadow: 0px 16px 24px rgba(0,0,0,0.14), 0px 6px 30px rgba(0,0,0,0.12), 0px 8px 10px rgba(0,0,0,0.2);
+  }
 `;
 
 class TextBox extends React.Component {
@@ -28,17 +32,11 @@ class TextBox extends React.Component {
         this.state = {value: ''};
 
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
         this.setState({value: event.target.value});
     }
-
-    handleSubmit(event) {
-        // handle form submit
-    }
-
     render() {
         return(
             <Input placeholder={this.props.placeholder}/>
