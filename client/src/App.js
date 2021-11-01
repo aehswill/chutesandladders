@@ -6,7 +6,7 @@ import HostGameGroup from "./components/HostGameGroup";
 import JoinSpecifc from "./components/JoinSpecificGroup";
 
 function clickMe() {
-  const res =  axios.get('http://localhost:5000/', {
+  const res =  axios.get('http://azurebackend:5000/', {
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
