@@ -13,6 +13,7 @@
     "http-errors": "~1.6.3",
     "mongoose": "^6.0.8",
     "morgan": "~1.9.1",
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.13",
+    "swagger-ui-express": "^4.1.6"
   }
 }
