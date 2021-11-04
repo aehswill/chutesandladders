@@ -6,7 +6,9 @@ import HostGameGroup from "./components/HostGameGroup";
 import JoinSpecifc from "./components/JoinSpecificGroup";
 
 function clickMe() {
-  const res =  axios.get('https://puzzlingpipes-api.azurewebsites.net/', {
+  //chagne to localhost:5000 for testing
+  //change to https://puzzlingpipes-api.azurewebsites.net/
+  const res =  axios.get('https://localhost:5000', {
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",

@@ -17,20 +17,20 @@ const leaderboardRecordData = require('../models/leaderboard_record');
  *      -list of player objects (required)
  */
 const add_scores = async(req, res) => {
-    //get all the info from req
-    const record = req.body;
+    console.log(req);
+    // //get all the info from req
+    // const record = req.body;
+    // //create new record
+    // const newRecord = new leaderboardRecordData(record);
 
-    //create new record
-    const newRecord = new leaderboardRecordData(record);
-
-    try {
-        await newRecord.save();
-        res.status(201);
-    } catch (error) {
-        res.status(409).json({
-            message: error.message
-        })
-    }
+    // try {
+    //     await newRecord.save();
+    //     res.status(201);
+    // } catch (error) {
+    //     res.status(409).json({
+    //         message: error.message
+    //     })
+    // }
 }
 
 /**

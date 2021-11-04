@@ -1,28 +1,35 @@
 const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const mongoose = require('mongoose');
-const swagger = require('swagger-ui-express');
+const morgan = require('morgan');
+const helmet = require('helmet');
+const cors = require('cors');
 
+require('dotenv').config();
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const middlewares = require('./middlewares');
+const api = require('./routes');
 
 const app = express();
 
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'ejs');
-app.use(express.static("/bin/public/"));
-app.use(express.static("./client/build"));
-
-app.use(logger('dev'));
+app.use(morgan('dev'));
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
+app.get('/', (req, res) => {
+  res.json({
+    message: '🦄🌈✨👋🌎🌍✨🌈🦄'
+  });
+});
+
+app.use('/api/v1', api);
+
+app.use(middlewares.notFound);
+app.use(middlewares.errorHandler);
 
 module.exports = app;

@@ -32,14 +32,15 @@ const LobbyData = require('../models/lobby');
  *      -return all lobby instances
  */
 const get_lobbies = async(req, res) => {
-    try {
-        const allLobbies = await LobbyData.find();
-        res.status(200).json(allLobbies);
-    } catch (error) {
-        res.status(404).json({
-            message: error.message
-        });
-    }
+    console.log(req);
+    // try {
+    //     const allLobbies = await LobbyData.find();
+    //     res.status(200).json(allLobbies);
+    // } catch (error) {
+    //     res.status(404).json({
+    //         message: error.message
+    //     });
+    // }
 }
 
 /**
@@ -74,16 +75,17 @@ const add_player = async(req, res) => {
  * return all players in this lobby
  */
 const get_players = async(req, res) => {
-    const id;
+    
+    // const id;
 
-    try{
-        const lobby = await LobbyData.findById(id);
-        //send lobby players and status 200
-        res.status(200).json(lobby.players)
-    } catch (error) {
-        res.status(404).json({
-            message: error.message
-        });
-    }
+    // try{
+    //     const lobby = await LobbyData.findById(id);
+    //     //send lobby players and status 200
+    //     res.status(200).json(lobby.players)
+    // } catch (error) {
+    //     res.status(404).json({
+    //         message: error.message
+    //     });
+    // }
 }
 
