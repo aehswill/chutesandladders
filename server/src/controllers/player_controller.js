@@ -25,15 +25,20 @@ const PlayerData = require('../models/player');
  * all points variables are set to 0 
  * color is null 
  */
-const create_player = (req, res) => {
+
+/**
+ * for now I'm just making sure that instantiating an object works
+ */
+const create_player = async(req, res) => {
     //get info from req
     const player = req.body;
     //create new student
-    const newPlayer = new PlayerData(player);
+    const newPlayer = new PlayerData(req.body);
 
     try {
         await newPlayer.save();
         res.status(201).json(newPlayer);
+        console.log(newPlayer);
         
     } catch (error) {
         res.status(409).josn({
@@ -62,7 +67,7 @@ const update_player_color = (req, res) => {
  */
 const get_scores = async(req, res) => {
     //get player id from req body
-    const id;
+    const id = req.params.id;
     //send points vars back as json
     try {
         const player = await PlayerData.findById(id);
@@ -76,4 +81,10 @@ const get_scores = async(req, res) => {
             message: error.message
         })
     }
+}
+
+module.exports = {
+    create_player,
+    update_player_color,
+    get_scores,
 }

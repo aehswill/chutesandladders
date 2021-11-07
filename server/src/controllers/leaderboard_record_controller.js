@@ -17,20 +17,20 @@ const leaderboardRecordData = require('../models/leaderboard_record');
  *      -list of player objects (required)
  */
 const add_scores = async(req, res) => {
-    console.log(req);
-    // //get all the info from req
-    // const record = req.body;
-    // //create new record
-    // const newRecord = new leaderboardRecordData(record);
+    //get all the info from req
+    const record = req.body;
+    //create new record
+    const newRecord = new leaderboardRecordData(record);
 
-    // try {
-    //     await newRecord.save();
-    //     res.status(201);
-    // } catch (error) {
-    //     res.status(409).json({
-    //         message: error.message
-    //     })
-    // }
+    try {
+        await newRecord.save();
+        res.status(201);
+        console.log(newRecord);
+    } catch (error) {
+        res.status(409).json({
+            message: error.message
+        })
+    }
 }
 
 /**
@@ -48,3 +48,8 @@ const get_scores = async(req, res) => {
         })
     }
 }
+
+module.exports = {
+    add_scores,
+    get_scores,
+};

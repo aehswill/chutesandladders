@@ -1,3 +1,4 @@
+const Lobby = require('../models/lobby');
 const LobbyData = require('../models/lobby');
 
 /**
@@ -18,8 +19,22 @@ const LobbyData = require('../models/lobby');
  *      -set lobby name
  *      -generate id
  */
- const create_lobby = (req, res) => {
+ const create_lobby = async(req, res) => {
     //take the info from req and create a lobby
+    const lobby = req.body;
+
+    const newLobby = new LobbyData(lobby);
+
+    try {
+        await newLobby.save();
+        console.log(newLobby);
+        res.status(201).json(newLobby);
+        
+    } catch (error) {
+        res.status(409).josn({
+            message: error.message
+        });
+    }
 }
 
 /**
@@ -32,15 +47,26 @@ const LobbyData = require('../models/lobby');
  *      -return all lobby instances
  */
 const get_lobbies = async(req, res) => {
-    console.log(req);
-    // try {
-    //     const allLobbies = await LobbyData.find();
-    //     res.status(200).json(allLobbies);
-    // } catch (error) {
-    //     res.status(404).json({
-    //         message: error.message
-    //     });
-    // }
+    try {
+        const allLobbies = await LobbyData.find();
+        res.status(200).json(allLobbies);
+    } catch (error) {
+        res.status(404).json({
+            message: error.message
+        });
+    }
+}
+
+const get_lobby = async(req, res) => {
+    const id = req.params.id
+    try {
+        const lobby = await LobbyData.findById(id);
+        res.status(200).json(lobby);
+    } catch (error) {
+        res.status(404).json({
+            message: error.message
+        })
+    }
 }
 
 /**
@@ -53,17 +79,17 @@ const get_lobbies = async(req, res) => {
  * add the player to this lobby
  */
 const add_player = async(req, res) => {
-    const id; //needs to be set
+    // const id; //needs to be set
 
-    try {
-        const lobby = await LobbyData.findById(id);
-        //add player to lobby
-        res.status(200);
-    } catch (error) {
-        res.status(404).json({
-            message: error.message
-        });
-    }
+    // try {
+    //     const lobby = await LobbyData.findById(id);
+    //     //add player to lobby
+    //     res.status(200);
+    // } catch (error) {
+    //     res.status(404).json({
+    //         message: error.message
+    //     });
+    // }
 }
 
 /**
@@ -76,16 +102,24 @@ const add_player = async(req, res) => {
  */
 const get_players = async(req, res) => {
     
-    // const id;
+    const id = req.params.id;
 
-    // try{
-    //     const lobby = await LobbyData.findById(id);
-    //     //send lobby players and status 200
-    //     res.status(200).json(lobby.players)
-    // } catch (error) {
-    //     res.status(404).json({
-    //         message: error.message
-    //     });
-    // }
+    try{
+        const lobby = await LobbyData.findById(id);
+        //send lobby players and status 200
+        res.status(200).json(lobby.players)
+    } catch (error) {
+        res.status(404).json({
+            message: error.message
+        });
+    }
 }
 
+
+module.exports = {
+    create_lobby,
+    get_lobbies,
+    get_lobby,
+    add_player,
+    get_players,
+};

@@ -9,7 +9,15 @@ const Player = require('./player')
  * 
  */
 const leaderboardRecordSchema = mongoose.Schema({
-    player: Player,
+    player: {
+        player_uid: String,
+        nickname: String,
+        ip: String, 
+        isRobot: Boolean,
+        total_points: Number,
+        speed_points: Number,
+        trivia_points: Number,
+    },
     score_ranking: Number,
     speed_ranking: Number,
     trivia_ranking: Number
