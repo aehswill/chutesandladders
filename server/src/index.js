@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 //   /* eslint-enable no-console */
 // });
 
-const CONNECTION_URL = "mongodb://chutesandladders:EQmOXQCXb9JPxYe1tAEMg6H1471fiCcTGr0Jot4VniG0OX4Kye4T3dWnrTMfZDj3IG20asYQSqJ8hXUryWty2g==@chutesandladders.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@chutesandladders@";
+const CONNECTION_URL = "";
 
 const PORT = process.env.PORT || 5000;
 
