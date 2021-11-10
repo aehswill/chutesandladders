@@ -8,10 +8,62 @@ import JoinSpecifc from "./components/JoinSpecificGroup";
 function clickMe() {
   //chagne to localhost:5000 for testing
   //change to https://puzzlingpipes-api.azurewebsites.net/
-  const id = '6186cada0c4b9cf7fec26198'
-  const res =  axios.get(`http://localhost:5000/lobbies/${id}/players`, {
-    
+  const res =  axios.post('http://localhost:5000/lobbies', {
+    name: 'lobby',
+    id: 'idNo',
+    players: {
+        player1: {
+          player_uid: '1',
+          nickname: 'Kevin',
+          ip: '123.45.67',
+          isRobot: false,
+          total_points: 0,
+          speed_points: 0,
+          trivia_points: 0,
+        },
+        player2: {
+          player_uid: '2',
+          nickname: 'Tara',
+          ip: '123.45.67',
+          isRobot: false,
+          total_points: 0,
+          speed_points: 0,
+          trivia_points: 0,
+        },
+        player3: {
+          player_uid: '3',
+          nickname: 'Nethra',
+          ip: '123.45.67',
+          isRobot: false,
+          total_points: 0,
+          speed_points: 0,
+          trivia_points: 0,
+        },
+        player4: {
+          player_uid: '4',
+          nickname: 'Robert',
+          ip: '123.45.67',
+          isRobot: true,
+          total_points: 0,
+          speed_points: 0,
+          trivia_points: 0,
+        },
+    },
+    gamestate: {
+      active_trivia_question: 'trivia q',
+      player_trivia_answer: 'trivia a',
+      active_player: {
+          player_uid: '1',
+          nickname: 'kevin',
+          ip: '123.45.67', 
+          isRobot: false,
+          total_points: 0,
+          speed_points: 0,
+          trivia_points: 0,
+      }
+    }
   });
+
 
   
   res.then(function(response){

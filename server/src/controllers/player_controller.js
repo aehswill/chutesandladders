@@ -31,14 +31,13 @@ const PlayerData = require('../models/player');
  */
 const create_player = async(req, res) => {
     //get info from req
-    const player = req.body;
+    const player_name = req.body.name;
     //create new student
     const newPlayer = new PlayerData(req.body);
 
     try {
         await newPlayer.save();
         res.status(201).json(newPlayer);
-        console.log(newPlayer);
         
     } catch (error) {
         res.status(409).josn({
@@ -54,7 +53,7 @@ const create_player = async(req, res) => {
  * there is no player color var in schema
  */
 const update_player_color = (req, res) => {
-
+    //unsure of how to implement this
 }
 
 /**

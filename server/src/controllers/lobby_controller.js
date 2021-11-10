@@ -1,5 +1,6 @@
 const Lobby = require('../models/lobby');
 const LobbyData = require('../models/lobby');
+const Player = require('../models/player');
 
 /**
  * Lobby Controller
@@ -7,6 +8,7 @@ const LobbyData = require('../models/lobby');
  * functions 
  *      -create lobby
  *      -get lobbies
+ *      -delete_lobby
  *      -add player
  *      -get players
  */
@@ -27,13 +29,30 @@ const LobbyData = require('../models/lobby');
 
     try {
         await newLobby.save();
-        console.log(newLobby);
         res.status(201).json(newLobby);
         
     } catch (error) {
-        res.status(409).josn({
+        res.status(500).josn({
             message: error.message
         });
+    }
+}
+
+/**
+ * delete lobby
+ * 
+ * delete an instance of lobby 
+ */
+const delete_lobby = async(req, res) => {
+    const id = req.params.id;
+
+    try {
+        await LobbyData.findByIdAndDelete(id);
+        res.status(200);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
     }
 }
 
@@ -51,7 +70,7 @@ const get_lobbies = async(req, res) => {
         const allLobbies = await LobbyData.find();
         res.status(200).json(allLobbies);
     } catch (error) {
-        res.status(404).json({
+        res.status(400).json({
             message: error.message
         });
     }
@@ -79,17 +98,33 @@ const get_lobby = async(req, res) => {
  * add the player to this lobby
  */
 const add_player = async(req, res) => {
-    // const id; //needs to be set
-
-    // try {
-    //     const lobby = await LobbyData.findById(id);
-    //     //add player to lobby
-    //     res.status(200);
-    // } catch (error) {
-    //     res.status(404).json({
-    //         message: error.message
-    //     });
-    // }
+    const id = req.params.id;
+    const newPlayer = new Player(req.body);
+    try{
+        const lobby = await LobbyData.findById(id);
+        const playerList = lobby['players'];
+        if(playerList.player2.isRobot == true){
+            playerList.player2 = newPlayer;
+        }
+        else if (playerList.player3.isRobot == true) {
+            playerList.player3 = newPlayer;
+        }
+        else if (playerList.player4.isRobot == true) {
+            playerList.player4 = newPlayer;
+        }
+        else {
+            console.log('Lobby is full');
+        }
+        await LobbyData.findByIdAndUpdate(id, lobby);
+        res.status(200).json(lobby);
+        
+    } catch (error) {
+        res.status(400).json({
+            message: error.message
+        });
+    }
+    
+    
 }
 
 /**
@@ -109,7 +144,7 @@ const get_players = async(req, res) => {
         //send lobby players and status 200
         res.status(200).json(lobby.players)
     } catch (error) {
-        res.status(404).json({
+        res.status(400).json({
             message: error.message
         });
     }
@@ -118,6 +153,7 @@ const get_players = async(req, res) => {
 
 module.exports = {
     create_lobby,
+    delete_lobby,
     get_lobbies,
     get_lobby,
     add_player,

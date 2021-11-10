@@ -23,15 +23,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.get('/', (req, res) => {
-//   res.json({
-//     message: '🦄🌈✨👋🌎🌍✨🌈🦄'
-//   });
-// });
+app.get('/', (req, res) => {
+  res.json({
+    message: '🦄🌈✨👋🌎🌍✨🌈🦄'
+  });
+});
 
-// app.use('/api/v1', api);
-
-app.use('/', api);
+app.use('/api/v1', api);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
