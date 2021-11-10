@@ -1,4 +1,4 @@
-import React from "react"
+import * as React from "react"
 import axios from "axios"
 import './css/App.css';
 import LobbyTable from "./components/LobbyTable";
@@ -6,16 +6,15 @@ import HostGameGroup from "./components/HostGameGroup";
 import JoinSpecifc from "./components/JoinSpecificGroup";
 
 function clickMe() {
+  //chagne to localhost:5000 for testing
+  //change to https://puzzlingpipes-api.azurewebsites.net/
   const res =  axios.get('https://puzzlingpipes-api.azurewebsites.net/', {
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+    
   });
-  
   res.then(function(response){
+    console.log(response.data);
     alert('Backend API says: '+response.data.message);
-    console.log(response.data.message);
+    
   })
   .catch(function(error){
     console.log(error);
