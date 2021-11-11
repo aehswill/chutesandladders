@@ -1,10 +1,13 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 //import {Link} from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 import HostComponent from './HostComponent'
 import JoinComponent from './JoinComponent'
 import LobbyTableComponent from './LobbyTableComponent'
+import { openModal } from '../../common/modalSlice'
+import Modal from '../../common/Modal'
 
 function APITest() {
     const res =  axios.get('https://puzzlingpipes-api.azurewebsites.net/', {
@@ -23,7 +26,10 @@ function APITest() {
   };
 
 export default function StartPage(props){
-    return(
+  const dispatch = useDispatch();
+  return(
+      <>
+        <Modal />
         <Start>
             <MainTitle>
                 <MainTitleText>Puzzling Pipes</MainTitleText>
@@ -31,6 +37,7 @@ export default function StartPage(props){
             <HostComponent />
             <div className="dev-test">
                 <button onClick={APITest}>API TEST</button>
+                <button onClick={()=>dispatch(openModal())}>OPEN MODAL</button>
             </div>
             <JoinComponent />
             <div className="join-existing">
@@ -38,9 +45,12 @@ export default function StartPage(props){
                 <LobbyTableComponent />
             </div>
         </Start>
-    );
+      </>
+  );
 }
 
+
+// STYLE
 const Start = styled.div`
   display: grid;
   grid-template-columns: 50px repeat(3, 1fr 50px);
