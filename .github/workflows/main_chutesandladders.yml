@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-    - docker-compose
+    - master
 
 name: Docker_Compose_Azure_Workflow
 
