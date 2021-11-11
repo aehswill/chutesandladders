@@ -1,7 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-
+export default function StartButton(props){
+  const onClick = () => {alert("Testing!")};
+    return(
+      <Button onClick={onClick}>
+          <ButtonText>{props.text}</ButtonText>
+      </Button>
+    );
+}
 
 const ButtonText = styled.text`
   line-height: 52px;
@@ -30,24 +37,3 @@ const Button = styled.button`
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   }
 `;
-
-class StartButton extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {value: ''};
-    }
-
-    onClick(){
-        alert("Testing");
-    }
-
-    render(){
-        return(
-            <Button onClick={this.onClick}>
-                <ButtonText>{this.props.text}</ButtonText>
-            </Button>
-        )
-    }
-}
-
-export default StartButton

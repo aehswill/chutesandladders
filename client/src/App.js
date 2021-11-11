@@ -1,44 +1,17 @@
-import React from "react"
-import axios from "axios"
-import './css/App.css';
-import LobbyTable from "./components/LobbyTable";
-import HostGameGroup from "./components/HostGameGroup";
-import JoinSpecifc from "./components/JoinSpecificGroup";
+import React from 'react';
+import './App.css';
+import {useRoutes} from 'hookrouter'
+import StartPage from './pages/start/StartPage'
+import LobbyPage from './pages/lobby/LobbyPage'
 
-function clickMe() {
-  const res =  axios.get('https://puzzlingpipes-api.azurewebsites.net/', {
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
-  });
-  
-  res.then(function(response){
-    alert('Backend API says: '+response.data.message);
-    console.log(response.data.message);
-  })
-  .catch(function(error){
-    console.log(error);
-  })
+const routes = {
+  "/":()=><StartPage />,
+  "/lobby":()=><LobbyPage />
 };
-//TODO: implement flexbox in main layout instead of grid
+
 function App() {
-  return (
-    <div className="App">
-      <div className="main-title">
-        <header className="main-title-text">Puzzling Pipes</header>
-      </div>
-      <HostGameGroup/>
-      <div className="dev-test">
-        <button onClick={clickMe}>API TEST</button>
-      </div>
-      <JoinSpecifc />
-      <div className="join-existing">
-        <h1>Join an Open Game</h1>
-        <LobbyTable></LobbyTable>
-      </div>
-    </div>
-  );
+    const routeResult = useRoutes(routes)
+    return routeResult
 }
 
 export default App;

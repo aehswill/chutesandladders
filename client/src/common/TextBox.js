@@ -1,7 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Input = styled.input`
+export default function TextBox(props){
+    return(
+        <TextField placeholder={props.placeholder}/>
+    );
+}
+
+// STYLE
+const TextField = styled.input`
   width: 400px;
   height: 45px;
   background-color: transparent;
@@ -25,23 +32,3 @@ const Input = styled.input`
     box-shadow: 0px 16px 24px rgba(0,0,0,0.14), 0px 6px 30px rgba(0,0,0,0.12), 0px 8px 10px rgba(0,0,0,0.2);
   }
 `;
-
-class TextBox extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {value: ''};
-
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
-    render() {
-        return(
-            <Input placeholder={this.props.placeholder}/>
-        );
-    }
-}
-
-export default TextBox;
