@@ -1,6 +1,6 @@
 const app = require('./app');
-const mongoose = require('mongoose');
-require('dotenv').config({ path: '../.env' })
+var mongoose = require('mongoose');
+var env = require('dotenv').config();
 
 // const port = process.env.PORT || 5000;
 // app.listen(port, () => {
@@ -10,9 +10,9 @@ require('dotenv').config({ path: '../.env' })
 // });
 
 
-const CONNECTION_URL = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@chutesandladders.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@chutesandladders@`;
+const CONNECTION_URL = `mongodb://${process.env.COSMOSDB_USER}:${process.env.COSMOSDB_PASSWORD}@${process.env.COSMOSDB_HOST}:${process.env.COSMOSDB_PORT}/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@${process.env.COSMOSDB_DBNAME}@`;
 
-
+// console.log(CONNECTION_URL);
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(CONNECTION_URL, {
@@ -23,3 +23,15 @@ mongoose.connect(CONNECTION_URL, {
 })).catch((err) => {
     console.log(err);
 });
+
+// mongoose.connect("mongodb://"+process.env.COSMOSDB_HOST+":"+process.env.COSMOSDB_PORT+"/"+process.env.COSMOSDB_DBNAME+"?ssl=true&replicaSet=globaldb", {
+//    auth: {
+//      username: process.env.COSMOSDB_USER,
+//      password: process.env.COSMOSDB_PASSWORD
+//    },
+//  useNewUrlParser: true,
+//  useUnifiedTopology: true,
+//  retryWrites: false
+//  })
+//  .then(() => console.log(`Connection to CosmosDB successful and running on port: ${PORT}`))
+//  .catch((err) => console.error(err));
