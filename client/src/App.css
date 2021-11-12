@@ -15,7 +15,7 @@ h1 {
   text-align: center;
 }
 
-.host-game, .dev-test, .join-specific, .join-existing {
+.host-game, .join-specific, .join-existing {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,6 +25,11 @@ h1 {
 
 .dev-test {
   grid-area: devtest;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 10px;
 }
 
 .join-specific {
@@ -62,4 +67,24 @@ h1 {
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+
+body::-webkit-scrollbar {
+  border-radius: 16px;
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: orange;        /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: blue;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid orange;  /* creates padding around scroll thumb */
+}
+
+body {
+  scrollbar-width: thin;          /* "auto" or "thin" */
+  scrollbar-color: blue orange;   /* scroll thumb and track */
 }

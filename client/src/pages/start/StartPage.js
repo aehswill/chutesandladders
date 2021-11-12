@@ -1,6 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-//import {Link} from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import styled from 'styled-components'
 import HostComponent from './HostComponent'
@@ -8,6 +7,8 @@ import JoinComponent from './JoinComponent'
 import LobbyTableComponent from './LobbyTableComponent'
 import { openModal } from '../../common/modalSlice'
 import Modal from '../../common/Modal'
+import EnterNameComponent from './EnterNameComponent'
+import { selectIsHost, selectLobbyID, selectLobbyNickname, selectUser } from './gamesetupSlice'
 
 function APITest() {
     const res =  axios.get('https://puzzlingpipes-api.azurewebsites.net/', {
@@ -27,22 +28,34 @@ function APITest() {
 
 export default function StartPage(props){
   const dispatch = useDispatch();
+  const getisHost = useSelector(selectIsHost);
+    const getNickname = useSelector(selectLobbyNickname);
+    const getLobby = useSelector(selectLobbyID);
+    const getUser = useSelector(selectUser);
+
+  const click = () => {
+    dispatch(openModal());
+  }
+
   return(
       <>
-        <Modal />
+        <Modal content={EnterNameComponent}/>
         <Start>
             <MainTitle>
                 <MainTitleText>Puzzling Pipes</MainTitleText>
             </MainTitle>
-            <HostComponent />
+            <HostComponent onClick={click}/>
             <div className="dev-test">
                 <button onClick={APITest}>API TEST</button>
-                <button onClick={()=>dispatch(openModal())}>OPEN MODAL</button>
+                <button onClick={()=>alert(getisHost)}>IsHost</button>
+                <button onClick={()=>alert(getNickname)}>LobbyNickname</button>
+                <button onClick={()=>alert(getLobby)}>LobbyID</button>
+                <button onClick={()=>alert(getUser)}>User</button>
             </div>
-            <JoinComponent />
+            <JoinComponent onClick={click}/>
             <div className="join-existing">
                 <h1>Join an Open Game</h1>
-                <LobbyTableComponent />
+                <LobbyTableComponent/>
             </div>
         </Start>
       </>

@@ -2,14 +2,15 @@ import React from 'react'
 import styled from 'styled-components'
 
 export default function StartButton(props){
-  const onClick = () => {alert("Testing!")};
+
     return(
-      <Button onClick={onClick}>
+      <Button onClick={props.click}>
           <ButtonText>{props.text}</ButtonText>
       </Button>
     );
 }
 
+// STYLE
 const ButtonText = styled.text`
   line-height: 52px;
   color: white;

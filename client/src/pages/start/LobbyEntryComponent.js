@@ -31,17 +31,18 @@ function Portrait(props){
 
 // STYLE
 const ListItem = styled.li`
-  height: 80px;
-  width: 600px;
+  height: 76px;
+  width: 475px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   gap: 30px;
   padding: 0px 20px;
   align-items: center;
-  background-color: #00B800;
-  border: 0px;
-  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.25) 100%), #00B800;
+  background-blend-mode: soft-light, normal;
+  border: 3px solid rgba(0,0,0,0.35);
+  border-radius: 8px;
   box-shadow: 0px 6px 10px rgba(0,0,0,0.14), 0px 1px 18px rgba(0,0,0,0.12), 0px 3px 5px rgba(0,0,0,0.2);
   &:hover{
     border: 3px solid #FFE424;
@@ -63,8 +64,9 @@ const PortraitContainer = styled.div`
   padding: 10px;
   flex-direction: row;
   justify-content: flex-start;
-  gap: 10px;
+  gap: 5px;
   align-items: center;
-  border: 1px solid black;
+  height: 30px;
+  border: 2px solid black;
   border-radius: 8px;
 `;
