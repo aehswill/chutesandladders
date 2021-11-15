@@ -1,15 +1,10 @@
 on:
   push:
     branches:
-    - ENV-action
+    - master
 
 name: Docker_Compose_Azure_Workflow
 env:
-    db_user: ${{ secrets.COSMOSDB_USER }}
-    db_pass: ${{ secrets.COSMOSDB_PASSWORD }}
-    db_name: ${{ secrets.COSMOSDB_NAME }}
-    db_host: ${{ secrets.COSMOSDB_HOST }}
-    db_port: ${{ secrets.COSMOSDB_PORT }}
     db_string: ${{ secrets.COSMOSDB_CONNECTION_STRING }}
 jobs:
   build-and-deploy:
@@ -21,11 +16,6 @@ jobs:
          
     - run: |
             touch server/.env
-            echo COSMOSDB_USER="$db_user" >> server/.env
-            echo COSMOSDB_PASSWORD="$db_pass" >> server/.env
-            echo COSMOSDB_DBNAME="$db_name" >> server/.env
-            echo COSMOSDB_HOST="$db_host" >> server/.env
-            echo COSMOSDB_PORT="$db_port" >> server/.env
             echo COSMOSDB_CONNECTION_STRING="$db_string" >> server/.env
             cat server/.env
       
