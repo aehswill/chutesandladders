@@ -10,8 +10,8 @@ var env = require('dotenv').config();
 // });
 
 
-const CONNECTION_URL = `mongodb://${process.env.COSMOSDB_USER}:${process.env.COSMOSDB_PASSWORD}@${process.env.COSMOSDB_HOST}:${process.env.COSMOSDB_PORT}/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@${process.env.COSMOSDB_DBNAME}@`;
-
+//const CONNECTION_URL = `mongodb://${process.env.COSMOSDB_USER}:${process.env.COSMOSDB_PASSWORD}@${process.env.COSMOSDB_HOST}:${process.env.COSMOSDB_PORT}/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@${process.env.COSMOSDB_DBNAME}@`;
+const CONNECTION_URL = `${process.env.COSMOSDB_CONNECTION_STRING}`;
 // console.log(CONNECTION_URL);
 const PORT = process.env.PORT || 5000;
 
