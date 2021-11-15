@@ -25,6 +25,7 @@ jobs:
             echo COSMOSDB_DBNAME="$db_name" >> server/.env
             echo COSMOSDB_HOST="$db_host" >> server/.env
             echo COSMOSDB_PORT="$db_port" >> server/.env
+            cat server/.env
       
     - uses: azure/docker-login@v1
       with:
