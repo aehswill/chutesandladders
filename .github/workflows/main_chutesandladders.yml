@@ -10,6 +10,7 @@ env:
     db_name: ${{ secrets.COSMOSDB_NAME }}
     db_host: ${{ secrets.COSMOSDB_HOST }}
     db_port: ${{ secrets.COSMOSDB_PORT }}
+    db_string: ${{ secrets.COSMOSDB_CONNECTION_STRING }}
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -25,6 +26,7 @@ jobs:
             echo COSMOSDB_DBNAME="$db_name" >> server/.env
             echo COSMOSDB_HOST="$db_host" >> server/.env
             echo COSMOSDB_PORT="$db_port" >> server/.env
+            echo COSMOSDB_CONNECTION_STRING="$db_string" >> server/.env
             cat server/.env
       
     - uses: azure/docker-login@v1
