@@ -1,10 +1,11 @@
 on:
   push:
     branches:
-    - docker-compose
+    - master
 
 name: Docker_Compose_Azure_Workflow
-
+env:
+    db_string: ${{ secrets.COSMOSDB_CONNECTION_STRING }}
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -12,13 +13,18 @@ jobs:
     # checkout the repo
     - name: 'Checkout Github Action'
       uses: actions/checkout@master
-
+         
+    - run: |
+            touch server/.env
+            echo COSMOSDB_CONNECTION_STRING="$db_string" >> server/.env
+            cat server/.env
+      
     - uses: azure/docker-login@v1
       with:
         login-server: chutesandladders.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-
+            
     - run: |
         docker build ./client -t chutesandladders.azurecr.io/pipes:frontend
         docker push chutesandladders.azurecr.io/pipes:frontend
