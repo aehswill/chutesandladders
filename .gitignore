@@ -3,3 +3,5 @@ package-lock.json
 
 server.crt
 server.key
+.vscode/launch.json
+.vscode/settings.json

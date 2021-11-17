@@ -13,6 +13,9 @@ export default function EnterNameComponent(props){
     // go to next page first, send request from there with loading icon
     const onClick = () => {
         dispatch(setUser(textboxValue)); // does this need time to execute? returns "empty" here
+        // API CALL -> async PUT request (ishost, lobby ID, lobby nickname, player name)
+
+        // Wait for request to return... handle bad responses, then...
         navigate("/lobby");
     }
 

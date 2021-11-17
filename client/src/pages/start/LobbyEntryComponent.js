@@ -2,10 +2,23 @@ import React from 'react'
 import styled from 'styled-components'
 import Bot from '../../assets/Bot.png'
 import Human from '../../assets/Human.png'
+import { useDispatch} from 'react-redux'
+import { setIdToJoin, setLobbyNickname} from './gamesetupSlice'
+
 
 export default function LobbyEntryComponent(props){
+  const dispatch = useDispatch();
+
+  function onClick(){
+    dispatch(setIdToJoin(props.lobbyID));
+    dispatch(setLobbyNickname(props.lobbyName));
+  }
+
     return(
-        <ListItem>
+        <ListItem onClick={()=>{
+          onClick();
+          props.click();
+          }}>
             <ListItemText>{props.lobbyName}</ListItemText>
             <ListItemText>{props.lobbyID}</ListItemText>
             <PortraitContainer>

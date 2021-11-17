@@ -4,12 +4,19 @@ import LobbyEntryComponent from './LobbyEntryComponent';
 import lobbies from '../../mockData/mockLobbies'
 
 
-export default function LobbyTable(){
+export default function LobbyTable(props){
+
+    
+    function getLobbies(){
+        // GET lobbies API call
+        // this function shall return a JSON document of the lobbies (see mockLobbies file for format)
+    }
+
     return(
         <ListBox>
             <InnerScroll>
             {(lobbies).map(lobby => (
-                <LobbyEntryComponent lobbyName={lobby.name} lobbyID={lobby.id} players={lobby.players}/>
+                <LobbyEntryComponent lobbyName={lobby.name} lobbyID={lobby.id} players={lobby.players} click={props.onClick}/>
             ))}
             </InnerScroll>
         </ListBox>
