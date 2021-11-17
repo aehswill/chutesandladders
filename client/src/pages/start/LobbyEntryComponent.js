@@ -5,7 +5,6 @@ import Human from '../../assets/Human.png'
 import { useDispatch} from 'react-redux'
 import { setIdToJoin, setLobbyNickname} from './gamesetupSlice'
 
-
 export default function LobbyEntryComponent(props){
   const dispatch = useDispatch();
 
@@ -13,12 +12,11 @@ export default function LobbyEntryComponent(props){
     dispatch(setIdToJoin(props.lobbyID));
     dispatch(setLobbyNickname(props.lobbyName));
   }
-
-    return(
-        <ListItem onClick={()=>{
-          onClick();
-          props.click();
-          }}>
+  return(
+    <ListItem onClick={()=>{
+      onClick();
+      props.click();
+      }}>
             <ListItemText>{props.lobbyName}</ListItemText>
             <ListItemText>{props.lobbyID}</ListItemText>
             <PortraitContainer>
@@ -29,7 +27,6 @@ export default function LobbyEntryComponent(props){
                     </div>
                 ))}
             </PortraitContainer>
-
         </ListItem>
     );
 }

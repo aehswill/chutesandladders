@@ -6,11 +6,12 @@ import { useDispatch } from 'react-redux'
 import { setUser } from './gamesetupSlice';
 import { navigate } from 'hookrouter';
 
+const input = /^([A-Za-z0-9]{1,10})$/
 
 export default function EnterNameComponent(props){
     const dispatch = useDispatch();
 
-    // go to next page first, send request from there with loading icon
+    // go to next page first, send request from there with loading icon?
     const onClick = () => {
         dispatch(setUser(textboxValue)); // does this need time to execute? returns "empty" here
         // API CALL -> async PUT request (ishost, lobby ID, lobby nickname, player name)
@@ -19,11 +20,18 @@ export default function EnterNameComponent(props){
         navigate("/lobby");
     }
 
+    var isInputValid = true; //TODO: textbox doesn't re-render after prop update....
     var textboxValue;
     const handleChange = (evt)=>{
-        // HANDLE INPUT VALIDATION HERE!
-        textboxValue = evt.target.value;
-        console.log(textboxValue);
+        if(input.test(evt.target.value)){
+            isInputValid = true;
+            textboxValue = evt.target.value;
+            console.log("OK: "+textboxValue);
+        }
+        else{
+            isInputValid = false;
+            console.log("INVALID CHARACTER: " + evt.target.value);
+        }
     }
 
     return(
@@ -31,7 +39,7 @@ export default function EnterNameComponent(props){
                 <ModalClose onClick={props.close}>&#10005;</ModalClose>
                 <InnerContainer>
                     <PopupTitle>Enter Nickname</PopupTitle>
-                    <TextBox placeholder="Name" value={textboxValue} onChange={handleChange} bg="white"/>
+                    <TextBox placeholder="Name" value={textboxValue} onChange={handleChange} bg="white" isValid={isInputValid}/>
                     <PopupButton text="START"click={onClick}/>
                 </InnerContainer>
             </OuterContainer>

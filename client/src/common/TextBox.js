@@ -7,7 +7,8 @@ export default function TextBox(props){
         type="text" 
         value={props.value} 
         onChange={props.onChange}
-        background={props.bg}/>
+        background={props.bg}
+        isValid={props.isValid}/>
     );
 }
 
@@ -23,7 +24,7 @@ const TextField = styled.input`
   text-align: left;
   letter-spacing: -0.015em;
   color: #000000;
-  border: 2px solid #FFFFFF;
+  border: ${props => (props.isValid ? "2px solid #FFFFFF" : "2px solid red")};
   box-sixing: border-box;
   border-radius: 2px;
   font-family: Poppins;
