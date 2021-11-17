@@ -20,7 +20,7 @@ export default function EnterNameComponent(props){
         navigate("/lobby");
     }
 
-    var isInputValid = true; //TODO: textbox doesn't re-render after prop update....
+    var isInputValid = true; //TODO: textbox doesn't re-render after prop update...
     var textboxValue;
     const handleChange = (evt)=>{
         if(input.test(evt.target.value)){
