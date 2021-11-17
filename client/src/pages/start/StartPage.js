@@ -1,3 +1,4 @@
+// I'm the main page component, I house all of the other components you see on the main page.
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
@@ -55,7 +56,7 @@ export default function StartPage(props){
             <JoinComponent onClick={click}/>
             <div className="join-existing">
                 <h1>Join an Open Game</h1>
-                <LobbyTableComponent/>
+                <LobbyTableComponent onClick={click}/>
             </div>
         </Start>
       </>
