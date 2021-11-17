@@ -12,6 +12,7 @@ export default function LobbyTable(props){
         // this function shall return a JSON document of the lobbies (see mockLobbies file for format)
     }
 
+export default function LobbyTable(){
     return(
         <ListBox>
             <InnerScroll>

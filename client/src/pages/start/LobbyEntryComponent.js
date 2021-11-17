@@ -14,6 +14,7 @@ export default function LobbyEntryComponent(props){
     dispatch(setLobbyNickname(props.lobbyName));
   }
 
+export default function LobbyEntryComponent(props){
     return(
         <ListItem onClick={()=>{
           onClick();
