@@ -12,11 +12,11 @@ export default function LobbyEntryComponent(props){
     dispatch(setIdToJoin(props.lobbyID));
     dispatch(setLobbyNickname(props.lobbyName));
   }
-  return(
-    <ListItem onClick={()=>{
-      onClick();
-      props.click();
-      }}>
+    return(
+        <ListItem onClick={()=>{
+          onClick();
+          props.click();
+          }}>
             <ListItemText>{props.lobbyName}</ListItemText>
             <ListItemText>{props.lobbyID}</ListItemText>
             <PortraitContainer>
