@@ -1,6 +1,6 @@
-export default [
+const ml = [
     {
-        name: 'Test Lobby 1',
+        name: 'Test 1',
         id: 'F48K12',
         players: [
             {
@@ -22,7 +22,7 @@ export default [
         ]
     },
     {
-        name: 'Test Lobby 2',
+        name: 'Test 2',
         id: 'S8RV43',
         players: [
             {
@@ -44,7 +44,7 @@ export default [
         ]
     },
     {
-        name: 'Test Lobby 3',
+        name: 'Test 3',
         id: 'F89D3U',
         players: [
             {
@@ -66,7 +66,7 @@ export default [
         ]
     },
     {
-        name: 'Test Lobby 4',
+        name: 'Test 4',
         id: '98DK3W',
         players: [
             {
@@ -88,7 +88,7 @@ export default [
         ]
     },
     {
-        name: 'Test Lobby 5',
+        name: 'Test 5',
         id: '78DFIE',
         players: [
             {
@@ -110,7 +110,7 @@ export default [
         ]
     },
     {
-        name: 'Test Lobby 6',
+        name: 'Test 6',
         id: 'EXS89R',
         players: [
             {
@@ -132,3 +132,5 @@ export default [
         ]
     }
 ]
+
+export default ml;

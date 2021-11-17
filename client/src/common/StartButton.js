@@ -1,8 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 
+export default function StartButton(props){
 
+    return(
+      <Button onClick={props.click} disabled={props.isDisabled}>
+          <ButtonText>{props.text}</ButtonText>
+      </Button>
+    );
+}
 
+// STYLE
 const ButtonText = styled.text`
   line-height: 52px;
   color: white;
@@ -29,25 +37,7 @@ const Button = styled.button`
   &:hover ${ButtonText}{
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   }
+  &:disabled{
+    background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(0,0,0,0.25) 100%), rgba(136,20,0,0.5);
+  }
 `;
-
-class StartButton extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {value: ''};
-    }
-
-    onClick(){
-        alert("Testing");
-    }
-
-    render(){
-        return(
-            <Button onClick={this.onClick}>
-                <ButtonText>{this.props.text}</ButtonText>
-            </Button>
-        )
-    }
-}
-
-export default StartButton
