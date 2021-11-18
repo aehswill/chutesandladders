@@ -13,8 +13,6 @@ export default function LobbyEntryComponent(props){
     dispatch(setIdToJoin(props.lobbyID));
     dispatch(setLobbyNickname(props.lobbyName));
   }
-
-export default function LobbyEntryComponent(props){
     return(
         <ListItem onClick={()=>{
           onClick();

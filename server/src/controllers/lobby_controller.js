@@ -103,18 +103,15 @@ const add_player = async(req, res) => {
     try{
         const lobby = await LobbyData.findById(id);
         const playerList = lobby['players'];
-        if(playerList.player2.isRobot == true){
-            playerList.player2 = newPlayer;
+        // console.log(playerList);
+        for(var player in playerList){
+            if(playerList[player].isRobot == true){
+                playerList[player] = newPlayer;
+                // console.log(newPlayer);
+                break;
+            }
         }
-        else if (playerList.player3.isRobot == true) {
-            playerList.player3 = newPlayer;
-        }
-        else if (playerList.player4.isRobot == true) {
-            playerList.player4 = newPlayer;
-        }
-        else {
-            console.log('Lobby is full');
-        }
+        lobby.players = playerList;
         await LobbyData.findByIdAndUpdate(id, lobby);
         res.status(200).json(lobby);
         

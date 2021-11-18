@@ -12,11 +12,19 @@ import EnterNameComponent from './EnterNameComponent'
 import { selectIsHost, selectLobbyID, selectLobbyNickname, selectUser } from './gamesetupSlice'
 
 function APITest() {
-    const res =  axios.get('https://puzzlingpipes-api.azurewebsites.net/', {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+    const id = '6196d4a7d759909ed418ad20';
+    const res =  axios.put(`http://localhost:5000/api/v1/lobbies/${id}/players`, {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+        player_uid: '7',
+        nickname: 'Kevin',
+        ip: '123.45.67',
+        isRobot: false,
+        total_points: 0,
+        speed_points: 0,
+        trivia_points: 0,
     });
     res.then(function(response){
       alert('Backend API says: '+response.data.message);
