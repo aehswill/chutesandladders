@@ -34,7 +34,7 @@ const TextField = styled.input`
   line-height: 45px;
   filter: drop-shadow(0px 4px 3px rgba(0,0,0,0.25));
   &:focus{
-    outline: 1px solid white;
+    outline: ${props => (props.isValid? "1px solid white" : "1px solid red")};
     box-shadow: 0px 16px 24px rgba(0,0,0,0.14), 0px 6px 30px rgba(0,0,0,0.12), 0px 8px 10px rgba(0,0,0,0.2);
   }
   &::placeholder{

@@ -10,28 +10,24 @@ const input = /^([A-Za-z0-9]{1,10})$/
 
 export default function EnterNameComponent(props){
     const dispatch = useDispatch();
+    const [isInputValid, setIsInputValid] = React.useState(true);
 
-    // go to next page first, send request from there with loading icon?
     const onClick = () => {
         dispatch(setUser(textboxValue)); // does this need time to execute? returns "empty" here
-
         // API CALL -> async PUT request (ishost, lobby ID, lobby nickname, player name)
-
         // Wait for request to return... handle bad responses, then...
-
         navigate("/lobby");
     }
 
-    var isInputValid = true; //TODO: textbox doesn't re-render after prop update...
     var textboxValue;
     const handleChange = (evt)=>{
         if(input.test(evt.target.value)){
-            isInputValid = true;
+            setIsInputValid(true);
             textboxValue = evt.target.value;
             console.log("OK: "+textboxValue);
         }
         else{
-            isInputValid = false;
+            setIsInputValid(false);
             console.log("INVALID CHARACTER: " + evt.target.value);
         }
     }
@@ -42,7 +38,7 @@ export default function EnterNameComponent(props){
                 <InnerContainer>
                     <PopupTitle>Enter Nickname</PopupTitle>
                     <TextBox placeholder="Name" value={textboxValue} onChange={handleChange} bg="white" isValid={isInputValid}/>
-                    <PopupButton text="START"click={onClick}/>
+                    <PopupButton text="START"click={onClick} isDisabled={isInputValid}/>
                 </InnerContainer>
             </OuterContainer>
     );
