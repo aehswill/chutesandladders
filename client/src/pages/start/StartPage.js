@@ -12,8 +12,8 @@ import EnterNameComponent from './EnterNameComponent'
 import { selectIsHost, selectLobbyID, selectLobbyNickname, selectUser } from './gamesetupSlice'
 
 function APITest() {
-    const id = '000006';
-    // // delete lobby request
+    const id = '000002';
+    // delete lobby request
     // const res =  axios.delete(`http://localhost:5000/api/v1/lobbies/${id}`, {
        
     // });
@@ -23,10 +23,67 @@ function APITest() {
        
     // });
 
-    // get players from lobby request
-    const res = axios.get(`http://localhost:5000/api/v1/lobbies/${id}/players`, {
+    // // get players from lobby request
+    // const res = axios.get(`http://localhost:5000/api/v1/lobbies/${id}/players`, {
 
-    });
+    // });
+
+    // post lobby
+    const res = axios.post('http://localhost:5000/api/v1/lobbies',{
+        name: 'lobby15',
+        id: '00000E',
+        players: [
+            {
+                player_uid: '1',
+                nickname: 'Peggy',
+                ip: '123.45.67',
+                isRobot: false,
+                total_points: 0,
+                speed_points: 0,
+                trivia_points: 0,
+            }, 
+            {
+                player_uid: '2',
+                nickname: 'Robert',
+                ip: '123.45.67',
+                isRobot: true,
+                total_points: 0,
+                speed_points: 0,
+                trivia_points: 0,
+            },
+            {
+                player_uid: '3',
+                nickname: 'Robert',
+                ip: '123.45.67',
+                isRobot: true,
+                total_points: 0,
+                speed_points: 0,
+                trivia_points: 0,
+            },
+            {
+                player_uid: '4',
+                nickname: 'Robert',
+                ip: '123.45.67',
+                isRobot: true,
+                total_points: 0,
+                speed_points: 0,
+                trivia_points: 0,
+            }
+        ],
+        gamestate: {
+            active_trivia_question: 'trivia q',
+            player_trivia_answer: 'trivia a',
+            active_player: {
+                player_uid: '1',
+                nickname: 'kevin',
+                ip: '123.45.67', 
+                isRobot: false,
+                total_points: 0,
+                speed_points: 0,
+                trivia_points: 0,
+            }
+        }
+    })
     res.then(function(response){
       alert('Backend API says: '+response.data);
       console.log(response.data);

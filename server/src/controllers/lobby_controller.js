@@ -26,15 +26,26 @@ const Player = require('../models/player');
     const lobby = req.body;
 
     const newLobby = new LobbyData(lobby);
-    console.log(newLobby);
 
-    
-    await newLobby.save()
-    .then(() => {
-        res.status(201).json(newLobby);
+    await LobbyData.findOne({'id' : newLobby.id})
+    .then(async(found_lobby) => {
+        if(found_lobby){
+            res.status(409).josn({
+                message: error.message
+            });
+        }
+        await newLobby.save()
+        .then(() => {
+            res.status(201).json(newLobby);
+        })
+        .catch ((error) => {
+            res.status(409).json({
+                message: error.message
+            });
+        });
     })
     .catch ((error) => {
-        res.status(500).josn({
+        res.status(409).json({
             message: error.message
         });
     });

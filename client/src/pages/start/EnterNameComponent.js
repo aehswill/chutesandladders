@@ -10,7 +10,7 @@ import axios from 'axios';
 
 export default function EnterNameComponent(props){
     const dispatch = useDispatch();
-    // var getUser = useSelector(selectUser);
+    const getUser = useSelector(selectUser);
     const getIsHost = useSelector(selectIsHost);
     const getIdToJoin = useSelector(selectLobbyID);
     const getLobbyNickname = useSelector(selectLobbyNickname);
@@ -18,7 +18,6 @@ export default function EnterNameComponent(props){
     const onClick = () => {
         dispatch(setUser(textboxValue)); // does this need time to execute? returns "empty" here
 
-        var getUser = selectUser;
         // API CALL -> async PUT request (ishost, lobby ID, lobby nickname, player name) 
         /**
          * if isHost is false Put the player in the lobby where id = lobbyID
@@ -32,7 +31,7 @@ export default function EnterNameComponent(props){
         if(getIsHost === true){
             axios.post('http://localhost:5000/api/v1/lobbies',{
                 name: getLobbyNickname,
-                id: '3d4a9a',
+                id: '000001',
                 players: [
                     {
                         player_uid: '1',
