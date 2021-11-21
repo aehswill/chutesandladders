@@ -65,8 +65,7 @@ const mongoose = require('mongoose');
 const lobbySchema = mongoose.Schema({
     name: String,
     id: String,
-    players: [
-        {
+    players: [{
             player_uid: String,
             nickname: String,
             ip: String, 

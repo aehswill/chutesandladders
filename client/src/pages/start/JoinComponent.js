@@ -8,6 +8,10 @@ import { setIdToJoin} from './gamesetupSlice'
 export default function JoinComponent(props){
     const dispatch = useDispatch();
 
+
+    /**
+     * do a deach for the lobby? 
+     */
     var userInput;
     const handleUserInput = (evt)=>{
         //HANDLE INPUT VALIDATION HERE!
@@ -15,6 +19,7 @@ export default function JoinComponent(props){
         console.log(userInput)
     }
     function onClick(){
+        //search for valid lobby
         dispatch(setIdToJoin(userInput));
     }
     return(

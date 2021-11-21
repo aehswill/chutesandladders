@@ -12,23 +12,24 @@ import EnterNameComponent from './EnterNameComponent'
 import { selectIsHost, selectLobbyID, selectLobbyNickname, selectUser } from './gamesetupSlice'
 
 function APITest() {
-    const id = '6196d4a7d759909ed418ad20';
-    const res =  axios.put(`http://localhost:5000/api/v1/lobbies/${id}/players`, {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //     "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
-        player_uid: '7',
-        nickname: 'Kevin',
-        ip: '123.45.67',
-        isRobot: false,
-        total_points: 0,
-        speed_points: 0,
-        trivia_points: 0,
+    const id = '000006';
+    // // delete lobby request
+    // const res =  axios.delete(`http://localhost:5000/api/v1/lobbies/${id}`, {
+       
+    // });
+
+    // // get lobby request
+    // const res =  axios.get(`http://localhost:5000/api/v1/lobbies/${id}`, {
+       
+    // });
+
+    // get players from lobby request
+    const res = axios.get(`http://localhost:5000/api/v1/lobbies/${id}/players`, {
+
     });
     res.then(function(response){
-      alert('Backend API says: '+response.data.message);
-      console.log(response.data.message);
+      alert('Backend API says: '+response.data);
+      console.log(response.data);
     })
     .catch(function(error){
       console.log(error);
