@@ -3,9 +3,10 @@ import styled from 'styled-components'
 import TextBox from '../../common/TextBox'
 import StartButton from '../../common/StartButton'
 import { useDispatch} from 'react-redux'
-import { setIdToJoin} from './gamesetupSlice'
+import { setLobbyID } from './gamesetupSlice'
 
 const input = /^([A-Za-z0-9]{1,6})$/;
+const helpText = "Lobby ID must only contain the following characters: A-Z 0-9"
 
 export default function JoinComponent(props){
     const dispatch = useDispatch();
@@ -23,7 +24,8 @@ export default function JoinComponent(props){
     }
     function onClick(){
         if(inputValue != null){
-            dispatch(setIdToJoin(inputValue));
+            // CHECK IF LOBBY EXISTS, then...
+            dispatch(setLobbyID(inputValue));
             inputValue = "";
             setIsInputValid(true);
             props.onClick();
@@ -33,10 +35,12 @@ export default function JoinComponent(props){
             setIsInputValid(true);
         } 
     }
+
     return(
         <JoinContainer>
             <h1>Join a Game</h1>
-            <TextBox placeholder="Lobby ID" value={inputValue} onChange={handleUserInput} isValid={isInputValid}/>
+            <TextBox placeholder="Lobby ID" value={inputValue} 
+            onChange={handleUserInput} isValid={isInputValid} helpText={helpText}/>
             <StartButton text="JOIN" isDisabled={!isInputValid} click={onClick}/>
         </JoinContainer>
     )

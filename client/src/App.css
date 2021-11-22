@@ -1,6 +1,15 @@
 body {
-  background: linear-gradient(#56C7FF, #FFFFFF) no-repeat center center fixed;
+  /* Eventually we will keep the gradient, but use two cloud images anchored 
+  in the corners. Use media queries to make sure the viewport is 
+  wider than than it is tall, otherwise just use the gradient.
+  */
+  /*background: linear-gradient(#56C7FF, #FFFFFF) no-repeat center center fixed;*/
+  background-image: url(./assets/1920x1080_staticClouds.png);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
   background-size: cover;
+  overflow: hidden;
 }
 
 h1 {
@@ -15,50 +24,25 @@ h1 {
   text-align: center;
 }
 
-.host-game, .join-specific, .join-existing {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 10px;
-}
-
-.dev-test {
-  grid-area: devtest;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 10px;
-}
-
-.join-specific {
-  grid-area: specific;
-}
-
-.join-existing {
-  grid-area: existing;
-}
-
 /* Tooltip container */
 .tooltip {
   position: relative;
-  display: inline-block;
+  display: flex;
 }
 
 /* Tooltip text */
 .tooltip .tooltiptext {
+  align-self: center;
+  justify-self: center;
   visibility: hidden;
-  width: 120px;
   top: 150%;
-  left: 50%;
-  margin-left: -60px;
   background-color: black;
   color: #fff;
   text-align: center;
-  padding: 5px 0;
+  padding: 5px;
   border-radius: 6px;
   font-family: Poppins;
+  white-space: pre-wrap;
  
   /* Position the tooltip text - see examples below! */
   position: absolute;
@@ -68,24 +52,4 @@ h1 {
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
   visibility: visible;
-}
-
-body::-webkit-scrollbar {
-  border-radius: 16px;
-  width: 12px;               /* width of the entire scrollbar */
-}
-
-body::-webkit-scrollbar-track {
-  background: orange;        /* color of the tracking area */
-}
-
-body::-webkit-scrollbar-thumb {
-  background-color: blue;    /* color of the scroll thumb */
-  border-radius: 20px;       /* roundness of the scroll thumb */
-  border: 3px solid orange;  /* creates padding around scroll thumb */
-}
-
-body {
-  scrollbar-width: thin;          /* "auto" or "thin" */
-  scrollbar-color: blue orange;   /* scroll thumb and track */
 }

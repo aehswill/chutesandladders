@@ -2,21 +2,38 @@ import React from 'react'
 import styled from 'styled-components'
 
 export default function TextBox(props){
+  if(!props.isValid){
     return(
+    <div className="tooltip">
         <TextField placeholder={props.placeholder} 
         type="text" 
         value={props.value} 
         onChange={props.onChange}
         background={props.bg}
         isValid={props.isValid}/>
+        <span className="tooltiptext">{props.helpText}</span>
+      </div>
+  );
+  }
+  else{
+    return(
+      <div className="tooltip">
+        <TextField placeholder={props.placeholder} 
+        type="text" 
+        value={props.value} 
+        onChange={props.onChange}
+        background={props.bg}
+        isValid={props.isValid}/>
+      </div>
     );
+  }
 }
 
 // STYLE
 const TextField = styled.input`
   width: 411px;
   height: 53px;
-  background-color: ${props => props.background || "transparent"};
+  background-color: ${props => (props.isValid? props.background || "transparent" : "rgba(255,0,0,0.2)" )};
   margin: 12px;
   padding: 4px 4px;
   align-self: center;
