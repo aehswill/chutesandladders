@@ -2,16 +2,33 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 import PlayerEntryComponent from './PlayerEntryComponent';
+import axios from 'axios';
+import { selectLobbyID, } from '../start/gamesetupSlice'
+import { useSelector } from 'react-redux';
+
 
 
 export default function PlayerBoxComponent(props){
-    
+    const getLobbyID = useSelector(selectLobbyID);
+
+    const [players, setPlayers] = React.useState([])
+    React.useEffect(() => {
+        axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players`)
+        .then((players) => {
+            setPlayers(players.data);
+        })
+        .catch(function(error){
+            console.log({
+                message: error.message
+            })
+        })
+    })
     return(
         <Box>
             Players
             <Separator />
             <List>
-            {(props.players).map(player=>(
+            {(players).map(player=>(
                 <PlayerEntryComponent name={player.nickname} host={player.isHost}/>
             ))}
             </List>
