@@ -1,17 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
 import LobbyEntryComponent from './LobbyEntryComponent';
-import lobbies from '../../mockData/mockLobbies'
+// import lobbies from '../../mockData/mockLobbies'
+import axios from 'axios'
+
+export default function LobbyTable(props){
 
 
 export default function LobbyTable(props){
 
     
-    function getLobbies(){
-        // GET lobbies API call
-        // this function shall return a JSON document of the lobbies (see mockLobbies file for format)
-    }
-    
+
+    const [lobbies, setLobbies] = React.useState([]);
+
+    React.useEffect(() => {
+        axios.get('http://localhost:5000/api/v1/lobbies')
+        .then((allLobies) => {
+            setLobbies(allLobies.data);
+        })
+    })
+
     return(
         <ListBox>
             <InnerScroll>

@@ -30,20 +30,18 @@ const PlayerData = require('../models/player');
  * for now I'm just making sure that instantiating an object works
  */
 const create_player = async(req, res) => {
-    //get info from req
-    const player_name = req.body.name;
     //create new student
     const newPlayer = new PlayerData(req.body);
-
-    try {
-        await newPlayer.save();
+    
+    await newPlayer.save()
+    .then(() => {
         res.status(201).json(newPlayer);
-        
-    } catch (error) {
+    })
+    .catch ((error) => {
         res.status(409).josn({
             message: error.message
         });
-    }
+    });
 }
 
 /**
@@ -66,20 +64,21 @@ const update_player_color = (req, res) => {
  */
 const get_scores = async(req, res) => {
     //get player id from req body
-    const id = req.params.id;
+    const player_uid = req.params.id;
     //send points vars back as json
-    try {
-        const player = await PlayerData.findById(id);
-         res.status(200).json({ 
+    await PlayerData.findOne({'id': player_uid})
+    .then((player) => {
+        res.status(200).json({ 
             total_points: player.total_points,
             speed_points: player.speed_points,
             trivia_points: player.trivia_points
           })
-    } catch (error) {
+    })
+    .catch ((error) => {
         res.status(404).json({
             message: error.message
         })
-    }
+    });
 }
 
 module.exports = {
