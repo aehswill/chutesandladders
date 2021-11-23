@@ -29,19 +29,34 @@ const PlayerData = require('../models/player');
 /**
  * for now I'm just making sure that instantiating an object works
  */
-const create_player = async(req, res) => {
+const create_player = async (req, res) => {
     //create new student
     const newPlayer = new PlayerData(req.body);
-    
-    await newPlayer.save()
-    .then(() => {
-        res.status(201).json(newPlayer);
-    })
-    .catch ((error) => {
-        res.status(409).josn({
-            message: error.message
+
+    await PlayerData.findOne({ 'player_uid': newPlayer.player_uid })
+        .then(async (found_player) => {
+            if (found_player) {
+                res.status(409).josn({
+                    message: error.message
+                });
+            }
+            await newPlayer.save()
+                .then(() => {
+                    res.status(201).json(newPlayer);
+                })
+                .catch((error) => {
+                    res.status(409).json({
+                        error_code: error.message,
+                        error_message: 'Player UID apready exists'
+                    });
+                });
+        })
+        .catch((error) => {
+            res.status(409).json({
+                error_code: error.message,
+                error_message: 'Player UID apready exists'
+            });
         });
-    });
 }
 
 /**
@@ -62,23 +77,23 @@ const update_player_color = (req, res) => {
  *      -speed points
  *      -trivia points
  */
-const get_scores = async(req, res) => {
+const get_scores = async (req, res) => {
     //get player id from req body
     const player_uid = req.params.id;
     //send points vars back as json
-    await PlayerData.findOne({'id': player_uid})
-    .then((player) => {
-        res.status(200).json({ 
-            total_points: player.total_points,
-            speed_points: player.speed_points,
-            trivia_points: player.trivia_points
-          })
-    })
-    .catch ((error) => {
-        res.status(404).json({
-            message: error.message
+    await PlayerData.findOne({ 'id': player_uid })
+        .then((player) => {
+            res.status(200).json({
+                total_points: player.total_points,
+                speed_points: player.speed_points,
+                trivia_points: player.trivia_points
+            })
         })
-    });
+        .catch((error) => {
+            res.status(404).json({
+                message: error.message
+            })
+        });
 }
 
 module.exports = {

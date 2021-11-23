@@ -6,11 +6,6 @@ import axios from 'axios'
 
 export default function LobbyTable(props){
 
-
-export default function LobbyTable(props){
-
-    
-
     const [lobbies, setLobbies] = React.useState([]);
 
     React.useEffect(() => {

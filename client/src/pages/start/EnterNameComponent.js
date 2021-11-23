@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import TextBox from '../../common/TextBox';
 import PopupButton from '../../common/PopupButton';
-
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setUser, setUserID } from './gamesetupSlice';
+import { selectUser, selectIsHost, selectLobbyID, selectLobbyNickname } from './gamesetupSlice';
 import { navigate } from 'hookrouter';
 import { customAlphabet } from 'nanoid';
 import close from '../../assets/close.png'
@@ -39,89 +39,89 @@ export default function EnterNameComponent(props){
         console.log("Generating user id... "+userID);
         dispatch(setUserID(userID));
         props.close();
-        console.log(getUser);
-        console.log(getIsHost);
-        console.log(getIdToJoin);
-        console.log(getLobbyNickname);
-        if(getIsHost === true){
-            axios.post('http://localhost:5000/api/v1/lobbies',{
-                name: getLobbyNickname,
-                id: '000001',
-                players: [
-                    {
-                        player_uid: '1',
-                        nickname: getUser,
-                        ip: '123.45.67',
-                        isRobot: false,
-                        total_points: 0,
-                        speed_points: 0,
-                        trivia_points: 0,
-                    }, 
-                    {
-                        player_uid: '2',
-                        nickname: 'Robert',
-                        ip: '123.45.67',
-                        isRobot: true,
-                        total_points: 0,
-                        speed_points: 0,
-                        trivia_points: 0,
-                    },
-                    {
-                        player_uid: '3',
-                        nickname: 'Robert',
-                        ip: '123.45.67',
-                        isRobot: true,
-                        total_points: 0,
-                        speed_points: 0,
-                        trivia_points: 0,
-                    },
-                    {
-                        player_uid: '4',
-                        nickname: 'Robert',
-                        ip: '123.45.67',
-                        isRobot: true,
-                        total_points: 0,
-                        speed_points: 0,
-                        trivia_points: 0,
-                    }
-                ],
-                gamestate: {
-                    active_trivia_question: 'trivia q',
-                    player_trivia_answer: 'trivia a',
-                    active_player: {
-                        player_uid: '1',
-                        nickname: 'kevin',
-                        ip: '123.45.67', 
-                        isRobot: false,
-                        total_points: 0,
-                        speed_points: 0,
-                        trivia_points: 0,
-                    }
-                }
-            })
-        }
-        else if (getIsHost === false){
-            const res = axios.put(`http://localhost:5000/api/v1/lobbies/${getIdToJoin}/players`, {
-                player_uid: '10',
-                nickname: getUser,
-                ip: '123.45.67',
-                isRobot: false,
-                total_points: 0,
-                speed_points: 0,
-                trivia_points: 0,
-            });
-            res.then(function(response){
-                console.log(response.data);
-              })
-              .catch(function(error){
-                console.log(error);
-              })
-        }
-        else{
-            /**
-             * error or something here
-             */
-        }
+        // console.log(getUser);
+        // console.log(getIsHost);
+        // console.log(getIdToJoin);
+        // console.log(getLobbyNickname);
+        // if(getIsHost === true){
+        //     axios.post('http://localhost:5000/api/v1/lobbies',{
+        //         name: getLobbyNickname,
+        //         id: '000001',
+        //         players: [
+        //             {
+        //                 player_uid: '1',
+        //                 nickname: getUser,
+        //                 ip: '123.45.67',
+        //                 isRobot: false,
+        //                 total_points: 0,
+        //                 speed_points: 0,
+        //                 trivia_points: 0,
+        //             }, 
+        //             {
+        //                 player_uid: '2',
+        //                 nickname: 'Robert',
+        //                 ip: '123.45.67',
+        //                 isRobot: true,
+        //                 total_points: 0,
+        //                 speed_points: 0,
+        //                 trivia_points: 0,
+        //             },
+        //             {
+        //                 player_uid: '3',
+        //                 nickname: 'Robert',
+        //                 ip: '123.45.67',
+        //                 isRobot: true,
+        //                 total_points: 0,
+        //                 speed_points: 0,
+        //                 trivia_points: 0,
+        //             },
+        //             {
+        //                 player_uid: '4',
+        //                 nickname: 'Robert',
+        //                 ip: '123.45.67',
+        //                 isRobot: true,
+        //                 total_points: 0,
+        //                 speed_points: 0,
+        //                 trivia_points: 0,
+        //             }
+        //         ],
+        //         gamestate: {
+        //             active_trivia_question: 'trivia q',
+        //             player_trivia_answer: 'trivia a',
+        //             active_player: {
+        //                 player_uid: '1',
+        //                 nickname: 'kevin',
+        //                 ip: '123.45.67', 
+        //                 isRobot: false,
+        //                 total_points: 0,
+        //                 speed_points: 0,
+        //                 trivia_points: 0,
+        //             }
+        //         }
+        //     })
+        // }
+        // else if (getIsHost === false){
+        //     const res = axios.put(`http://localhost:5000/api/v1/lobbies/${getIdToJoin}/players`, {
+        //         player_uid: userID,
+        //         nickname: getUser,
+        //         ip: '123.45.67',
+        //         isRobot: false,
+        //         total_points: 0,
+        //         speed_points: 0,
+        //         trivia_points: 0,
+        //     });
+        //     res.then(function(response){
+        //         console.log(response.data);
+        //       })
+        //       .catch(function(error){
+        //         console.log(error);
+        //       })
+        // }
+        // else{
+        //     /**
+        //      * error or something here
+        //      */
+        // }
 
 
 
