@@ -95,6 +95,12 @@ export default function EnterNameComponent(props){
                 speed_points: 0,
                 trivia_points: 0,
             });
+            res.then(function(response){
+                console.log(response.data);
+              })
+              .catch(function(error){
+                console.log(error);
+              })
         }
         else{
             /**
@@ -107,7 +113,7 @@ export default function EnterNameComponent(props){
 
         // Wait for request to return... handle bad responses, then...
 
-        navigate("/lobby");
+        // navigate("/lobby");
     }
 
     var textboxValue;
