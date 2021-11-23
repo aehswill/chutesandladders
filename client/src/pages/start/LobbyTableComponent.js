@@ -6,6 +6,11 @@ import axios from 'axios'
 
 export default function LobbyTable(props){
 
+
+export default function LobbyTable(props){
+
+    
+
     const [lobbies, setLobbies] = React.useState([]);
 
     React.useEffect(() => {
@@ -14,6 +19,7 @@ export default function LobbyTable(props){
             setLobbies(allLobies.data);
         })
     })
+
     return(
         <ListBox>
             <InnerScroll>
@@ -28,8 +34,8 @@ export default function LobbyTable(props){
 // STYLE
 const ListBox = styled.ul`
   list-style-type: none;
-  height: 390px;
-  width: 550px;
+  height: 350px;
+  width: 600px;
   background: #881400;
   box-shadow: 0px 6px 10px rgba(0,0,0,0.14), 0px 1px 18px rgba(0,0,0,0.12), 0px 3px 5px rgba(0,0,0,0.2);
   border: 2px solid rgba(10,10,10,0.25);
@@ -40,7 +46,7 @@ const ListBox = styled.ul`
   text-align: center;
   letter-spacing: -0.015em;
   color: #504F4F;
-  padding: 24px 12px;
+  padding: 12px;
   
   overflow-x: hidden;
   overflow-y: auto;
@@ -49,10 +55,24 @@ const ListBox = styled.ul`
 const InnerScroll = styled.div`
     overflow-x: hidden;
     overflow-y: auto;
-    height: 390px;
-    width: 550px;
+    height: 350px;
+    width: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
+    scrollbar-width: thin;          /* "auto" or "thin" */
+    scrollbar-color:  #eac4ba #881400;   /* scroll thumb and track */
+    &::-webkit-scrollbar{
+        border-radius: 16px;
+        width: 12px; 
+    }
+    &::-webkit-scrollbar-track {
+        background: #881400;        /* color of the tracking area */
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #eac4ba;    /* color of the scroll thumb */
+        border-radius: 20px;       /* roundness of the scroll thumb */
+        border: 3px solid #881400;  /* creates padding around scroll thumb */
+      }
 `;

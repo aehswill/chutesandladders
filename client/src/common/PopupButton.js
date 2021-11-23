@@ -4,7 +4,7 @@ import styled from 'styled-components'
 export default function PopupButton(props){
 
     return(
-      <Button onClick={props.click}>
+      <Button onClick={props.click} disabled={!props.isDisabled}>
           <ButtonText>{props.text}</ButtonText>
       </Button>
     );
@@ -43,5 +43,15 @@ const Button = styled.button`
   }
   &:hover ${ButtonText}{
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+  &:disabled{
+    background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(0,0,0,0.25) 100%), #B8572C;
+    &:hover{
+      border: 3px solid rgba(10,10,10,0.35);
+      box-shadow: 0px 6px 10px rgba(0,0,0,0.14), 0px 1px 18px rgba(0,0,0,0.12), 0px 3px 5px rgba(0,0,0,0.2);
+    }
+    &:hover ${ButtonText}{
+      text-shadow: none;
+    }
   }
 `;

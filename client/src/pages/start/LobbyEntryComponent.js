@@ -3,15 +3,20 @@ import styled from 'styled-components'
 import Bot from '../../assets/Bot.png'
 import Human from '../../assets/Human.png'
 import { useDispatch} from 'react-redux'
-import { setIdToJoin, setLobbyNickname} from './gamesetupSlice'
+
+import { setLobbyID, setLobbyNickname} from './gamesetupSlice'
+
 
 
 export default function LobbyEntryComponent(props){
   const dispatch = useDispatch();
 
   function onClick(){
-    dispatch(setIdToJoin(props.lobbyID));
+
+    dispatch(setLobbyID(props.lobbyID));
     dispatch(setLobbyNickname(props.lobbyName));
+    // isHost = false by default
+
   }
     return(
         <ListItem onClick={()=>{
@@ -28,15 +33,14 @@ export default function LobbyEntryComponent(props){
                     </div>
                 ))}
             </PortraitContainer>
-
         </ListItem>
     );
 }
 
 function Portrait(props){
-    var icon = <img src={Human}/>
+    var icon = <img src={Human} alt="Human Icon"/>
     if(props.isRobot){
-        icon = <img src={Bot}/>
+        icon = <img src={Bot} alt="Robot"/>
     }
     return icon
 }
@@ -44,7 +48,7 @@ function Portrait(props){
 // STYLE
 const ListItem = styled.li`
   height: 76px;
-  width: 475px;
+  width: 525px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;

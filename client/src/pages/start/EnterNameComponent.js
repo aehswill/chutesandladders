@@ -2,14 +2,25 @@ import React from 'react'
 import styled from 'styled-components'
 import TextBox from '../../common/TextBox';
 import PopupButton from '../../common/PopupButton';
-import { useDispatch, useSelector } from 'react-redux'
-import { setUser, selectUser, selectIsHost, selectLobbyID, selectLobbyNickname } from './gamesetupSlice';
+
+import { useDispatch } from 'react-redux'
+import { setUser, setUserID } from './gamesetupSlice';
 import { navigate } from 'hookrouter';
+import { customAlphabet } from 'nanoid';
+import close from '../../assets/close.png'
 import axios from 'axios';
 
 
+const nanoid = customAlphabet("ABCDEF0123456789", 36);
+const input = /^([A-Za-z0-9]{1,10})$/
+const helpText = "Nickname must only contain the following characters: A-Z a-z 0-9"
+
 export default function EnterNameComponent(props){
     const dispatch = useDispatch();
+
+    const [isInputValid, setIsInputValid] = React.useState(true);
+
+
     const getUser = useSelector(selectUser);
     const getIsHost = useSelector(selectIsHost);
     const getIdToJoin = useSelector(selectLobbyID);
@@ -24,6 +35,10 @@ export default function EnterNameComponent(props){
          * 
          * else post new lobby where lobby name = lobby nickname
          */
+        const userID = nanoid();
+        console.log("Generating user id... "+userID);
+        dispatch(setUserID(userID));
+        props.close();
         console.log(getUser);
         console.log(getIsHost);
         console.log(getIdToJoin);
@@ -114,22 +129,32 @@ export default function EnterNameComponent(props){
         // Wait for request to return... handle bad responses, then...
 
         // navigate("/lobby");
+
     }
 
     var textboxValue;
     const handleChange = (evt)=>{
-        // HANDLE INPUT VALIDATION HERE!
-        textboxValue = evt.target.value;
-        console.log(textboxValue);
+        if(input.test(evt.target.value)){
+            setIsInputValid(true);
+            textboxValue = evt.target.value;
+            console.log("OK: "+textboxValue);
+        }
+        else{
+            setIsInputValid(false);
+            console.log("INVALID CHARACTER: " + evt.target.value);
+        }
     }
 
     return(
             <OuterContainer>
-                <ModalClose onClick={props.close}>&#10005;</ModalClose>
+                <ModalClose onClick={props.close}>
+                    <img src={close} alt="close"/>
+                </ModalClose>
                 <InnerContainer>
                     <PopupTitle>Enter Nickname</PopupTitle>
-                    <TextBox placeholder="Name" value={textboxValue} onChange={handleChange} bg="white"/>
-                    <PopupButton text="START"click={onClick}/>
+                    <TextBox placeholder="Name" value={textboxValue} 
+                    onChange={handleChange} bg="white" isValid={isInputValid} helpText={helpText}/>
+                    <PopupButton text="START"click={onClick} isDisabled={isInputValid}/>
                 </InnerContainer>
             </OuterContainer>
     );
@@ -151,7 +176,7 @@ const InnerContainer = styled.div`
 position: absolute;
 left: 2.39%;
 right: 2.39%;
-top: 16.05%;
+top: 16.25%;
 bottom: 5.35%;
 padding-bottom: 18px;
 display: flex;
@@ -174,8 +199,8 @@ text-shadow: 0px 2px 4px rgba(91, 26, 26, 0.14), 0px 3px 4px rgba(123,12,12,0.12
 `;
 const ModalClose = styled.span`
     position: absolute;
-    right: 8px;
-    top: 4px;
+    left: 8px;
+    top: 8px;
     font-size: 24px;
     cursor: pointer;
 `;
