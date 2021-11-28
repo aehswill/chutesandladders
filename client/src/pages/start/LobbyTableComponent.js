@@ -15,6 +15,9 @@ export default function LobbyTable(props){
         .then((allLobies) => {
             setLobbies(allLobies.data);
         })
+        .catch(function(error){
+            console.log(error)
+        })
     })
 
     return(

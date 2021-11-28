@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import die1 from '../../assets/die1.png'
 import die2 from '../../assets/die2.png'
@@ -8,21 +8,26 @@ import die5 from '../../assets/die5.png'
 import die6 from '../../assets/die6.png'
 
 export default function DieComponent(props){
-    console.log("Rolled a "+props.transformTo)
+    const [isClicked, setIsClicked] = useState(false);
     return(
-        <Scene onClick={props.roll}>
+        <Scene onClick={()=>{
+            if(!isClicked){
+                props.roll();
+                setIsClicked(true);
+            }
+        }}>
             <Cube xform={props.transformTo}>
-                <One><Icon src={die1} alt="1"/></One>
+                <One><Icon src={die1} alt="1" isClicked={isClicked}/></One>
                 <OneInner/>
-                <Two><Icon src={die2} alt="2"/></Two>
+                <Two><Icon src={die2} alt="2" isClicked={isClicked}/></Two>
                 <TwoInner/>
-                <Three><Icon src={die3} alt="3"/></Three>
+                <Three><Icon src={die3} alt="3" isClicked={isClicked}/></Three>
                 <ThreeInner/>
-                <Four><Icon src={die4} alt="4"/></Four>
+                <Four><Icon src={die4} alt="4" isClicked={isClicked}/></Four>
                 <FourInner/>
-                <Five><Icon src={die5} alt="5"/></Five>
+                <Five><Icon src={die5} alt="5" isClicked={isClicked}/></Five>
                 <FiveInner/>
-                <Six><Icon src={die6} alt="6"/></Six>
+                <Six><Icon src={die6} alt="6" isClicked={isClicked}/></Six>
                 <SixInner/>
                 <CoverX/>
                 <CoverY/>
@@ -38,10 +43,9 @@ const Scene = styled.div`
     left: 50%;
     width: 75px;
     height: 75px;
-    perspective: 225px;    
+    perspective: 225px;  
 `;
 const Cube = styled.div`
-    cursor: pointer;
     width: 100%;
     height: 100%;
     position: relative;
@@ -203,6 +207,14 @@ const CoverZ = styled.div`
 `;
 const Icon = styled.img`
     position: absolute;
-    top:-0.5px;
-    left:-0.5px;    
+    cursor: ${props=>props.isClicked?"arrow":"pointer"};
+    top:-3px;
+    left:-3px;
+    width: 75px;
+    height: 75px;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    &:hover{
+        border: ${props=>props.isClicked?"3px solid transparent":"3px solid yellow"};
+    }
 `;

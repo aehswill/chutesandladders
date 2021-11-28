@@ -16,29 +16,7 @@ export default function PlayerEntryComponent(props){
             {bot && <Icon src={Bot} alt="Robot Icon"/>}
         </ListItem>
     )
-}
-
-// export default function PlayerEntryComponent(props){
-//     // also pass in user ID
-//     // listen for updates... check that this color = userID's color from request
-//     if(props.host === true){
-//         return(
-//             <ListItem>
-//                 <ChosenColor color={props.color}/>
-//                 <span>{props.name}</span>
-//                 <GM>gamemaster</GM>
-//             </ListItem>
-//         )
-//     }
-//     else{
-//         return(
-//             <ListItem>
-//                 <ChosenColor color={props.color}/>
-//                 <span>{props.name}</span>
-//             </ListItem>
-//         )
-//     }
-//   }           
+}        
 
 // STYLE
 const ListItem = styled.li`

@@ -1,11 +1,10 @@
-
 import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios';
 
 export const orange = "#FC7438";
 export const purple = "#B117EB";
 export const blue = "#005BF5";
 export const yellow = "#FFE424";
-import axios from 'axios';
 
 const initialState = {
     isPublicGame: false, 
