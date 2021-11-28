@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components';
 import close from '../../assets/close.png'
-import PopupButton, { Button } from '../../common/PopupButton';
+import PopupButton from '../../common/PopupButton';
 import { selectPlayers, setPlayers } from './lobbysetupSlice'
 
 export default function DifficultyComponent(props){

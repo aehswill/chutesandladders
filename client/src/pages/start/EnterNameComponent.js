@@ -2,9 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import TextBox from '../../common/TextBox';
 import PopupButton from '../../common/PopupButton';
-
-import { useDispatch } from 'react-redux'
-import { setUser, setUserID } from './gamesetupSlice';
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser, setUserID, selectUser, selectIsHost, selectLobbyID, selectLobbyNickname } from './gamesetupSlice';
 import { navigate } from 'hookrouter';
 import { customAlphabet } from 'nanoid';
 import close from '../../assets/close.png'
@@ -25,7 +24,6 @@ export default function EnterNameComponent(props){
     const getIsHost = useSelector(selectIsHost);
     const getIdToJoin = useSelector(selectLobbyID);
     const getLobbyNickname = useSelector(selectLobbyNickname);
-    // go to next page first, send request from there with loading icon
     const onClick = () => {
         dispatch(setUser(textboxValue)); // does this need time to execute? returns "empty" here
 
