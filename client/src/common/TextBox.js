@@ -40,7 +40,9 @@ const TextField = styled.input`
   justify-self: center;
   text-align: left;
   letter-spacing: -0.015em;
+
   color: ${props=>props.isValid?"#000000":"#FF9E89"};
+
   border: ${props => (props.isValid ? "2px solid #FFFFFF" : "2px solid red")};
   box-sixing: border-box;
   border-radius: 2px;

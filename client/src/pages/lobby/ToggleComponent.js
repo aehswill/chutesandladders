@@ -3,15 +3,32 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsPublicGame, selectIsPublicGame } from './lobbysetupSlice';
+import axios from 'axios';
 
 export default function ToggleComponent(props){
     const dispatch = useDispatch();
     const getIsPublicGame = useSelector(selectIsPublicGame);
-    const [isPublic, setIsPublic] = useState(false);
+
+//     const [isPublic, setIsPublic] = useState(false);
+    const [isPublic, setIsPublic] = useState();
+
+    const url = window.location.href;
+    const getLobbyID = url.substring(url.lastIndexOf('/') + 1);
+    axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}`)
+        .then((lobby) => {
+            setIsPublic(lobby.data.isPublic);
+        })
+        .catch(function(error){
+            console.log({
+                message: error.message
+            })
+        })
+
 
     function onPublicClick(){
         setIsPublic(true);
         dispatch(setIsPublicGame(true));
+
     }
     function onPrivateClick(){
         setIsPublic(false);

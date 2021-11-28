@@ -11,7 +11,7 @@ export default function LobbyTable(props){
     const [lobbies, setLobbies] = React.useState([]);
 
     React.useEffect(() => {
-        axios.get('http://localhost:5000/api/v1/lobbies')
+        axios.get('http://localhost:5000/api/v1/lobbies/public')
         .then((allLobies) => {
             setLobbies(allLobies.data);
         })

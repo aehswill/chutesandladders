@@ -7,7 +7,7 @@ import GamePage from './pages/game/GamePage';
 
 const routes = {
   "/":()=><StartPage />,
-  "/lobby":()=><LobbyPage />,
+  "/lobby/:id":()=><LobbyPage />,
   "/game":()=><GamePage/>
 };
 

@@ -16,8 +16,14 @@ const PlayerData = require('../models/player');
  * return the player from the lobby that is currently active
  */
 const get_active_player = async(req, res) => {
+    /**
+     * get the lobby id
+     * 
+     * search the db for that lobby
+     * then return the lobby's active player
+     */
+    
     const lobby_id = req.params.id;
-
     await LobbyData.findOne({'id': lobby_id})
     .then((lobby) => {
         const player = lobby.gamestate.active_player;
@@ -36,6 +42,13 @@ const get_active_player = async(req, res) => {
  * return the active trivia question from the lobby's gamestate
  */
 const get_active_trivia_question = async(req, res) => {
+    /**
+     * get the lobby id
+     * 
+     * search the db for that lobby
+     * then return the lobby's active question
+     */
+
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then((lobby) => {

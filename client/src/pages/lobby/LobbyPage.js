@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {selectIsHost, selectLobbyNickname,
@@ -8,6 +9,7 @@ import { customAlphabet } from 'nanoid'
 import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken} from './lobbysetupSlice'
 import { setMyColor, setIsBlueTaken, setIsOrangeTaken, setIsPurpleTaken, setIsYellowTaken} from './lobbysetupSlice'
 import { yellow, orange, purple, blue} from './lobbysetupSlice'
+import {useState} from 'react'
 import styled from 'styled-components'
 import ToggleComponent from './ToggleComponent'
 import DifficultyComponent from './DifficultyComponent'
@@ -17,10 +19,14 @@ import Modal from "../../common/Modal"
 import axios from 'axios'
 import Player from '../../model/Player'
 import StartButton from '../../common/StartButton'
-
+import PlayerEntryComponent from './PlayerEntryComponent'
+import { setIsPublicGame, selectIsPublicGame } from './lobbysetupSlice';
+import Cookies from 'universal-cookie';
 const nanoid = customAlphabet("ABCDEF0123456789", 36);
 
+// get lobby info here
 export default function LobbyPage(props){
+
     const dispatch = useDispatch();
     const getLobbyName = useSelector(selectLobbyNickname);
     const getLobbyID = useSelector(selectLobbyID);
@@ -92,6 +98,35 @@ export default function LobbyPage(props){
             return player;
         })))
     }
+//     const cookies = new Cookies();
+//     const [color, setColor] = useState("");
+//     const [getLobbyName, setLobbyName] = useState();
+//     const url = window.location.href;
+//     const getLobbyID = url.substring(url.lastIndexOf('/') + 1);
+
+//     axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}`)
+//         .then((lobby) => {
+//             setLobbyName(lobby.data.name);
+//         })
+//         .catch(function(error){
+//             console.log({
+//                 message: error.message
+//             })
+//         })
+
+//     const dispatch = useDispatch();
+    
+
+//     function setColorAndDispatch(c){
+//         setColor(c);
+//         dispatch()
+//     }
+//     // how to handle polling for new players on public?
+//     // non blocking request every x seconds? (async)
+//     const click = () => {
+//         dispatch(openModal());
+//       }
+
 
     return(
         <>

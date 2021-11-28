@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { setMyColor, setIsBlueTaken, setIsOrangeTaken, setIsPurpleTaken, setIsYellowTaken} from './lobbysetupSlice'
 import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken} from './lobbysetupSlice'
@@ -72,7 +73,9 @@ export default function ColorSelectorComponent(props){
         </Container>
     );
 }
+
 // &#10005;
+
 //style
 const Container = styled.div`
     margin: 40px 0px;
@@ -90,6 +93,7 @@ const ColorContainer = styled.div`
     gap: 10px;
     padding: 4px;
 `;
+
 const ColorButton = styled.button`
     padding: 0px;
     margin: 0px;
@@ -108,4 +112,5 @@ const ColorButton = styled.button`
 const X = styled.span`
     font-size: 45px;
     line-height: 30px;
+
 `;

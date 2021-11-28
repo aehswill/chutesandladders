@@ -57,10 +57,12 @@ export default function DifficultyComponent(props){
     );
 }
 
+//text click isDisabed
+
 // STYLE
 const OuterContainer =styled.div`
     position: absolute;
-    top: 23%;
+
     width: 430px;
     height: 540px;
     border: 3px solid;
