@@ -1,27 +1,44 @@
 import React from 'react'
 import styled from 'styled-components'
+import Bot from '../../assets/Bot.png'
 
 export default function PlayerEntryComponent(props){
-    // also pass in user ID
-    // listen for updates... check that this color = userID's color from request
-    if(props.host === true){
-        return(
-            <ListItem>
-                <ChosenColor color={props.color}/>
-                <span>{props.name}</span>
-                <GM>gamemaster</GM>
-            </ListItem>
-        )
-    }
-    else{
-        return(
-            <ListItem>
-                <ChosenColor color={props.color}/>
-                <span>{props.name}</span>
-            </ListItem>
-        )
-    }
+    const color = props.player.color;
+    const name = props.player.nickname;
+    const host = props.player.isHost;
+    const bot = props.player.isRobot;
+
+    return(
+        <ListItem>
+            <ChosenColor color={color}/>
+            <span>{name}</span>
+            {host && <GM>gamemaster</GM>}
+            {bot && <Icon src={Bot} alt="Robot Icon"/>}
+        </ListItem>
+    )
 }
+
+// export default function PlayerEntryComponent(props){
+//     // also pass in user ID
+//     // listen for updates... check that this color = userID's color from request
+//     if(props.host === true){
+//         return(
+//             <ListItem>
+//                 <ChosenColor color={props.color}/>
+//                 <span>{props.name}</span>
+//                 <GM>gamemaster</GM>
+//             </ListItem>
+//         )
+//     }
+//     else{
+//         return(
+//             <ListItem>
+//                 <ChosenColor color={props.color}/>
+//                 <span>{props.name}</span>
+//             </ListItem>
+//         )
+//     }
+//   }           
 
 // STYLE
 const ListItem = styled.li`
@@ -43,8 +60,12 @@ const ChosenColor = styled.span`
     width: 25px;
     border-radius: 50%;
     display: inline-block;
-    background-color: yellow;
+
+    background-color: ${props=>props.color};
 `;
-const GM = styled.span`
-    flex-grow: 2;
+const GM = styled.div`
+    margin-left: auto;
+`;
+const Icon = styled.img`
+    margin-left: auto;
 `;

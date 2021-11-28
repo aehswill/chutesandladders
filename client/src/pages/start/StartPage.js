@@ -11,7 +11,9 @@ import { openModal } from '../../common/modalSlice'
 import Modal from '../../common/Modal'
 import EnterNameComponent from './EnterNameComponent'
 import { selectIsHost, selectLobbyID, selectLobbyNickname, selectUser, selectUserID } from './gamesetupSlice'
+
 import Cookies from 'universal-cookie';
+
 
 
 function APITest() {
@@ -193,7 +195,9 @@ export default function StartPage(props){
                 <button onClick={()=>alert(getLobby)}>LobbyID</button>
                 <button onClick={()=>alert(getUser)}>User</button>
                 <button onClick={()=>alert(getUserID)}>UserID</button>
+
                 <button onClick={()=>navigate("/lobby/")}>LOBBY PAGE</button>
+
 
 
 

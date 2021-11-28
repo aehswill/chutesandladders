@@ -1,4 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+
+import { createSlice } from '@reduxjs/toolkit'
+
+export const orange = "#FC7438";
+export const purple = "#B117EB";
+export const blue = "#005BF5";
+export const yellow = "#FFE424";
 import axios from 'axios';
 
 const initialState = {
@@ -8,6 +14,7 @@ const initialState = {
     isPurpleTaken: false, 
     isOrangeTaken: false,
     isBlueTaken: false,
+    players: [],
 }
 
 export const lobbysetupSlice = createSlice({
@@ -17,6 +24,7 @@ export const lobbysetupSlice = createSlice({
         setIsPublicGame: (state, action) => {
             state.isPublicGame = action.payload
             console.log("Setting Public Game: "+state.isPublicGame)
+
             const url = window.location.href;
             const id = url.substring(url.lastIndexOf('/') + 1);
             const res =  axios.put(`http://localhost:5000/api/v1/lobbies/${id}`, {
@@ -28,6 +36,7 @@ export const lobbysetupSlice = createSlice({
             .catch(function(error){
                 console.log(error);
             })
+
         },
         setMyColor: (state, action) => {
             state.myColor = action.payload
@@ -49,6 +58,13 @@ export const lobbysetupSlice = createSlice({
             state.isBlueTaken = action.payload
             console.log("Setting blue taken: "+state.isBlueTaken)
         },
+
+        setPlayers: (state, action) => {
+            state.players = (action.payload).map(player=>JSON.stringify(player))
+            // SEND PLAYER LIST TO BACKEND FROM HERE
+            console.log("Updating player list")
+        }
+
     }
 });
 
@@ -59,12 +75,19 @@ export const selectIsPurpleTaken = (state) => state.lobbysetup.isPurpleTaken;
 export const selectIsOrangeTaken = (state) => state.lobbysetup.isOrangeTaken;
 export const selectIsBlueTaken = (state) => state.lobbysetup.isBlueTaken;
 
+export const selectPlayers = (state) => (state.lobbysetup.players).map(player=>JSON.parse(player));
+
+
 export const { 
     setIsPublicGame, 
     setMyColor, 
     setIsYellowTaken, 
     setIsPurpleTaken, 
     setIsOrangeTaken, 
-    setIsBlueTaken } = lobbysetupSlice.actions;
+
+    setIsBlueTaken,
+    setPlayers
+ } = lobbysetupSlice.actions;
+
 
 export default lobbysetupSlice.reducer;

@@ -3,10 +3,13 @@ import styled from 'styled-components'
 import TextBox from '../../common/TextBox';
 import PopupButton from '../../common/PopupButton';
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser, setUserID } from './gamesetupSlice';
-import { selectUser, selectIsHost, selectLobbyID, selectLobbyNickname } from './gamesetupSlice';
+
+import { setUser, setUserID, selectUser, selectIsHost, selectLobbyID, selectLobbyNickname } from './gamesetupSlice';
+import { navigate } from 'hookrouter';
 import { customAlphabet } from 'nanoid';
 import close from '../../assets/close.png'
+import axios from 'axios';
+
 
 
 const nanoid = customAlphabet("ABCDEF0123456789", 36);
@@ -17,6 +20,7 @@ export default function EnterNameComponent(props){
     const dispatch = useDispatch();
 
     const [isInputValid, setIsInputValid] = React.useState(true);
+
     // go to next page first, send request from there with loading icon
     const onClick = () => {
         dispatch(setUser(textboxValue)); // does this need time to execute? returns "empty" here
@@ -33,11 +37,11 @@ export default function EnterNameComponent(props){
         if(input.test(evt.target.value)){
             setIsInputValid(true);
             textboxValue = evt.target.value;
-            console.log("OK: "+textboxValue);
+
         }
         else{
             setIsInputValid(false);
-            console.log("INVALID CHARACTER: " + evt.target.value);
+
         }
     }
 
@@ -50,7 +54,9 @@ export default function EnterNameComponent(props){
                     <PopupTitle>Enter Nickname</PopupTitle>
                     <TextBox placeholder="Name" value={textboxValue} 
                     onChange={handleChange} bg="white" isValid={isInputValid} helpText={helpText}/>
-                    <PopupButton text="START"click={onClick} isDisabled={isInputValid}/>
+
+                    <PopupButton text="START"click={onClick} isDisabled={!isInputValid}/>
+
                 </InnerContainer>
             </OuterContainer>
     );

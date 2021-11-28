@@ -29,8 +29,11 @@ export default function PlayerBoxComponent(props){
             Players
             <Separator />
             <List>
-            {(players).map(player=>(
-                <PlayerEntryComponent name={player.nickname} host={player.isHost}/>
+            {(props.players).map(player=>(
+                <PlayerEntryComponent player={player}/>
+//             {(players).map(player=>(
+//                 <PlayerEntryComponent name={player.nickname} host={player.isHost}/>
+
             ))}
             </List>
         </Box>

@@ -1,50 +1,132 @@
-import React, { useEffect } from 'react';
+
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {selectIsHost, selectLobbyNickname,
+    selectLobbyID, selectUser, selectUserID} from '../start/gamesetupSlice'
+import { openModal } from '../../common/modalSlice'
+import { selectPlayers, setPlayers } from './lobbysetupSlice'
+import { customAlphabet } from 'nanoid'
+import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken} from './lobbysetupSlice'
+import { setMyColor, setIsBlueTaken, setIsOrangeTaken, setIsPurpleTaken, setIsYellowTaken} from './lobbysetupSlice'
+import { yellow, orange, purple, blue} from './lobbysetupSlice'
 import {useState} from 'react'
 import styled from 'styled-components'
 import ToggleComponent from './ToggleComponent'
 import DifficultyComponent from './DifficultyComponent'
 import PlayerBoxComponent from './PlayerBoxComponent'
 import ColorSelectorComponent from './ColorSelectorComponent'
-import { useDispatch, useSelector } from 'react-redux'
 import Modal from "../../common/Modal"
-import { openModal } from '../../common/modalSlice'
 import axios from 'axios'
 import Player from '../../model/Player'
-import PlayerEntryComponent from './PlayerEntryComponent'
 import StartButton from '../../common/StartButton'
+import PlayerEntryComponent from './PlayerEntryComponent'
 import { setIsPublicGame, selectIsPublicGame } from './lobbysetupSlice';
 import Cookies from 'universal-cookie';
+const nanoid = customAlphabet("ABCDEF0123456789", 36);
 
 // get lobby info here
 export default function LobbyPage(props){
-    const cookies = new Cookies();
-    const [color, setColor] = useState("");
-    const [getLobbyName, setLobbyName] = useState();
-    const url = window.location.href;
-    const getLobbyID = url.substring(url.lastIndexOf('/') + 1);
-
-    axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}`)
-        .then((lobby) => {
-            setLobbyName(lobby.data.name);
-        })
-        .catch(function(error){
-            console.log({
-                message: error.message
-            })
-        })
 
     const dispatch = useDispatch();
+    const getLobbyName = useSelector(selectLobbyNickname);
+    const getLobbyID = useSelector(selectLobbyID);
+    const getIsHost = useSelector(selectIsHost);
+    const getUser = useSelector(selectUser);
+    const getUserID = useSelector(selectUserID);
+    const getPlayers = useSelector(selectPlayers);
+    const blueTaken = useSelector(selectIsBlueTaken);
+    const orangeTaken = useSelector(selectIsOrangeTaken);
+    const purpleTaken = useSelector(selectIsPurpleTaken);
+    const yellowTaken = useSelector(selectIsYellowTaken);
+
+    // poll for updated players list, check specifically for color changes
+    // check players color and update corresponding IsTaken action in redux
+    
+    useEffect(()=>{
+        const temp = [];
+        const shortList = [];
+        const user = getUser;
+        const id = getUserID;
+        const host = getIsHost;
+        temp.push(new Player(`${id}`, `${user}`, false, host));
+        if(host === true){
+            const res = axios.get('https://api.fungenerators.com/name/generate?category=alien');
+            res.then(function(response){
+                var count = 1;
+                (response.data.contents.names).forEach(name =>{
+                    if(name.length < 10 && count < 4){ // we only need 3 robot names
+                        shortList.push(name);
+                        ++count;
+                    }
+                })
+                shortList.forEach(n=>{
+                    temp.push(new Player(nanoid(), n, true, false))
+                })
+
+                dispatch(setPlayers(temp)); // player list sent to backend when redux is updated (lobbysetupSlice)
+                console.log(getPlayers);
+            })
+            .catch(function(error){
+                console.log(error)
+            });
+    }},[]);
+
+    const click = () => {
+        // auto-assign colors to players who haven't chosen
+        dispatch(setPlayers(getPlayers.map( (player) => {
+            if(player.color === "transparent"){
+                if(!blueTaken) player.color = blue;
+                else if(!orangeTaken) player.color = orange;
+                else if(!yellowTaken) player.color = yellow;
+                else if(!purpleTaken) player.color = purple;
+            }
+            return player;
+        })))
+        // redux will update backend, then on our next poll the UI should pick up the changes
+        const anyBots = getPlayers.map(player=>player.isRobot?"true":"false");
+        if(anyBots) dispatch(openModal());
+        else{
+            //navigate directly
+        }
+      }
+    
+    const colorHandler = (color) => {
+        dispatch(setPlayers(getPlayers.map( (player) => {
+            if(player.player_uuid === getUserID){
+                player.color = color;
+            }
+            return player;
+        })))
+    }
+//     const cookies = new Cookies();
+//     const [color, setColor] = useState("");
+//     const [getLobbyName, setLobbyName] = useState();
+//     const url = window.location.href;
+//     const getLobbyID = url.substring(url.lastIndexOf('/') + 1);
+
+//     axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}`)
+//         .then((lobby) => {
+//             setLobbyName(lobby.data.name);
+//         })
+//         .catch(function(error){
+//             console.log({
+//                 message: error.message
+//             })
+//         })
+
+//     const dispatch = useDispatch();
     
 
-    function setColorAndDispatch(c){
-        setColor(c);
-        dispatch()
-    }
-    // how to handle polling for new players on public?
-    // non blocking request every x seconds? (async)
-    const click = () => {
-        dispatch(openModal());
-      }
+//     function setColorAndDispatch(c){
+//         setColor(c);
+//         dispatch()
+//     }
+//     // how to handle polling for new players on public?
+//     // non blocking request every x seconds? (async)
+//     const click = () => {
+//         dispatch(openModal());
+//       }
+
 
     return(
         <>
@@ -57,9 +139,9 @@ export default function LobbyPage(props){
                         <h1>{getLobbyName}</h1>
                         <h1>{getLobbyID}</h1>
                     </TitleBox>
-                    <PlayerBoxComponent/>
+                    <PlayerBoxComponent players={getPlayers}/>
                 </div>
-                <ColorSelectorComponent chooseColorHandler={setColor}/>
+                <ColorSelectorComponent click={colorHandler}/>
             </Container>
             <ButtonContainer>
                 <StartButton text="GO" click={click}/>

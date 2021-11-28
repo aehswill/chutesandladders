@@ -8,6 +8,8 @@ import axios from 'axios';
 export default function ToggleComponent(props){
     const dispatch = useDispatch();
     const getIsPublicGame = useSelector(selectIsPublicGame);
+
+//     const [isPublic, setIsPublic] = useState(false);
     const [isPublic, setIsPublic] = useState();
 
     const url = window.location.href;
