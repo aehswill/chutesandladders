@@ -54,12 +54,13 @@ export default function DifficultyComponent(props){
         </OuterContainer>
 );
 }
+
 //text click isDisabed
 
 // STYLE
 const OuterContainer =styled.div`
     position: absolute;
-    top: 23%;
+
     width: 430px;
     height: 540px;
     border: 3px solid;
@@ -72,6 +73,7 @@ const InnerContainer = styled.div`
 position: absolute;
 left: 2.39%;
 right: 2.39%;
+
 top: 12%;
 bottom: 5.35%;
 padding-bottom: 18px;
@@ -82,6 +84,7 @@ justify-content: space-around;
 border: 3px solid;
 border-radius: 8px;
 border-image-source: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(255,255,255,0.5) 100%);
+
 background: #881400;
 `;
 //background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.25) 100%), #881400;

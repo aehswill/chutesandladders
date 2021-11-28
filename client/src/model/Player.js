@@ -1,3 +1,4 @@
+
 export default class Player{
     constructor(id, name, isRobot, isHost){
         this.nickname = name;

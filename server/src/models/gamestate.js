@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
-const Player = require('./player');
 
 /**
  * gamestate shcema
- * 
- * i dont think im importing Player correctly
- * 
+ *      -active trivia question
+ *      -answer to trivia question
+ *      -active player
  */
 const gamestateSchema = mongoose.Schema({
     active_trivia_question: String,
@@ -13,14 +12,14 @@ const gamestateSchema = mongoose.Schema({
     active_player: {
         player_uid: String,
         nickname: String,
-        ip: String, 
         isRobot: Boolean,
+        isHost: Boolean,
         total_points: Number,
         speed_points: Number,
         trivia_points: Number,
     }
 });
 
+// create model and export
 const Gamestate = mongoose.model('Gamestate', gamestateSchema);
-
 module.exports = Gamestate;

@@ -6,7 +6,7 @@ import LobbyPage from './pages/lobby/LobbyPage'
 
 const routes = {
   "/":()=><StartPage />,
-  "/lobby":()=><LobbyPage />
+  "/lobby/:id":()=><LobbyPage />
 };
 
 function App() {

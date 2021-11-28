@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 export default function PopupButton(props){
     return(
+      
       <Button onClick={props.click} disabled={props.isDisabled} bgColor={props.color}>
           <ButtonText>{props.text}</ButtonText>
       </Button>

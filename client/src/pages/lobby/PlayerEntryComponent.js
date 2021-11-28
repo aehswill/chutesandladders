@@ -18,6 +18,28 @@ export default function PlayerEntryComponent(props){
     )
 }
 
+// export default function PlayerEntryComponent(props){
+//     // also pass in user ID
+//     // listen for updates... check that this color = userID's color from request
+//     if(props.host === true){
+//         return(
+//             <ListItem>
+//                 <ChosenColor color={props.color}/>
+//                 <span>{props.name}</span>
+//                 <GM>gamemaster</GM>
+//             </ListItem>
+//         )
+//     }
+//     else{
+//         return(
+//             <ListItem>
+//                 <ChosenColor color={props.color}/>
+//                 <span>{props.name}</span>
+//             </ListItem>
+//         )
+//     }
+//   }           
+
 // STYLE
 const ListItem = styled.li`
     height: 60px;
@@ -38,6 +60,7 @@ const ChosenColor = styled.span`
     width: 25px;
     border-radius: 50%;
     display: inline-block;
+
     background-color: ${props=>props.color};
 `;
 const GM = styled.div`
