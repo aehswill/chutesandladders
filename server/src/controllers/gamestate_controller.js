@@ -16,17 +16,18 @@ const PlayerData = require('../models/player');
  * return the player from the lobby that is currently active
  */
 const get_active_player = async(req, res) => {
-    const id = req.params.id;
+    const lobby_id = req.params.id;
 
-    try {
-        const lobby = await LobbyData.findById(id);
+    await LobbyData.findOne({'id': lobby_id})
+    .then((lobby) => {
         const player = lobby.gamestate.active_player;
         res.status(200).json(player);
-    } catch (error) {
+    })
+    .catch ((error) => {
         res.status(400).json({
             message: error.message
         });
-    }
+    });
 }
 
 /**
@@ -35,17 +36,17 @@ const get_active_player = async(req, res) => {
  * return the active trivia question from the lobby's gamestate
  */
 const get_active_trivia_question = async(req, res) => {
-    const id = req.params.id;
-
-    try {
-        const lobby = await LobbyData.findById(id);
+    const lobby_id = req.params.id;
+    await LobbyData.findOne({'id': lobby_id})
+    .then((lobby) => {
         const question = lobby.gamestate.active_trivia_question;
         res.status(200).json(question);
-    } catch (error) {
+    })
+    .catch ((error) => {
         res.status(400).json({
             message: error.message
         });
-    }
+    });
 }
 
 /**

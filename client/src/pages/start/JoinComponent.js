@@ -13,6 +13,7 @@ export default function JoinComponent(props){
     const [isInputValid, setIsInputValid] = React.useState(true);
 
     var inputValue;
+
     const handleUserInput = (evt)=>{
         if((evt.target.value).length > 0 && input.test(evt.target.value)){
             setIsInputValid(true);
@@ -23,6 +24,7 @@ export default function JoinComponent(props){
         }
     }
     function onClick(){
+
         if(inputValue != null){
             // CHECK IF LOBBY EXISTS, then...
             dispatch(setLobbyID(inputValue));
@@ -34,6 +36,7 @@ export default function JoinComponent(props){
             setIsInputValid(false);
             setIsInputValid(true);
         } 
+
     }
 
     return(

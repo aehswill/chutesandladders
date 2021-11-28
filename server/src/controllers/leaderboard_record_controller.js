@@ -22,14 +22,15 @@ const add_scores = async(req, res) => {
     //create new record
     const newRecord = new leaderboardRecordData(record);
 
-    try {
-        await newRecord.save();
+    await newRecord.save()
+    .then(() => {
         res.status(201).json(newRecord);
-    } catch (error) {
+    })
+    .catch ((error) => {
         res.status(409).json({
             message: error.message
         })
-    }
+    });
 }
 
 /**
@@ -38,14 +39,15 @@ const add_scores = async(req, res) => {
  * get all data from the leaderboard_record
  */
 const get_scores = async(req, res) => {
-    try {
-        const allRecords = await leaderboardRecordData.find();
-        res.status(200).json(allRecords);
-    } catch (error) {
+    await leaderboardRecordData.find()
+    .then((records) => {
+        res.status(200).json(records);
+    })
+    .catch ((error) => {
         res.status(404).json({
             message: error.message
         })
-    }
+    });
 }
 
 module.exports = {

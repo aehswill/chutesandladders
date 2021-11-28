@@ -2,11 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import TextBox from '../../common/TextBox';
 import PopupButton from '../../common/PopupButton';
+
 import { useDispatch } from 'react-redux'
 import { setUser, setUserID } from './gamesetupSlice';
 import { navigate } from 'hookrouter';
 import { customAlphabet } from 'nanoid';
 import close from '../../assets/close.png'
+import axios from 'axios';
+
 
 const nanoid = customAlphabet("ABCDEF0123456789", 36);
 const input = /^([A-Za-z0-9]{1,10})$/
@@ -14,16 +17,118 @@ const helpText = "Nickname must only contain the following characters: A-Z a-z 0
 
 export default function EnterNameComponent(props){
     const dispatch = useDispatch();
+
     const [isInputValid, setIsInputValid] = React.useState(true);
 
+
+    const getUser = useSelector(selectUser);
+    const getIsHost = useSelector(selectIsHost);
+    const getIdToJoin = useSelector(selectLobbyID);
+    const getLobbyNickname = useSelector(selectLobbyNickname);
+    // go to next page first, send request from there with loading icon
     const onClick = () => {
         dispatch(setUser(textboxValue)); // does this need time to execute? returns "empty" here
-        // API CALL -> async PUT request (ishost, lobby ID, lobby nickname, player name)
-        // Wait for request to return... handle bad responses, then...
-        //navigate("/lobby");
+
+        // API CALL -> async PUT request (ishost, lobby ID, lobby nickname, player name) 
+        /**
+         * if isHost is false Put the player in the lobby where id = lobbyID
+         * 
+         * else post new lobby where lobby name = lobby nickname
+         */
         const userID = nanoid();
         dispatch(setUserID(userID));
         props.close();
+        console.log(getUser);
+        console.log(getIsHost);
+        console.log(getIdToJoin);
+        console.log(getLobbyNickname);
+        if(getIsHost === true){
+            axios.post('http://localhost:5000/api/v1/lobbies',{
+                name: getLobbyNickname,
+                id: '000001',
+                players: [
+                    {
+                        player_uid: '1',
+                        nickname: getUser,
+                        ip: '123.45.67',
+                        isRobot: false,
+                        total_points: 0,
+                        speed_points: 0,
+                        trivia_points: 0,
+                    }, 
+                    {
+                        player_uid: '2',
+                        nickname: 'Robert',
+                        ip: '123.45.67',
+                        isRobot: true,
+                        total_points: 0,
+                        speed_points: 0,
+                        trivia_points: 0,
+                    },
+                    {
+                        player_uid: '3',
+                        nickname: 'Robert',
+                        ip: '123.45.67',
+                        isRobot: true,
+                        total_points: 0,
+                        speed_points: 0,
+                        trivia_points: 0,
+                    },
+                    {
+                        player_uid: '4',
+                        nickname: 'Robert',
+                        ip: '123.45.67',
+                        isRobot: true,
+                        total_points: 0,
+                        speed_points: 0,
+                        trivia_points: 0,
+                    }
+                ],
+                gamestate: {
+                    active_trivia_question: 'trivia q',
+                    player_trivia_answer: 'trivia a',
+                    active_player: {
+                        player_uid: '1',
+                        nickname: 'kevin',
+                        ip: '123.45.67', 
+                        isRobot: false,
+                        total_points: 0,
+                        speed_points: 0,
+                        trivia_points: 0,
+                    }
+                }
+            })
+        }
+        else if (getIsHost === false){
+            const res = axios.put(`http://localhost:5000/api/v1/lobbies/${getIdToJoin}/players`, {
+                player_uid: '10',
+                nickname: getUser,
+                ip: '123.45.67',
+                isRobot: false,
+                total_points: 0,
+                speed_points: 0,
+                trivia_points: 0,
+            });
+            res.then(function(response){
+                console.log(response.data);
+              })
+              .catch(function(error){
+                console.log(error);
+              })
+        }
+        else{
+            /**
+             * error or something here
+             */
+        }
+
+
+
+
+        // Wait for request to return... handle bad responses, then...
+
+        // navigate("/lobby");
+
     }
 
     var textboxValue;
