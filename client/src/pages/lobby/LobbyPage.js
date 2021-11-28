@@ -1,31 +1,40 @@
 import React, { useEffect } from 'react'
-import {useState} from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {selectIsHost, selectLobbyNickname,
+    selectLobbyID, selectUser, selectUserID} from '../start/gamesetupSlice'
+import { openModal } from '../../common/modalSlice'
+import { selectPlayers, setPlayers } from './lobbysetupSlice'
+import { customAlphabet } from 'nanoid'
+import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken} from './lobbysetupSlice'
+import { setMyColor, setIsBlueTaken, setIsOrangeTaken, setIsPurpleTaken, setIsYellowTaken} from './lobbysetupSlice'
+import { yellow, orange, purple, blue} from './lobbysetupSlice'
 import styled from 'styled-components'
 import ToggleComponent from './ToggleComponent'
 import DifficultyComponent from './DifficultyComponent'
 import PlayerBoxComponent from './PlayerBoxComponent'
 import ColorSelectorComponent from './ColorSelectorComponent'
-import {selectIsHost, selectLobbyNickname,
-    selectLobbyID, selectUser, selectUserID} from '../start/gamesetupSlice'
-import { useDispatch, useSelector } from 'react-redux'
 import Modal from "../../common/Modal"
-import { openModal } from '../../common/modalSlice'
 import axios from 'axios'
 import Player from '../../model/Player'
-import PlayerEntryComponent from './PlayerEntryComponent'
 import StartButton from '../../common/StartButton'
 
+const nanoid = customAlphabet("ABCDEF0123456789", 36);
 
-// get lobby info here
 export default function LobbyPage(props){
-    const [players, setPlayers] = useState([]);
-    const [color, setColor] = useState("");
     const dispatch = useDispatch();
     const getLobbyName = useSelector(selectLobbyNickname);
     const getLobbyID = useSelector(selectLobbyID);
     const getIsHost = useSelector(selectIsHost);
     const getUser = useSelector(selectUser);
     const getUserID = useSelector(selectUserID);
+    const getPlayers = useSelector(selectPlayers);
+    const blueTaken = useSelector(selectIsBlueTaken);
+    const orangeTaken = useSelector(selectIsOrangeTaken);
+    const purpleTaken = useSelector(selectIsPurpleTaken);
+    const yellowTaken = useSelector(selectIsYellowTaken);
+
+    // poll for updated players list, check specifically for color changes
+    // check players color and update corresponding IsTaken action in redux
     
     useEffect(()=>{
         const temp = [];
@@ -45,25 +54,44 @@ export default function LobbyPage(props){
                     }
                 })
                 shortList.forEach(n=>{
-                    temp.push(new Player("", n, true, false))
+                    temp.push(new Player(nanoid(), n, true, false))
                 })
-                
-                setPlayers(temp);
+
+                dispatch(setPlayers(temp)); // player list sent to backend when redux is updated (lobbysetupSlice)
+                console.log(getPlayers);
             })
             .catch(function(error){
                 console.log(error)
             });
     }},[]);
 
-    function setColorAndDispatch(c){
-        setColor(c);
-        dispatch()
-    }
-    // how to handle polling for new players on public?
-    // non blocking request every x seconds? (async)
     const click = () => {
-        dispatch(openModal());
+        // auto-assign colors to players who haven't chosen
+        dispatch(setPlayers(getPlayers.map( (player) => {
+            if(player.color === "transparent"){
+                if(!blueTaken) player.color = blue;
+                else if(!orangeTaken) player.color = orange;
+                else if(!yellowTaken) player.color = yellow;
+                else if(!purpleTaken) player.color = purple;
+            }
+            return player;
+        })))
+        // redux will update backend, then on our next poll the UI should pick up the changes
+        const anyBots = getPlayers.map(player=>player.isRobot?"true":"false");
+        if(anyBots) dispatch(openModal());
+        else{
+            //navigate directly
+        }
       }
+    
+    const colorHandler = (color) => {
+        dispatch(setPlayers(getPlayers.map( (player) => {
+            if(player.player_uuid === getUserID){
+                player.color = color;
+            }
+            return player;
+        })))
+    }
 
     return(
         <>
@@ -76,9 +104,9 @@ export default function LobbyPage(props){
                         <h1>{getLobbyName}</h1>
                         <h1>{getLobbyID}</h1>
                     </TitleBox>
-                    <PlayerBoxComponent players={players}/>
+                    <PlayerBoxComponent players={getPlayers}/>
                 </div>
-                <ColorSelectorComponent chooseColorHandler={setColor}/>
+                <ColorSelectorComponent click={colorHandler}/>
             </Container>
             <ButtonContainer>
                 <StartButton text="GO" click={click}/>

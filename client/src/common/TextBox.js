@@ -40,7 +40,7 @@ const TextField = styled.input`
   justify-self: center;
   text-align: left;
   letter-spacing: -0.015em;
-  color: #000000;
+  color: ${props=>props.isValid?"#000000":"#FF9E89"};
   border: ${props => (props.isValid ? "2px solid #FFFFFF" : "2px solid red")};
   box-sixing: border-box;
   border-radius: 2px;
@@ -55,13 +55,13 @@ const TextField = styled.input`
     box-shadow: 0px 16px 24px rgba(0,0,0,0.14), 0px 6px 30px rgba(0,0,0,0.12), 0px 8px 10px rgba(0,0,0,0.2);
   }
   &::placeholder{
-    color: #504F4F;
+    color: ${props=>props.isValid?"#504F4F":"#FF9E89"};
     opacity: 1;
   }
   &:-ms-input-placeholder{
-    color: #504F4F;
+    color: ${props=>props.isValid?"#504F4F":"#FF9E89"};
   }
   &::-ms-input-placeholder{
-    color: #504F4F;
+    color: ${props=>props.isValid?"#504F4F":"#FF9E89"};
   }
 `;

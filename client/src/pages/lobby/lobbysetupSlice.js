@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+export const orange = "#FC7438";
+export const purple = "#B117EB";
+export const blue = "#005BF5";
+export const yellow = "#FFE424";
+
 const initialState = {
     isPublicGame: false, 
     myColor: 'empty',
@@ -7,6 +12,7 @@ const initialState = {
     isPurpleTaken: false, 
     isOrangeTaken: false,
     isBlueTaken: false,
+    players: [],
 }
 
 export const lobbysetupSlice = createSlice({
@@ -37,6 +43,11 @@ export const lobbysetupSlice = createSlice({
             state.isBlueTaken = action.payload
             console.log("Setting blue taken: "+state.isBlueTaken)
         },
+        setPlayers: (state, action) => {
+            state.players = (action.payload).map(player=>JSON.stringify(player))
+            // SEND PLAYER LIST TO BACKEND FROM HERE
+            console.log("Updating player list")
+        }
     }
 });
 
@@ -46,6 +57,7 @@ export const selectIsYellowTaken = (state) => state.lobbysetup.isYellowTaken;
 export const selectIsPurpleTaken = (state) => state.lobbysetup.isPurpleTaken;
 export const selectIsOrangeTaken = (state) => state.lobbysetup.isOrangeTaken;
 export const selectIsBlueTaken = (state) => state.lobbysetup.isBlueTaken;
+export const selectPlayers = (state) => (state.lobbysetup.players).map(player=>JSON.parse(player));
 
 export const { 
     setIsPublicGame, 
@@ -53,6 +65,8 @@ export const {
     setIsYellowTaken, 
     setIsPurpleTaken, 
     setIsOrangeTaken, 
-    setIsBlueTaken } = lobbysetupSlice.actions;
+    setIsBlueTaken,
+    setPlayers
+ } = lobbysetupSlice.actions;
 
 export default lobbysetupSlice.reducer;

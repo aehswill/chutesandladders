@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import PlayerEntryComponent from './PlayerEntryComponent';
 
@@ -12,7 +11,7 @@ export default function PlayerBoxComponent(props){
             <Separator />
             <List>
             {(props.players).map(player=>(
-                <PlayerEntryComponent name={player.nickname} host={player.isHost}/>
+                <PlayerEntryComponent player={player}/>
             ))}
             </List>
         </Box>

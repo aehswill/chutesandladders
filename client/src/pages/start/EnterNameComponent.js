@@ -22,7 +22,6 @@ export default function EnterNameComponent(props){
         // Wait for request to return... handle bad responses, then...
         //navigate("/lobby");
         const userID = nanoid();
-        console.log("Generating user id... "+userID);
         dispatch(setUserID(userID));
         props.close();
     }
@@ -32,11 +31,9 @@ export default function EnterNameComponent(props){
         if(input.test(evt.target.value)){
             setIsInputValid(true);
             textboxValue = evt.target.value;
-            console.log("OK: "+textboxValue);
         }
         else{
             setIsInputValid(false);
-            console.log("INVALID CHARACTER: " + evt.target.value);
         }
     }
 
@@ -49,7 +46,7 @@ export default function EnterNameComponent(props){
                     <PopupTitle>Enter Nickname</PopupTitle>
                     <TextBox placeholder="Name" value={textboxValue} 
                     onChange={handleChange} bg="white" isValid={isInputValid} helpText={helpText}/>
-                    <PopupButton text="START"click={onClick} isDisabled={isInputValid}/>
+                    <PopupButton text="START"click={onClick} isDisabled={!isInputValid}/>
                 </InnerContainer>
             </OuterContainer>
     );
