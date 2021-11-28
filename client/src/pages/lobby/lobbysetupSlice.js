@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const initialState = {
     isPublicGame: false, 
@@ -16,6 +17,17 @@ export const lobbysetupSlice = createSlice({
         setIsPublicGame: (state, action) => {
             state.isPublicGame = action.payload
             console.log("Setting Public Game: "+state.isPublicGame)
+            const url = window.location.href;
+            const id = url.substring(url.lastIndexOf('/') + 1);
+            const res =  axios.put(`http://localhost:5000/api/v1/lobbies/${id}`, {
+                isPublic: (action.payload),
+            });
+            res.then(function(response){
+                console.log(response.data);
+            })
+            .catch(function(error){
+                console.log(error);
+            })
         },
         setMyColor: (state, action) => {
             state.myColor = action.payload

@@ -15,14 +15,17 @@ const Player = require('../models/player');
 
 /**
  * create lobby
- * 
- * create a new instance of lobby
- *      -add single player to the player list
- *      -set lobby name
- *      -generate id
  */
  const create_lobby = async(req, res) => {
-    //take the info from req and create a lobby
+    /**
+     * create a new lobby
+     * 
+     * seach for the new lobby in the db unsing the new lobby id
+     * if a lobby is found
+     *      return a 409
+     * else
+     *      save and return the new lobby
+     */
     const lobby = req.body;
 
     const newLobby = new LobbyData(lobby);
@@ -53,10 +56,18 @@ const Player = require('../models/player');
 
 /**
  * delete lobby
- * 
- * delete an instance of lobby 
  */
 const delete_lobby = async(req, res) => {
+    /**
+     * get the lobby id
+     * 
+     * seach the db for a lobby using the lobby id
+     * 
+     * if a lobby is found
+     *  delete the lobby
+     * else
+     *  return a 404
+     */
     const lobby_id = req.params.id;
     
     await LobbyData.findOneAndDelete({'id': lobby_id})
@@ -72,14 +83,12 @@ const delete_lobby = async(req, res) => {
 
 /**
  * get lobbies
- * 
- * if lobby id is passed
- *      -return the single lobby instance
- * 
- * else
- *      -return all lobby instances
  */
 const get_lobbies = async(req, res) => {
+
+    /**
+     * seach the db for all lobbies and return all lobbies
+     */
     await LobbyData.find()
     .then((lobbies) => {
         res.status(200).json(lobbies);
@@ -91,7 +100,35 @@ const get_lobbies = async(req, res) => {
     });
 }
 
+/**
+ * get public lobbies
+ */
+ const get_public_lobbies = async(req, res) => {
+
+    /**
+     * seach the db for all lobbies where isPrivate is false and return those lobbies
+     */
+    await LobbyData.find({ isPublic : true}).exec()
+    .then((public_lobbies) => {
+        res.status(200).json(public_lobbies);
+    })
+    .catch ((error) => {
+        res.status(400).json({
+            message: error.message
+        });
+    });
+}
+
 const get_lobby = async(req, res) => {
+    /**
+     * get the lobby id
+     * 
+     * seach the db for a lobby using the id
+     * if no lobby is found
+     *  send a 404
+     * else
+     *  return the lobby
+     */
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then((lobby) => {
@@ -111,14 +148,24 @@ const get_lobby = async(req, res) => {
 
 /**
  * add player
- * 
- * parameters
- *      -player
- *      -lobby id
- * 
- * add the player to this lobby
  */
 const add_player = async(req, res) => {
+    /**
+     * get the lobby id
+     * create a new player
+     * 
+     * seach the db for the lobby
+     * loop through the lobby's players
+     *  if a robot appears
+     *      replace the robot with a human player
+     *      set playerAdded to true
+     * 
+     * if playerAdded is true
+     *  update the lobby and return the lobby
+     * else 
+     *  give a "lobby is full" error
+     * 
+     */
     const lobby_id = req.params.id;
     const newPlayer = new Player(req.body);
 
@@ -128,7 +175,6 @@ const add_player = async(req, res) => {
         for(var i = 0; i<lobby.players.length; i++){
             if(lobby.players[i].isRobot == true){
                 lobby.players[i] = newPlayer;
-                // console.log(newPlayer);
                 playerAdded = true;
                 break;
             }
@@ -155,13 +201,14 @@ const add_player = async(req, res) => {
 
 /**
  * get players
- * 
- * parameters 
- *      -lobby id
- * 
- * return all players in this lobby
  */
 const get_players = async(req, res) => {
+    /**
+     * get the id
+     * 
+     * search the db for the lobby using the id
+     * return all the players from the lobby
+     */
     const lobby_id = req.params.id;
     
     await LobbyData.findOne({'id': lobby_id})
@@ -173,12 +220,40 @@ const get_players = async(req, res) => {
     });
 }
 
+const set_privacy = async(req, res) => {
+    /**
+     * get the lobby id
+     * create a new player
+     * 
+     * seach the db for the lobby
+     * set isPrivate to req.body
+     * retutn the new lobby
+     * 
+     */
+     const lobby_id = req.params.id;
+     await LobbyData.findOne({'id': lobby_id})
+     .then(async(lobby) => {
+        lobby.isPublic = req.body.isPublic;
+        await LobbyData.findByIdAndUpdate(lobby._id, lobby);
+        return res.status(200).json(lobby);
+     })   
+     .catch ((error) => {
+         return res.status(400).json({
+             message: error.message,
+             request: error.request,
+             response: error.response
+         });
+     });
+}
+
 
 module.exports = {
     create_lobby,
     delete_lobby,
     get_lobbies,
+    get_public_lobbies,
     get_lobby,
     add_player,
     get_players,
+    set_privacy
 };

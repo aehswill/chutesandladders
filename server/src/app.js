@@ -10,7 +10,9 @@ const api = require('./routes');
 
 const app = express();
 
-
+/**
+ * set up what the app needs
+ */
 
 app.use(morgan('dev'));
 app.use(helmet());

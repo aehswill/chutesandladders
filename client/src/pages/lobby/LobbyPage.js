@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import {useState} from 'react'
 import styled from 'styled-components'
 import ToggleComponent from './ToggleComponent'
 import DifficultyComponent from './DifficultyComponent'
 import PlayerBoxComponent from './PlayerBoxComponent'
 import ColorSelectorComponent from './ColorSelectorComponent'
-import {selectIsHost, selectLobbyNickname,
-    selectLobbyID, selectUser, selectUserID} from '../start/gamesetupSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Modal from "../../common/Modal"
 import { openModal } from '../../common/modalSlice'
@@ -14,46 +12,29 @@ import axios from 'axios'
 import Player from '../../model/Player'
 import PlayerEntryComponent from './PlayerEntryComponent'
 import StartButton from '../../common/StartButton'
-
+import { setIsPublicGame, selectIsPublicGame } from './lobbysetupSlice';
+import Cookies from 'universal-cookie';
 
 // get lobby info here
 export default function LobbyPage(props){
-    const [players, setPlayers] = useState([]);
+    const cookies = new Cookies();
     const [color, setColor] = useState("");
-    const dispatch = useDispatch();
-    const getLobbyName = useSelector(selectLobbyNickname);
-    const getLobbyID = useSelector(selectLobbyID);
-    const getIsHost = useSelector(selectIsHost);
-    const getUser = useSelector(selectUser);
-    const getUserID = useSelector(selectUserID);
-    
-    useEffect(()=>{
-        const temp = [];
-        const shortList = [];
-        const user = getUser;
-        const id = getUserID;
-        const host = getIsHost;
-        temp.push(new Player(`${id}`, `${user}`, false, host));
-        if(host === true){
-            const res = axios.get('https://api.fungenerators.com/name/generate?category=alien');
-            res.then(function(response){
-                var count = 1;
-                (response.data.contents.names).forEach(name =>{
-                    if(name.length < 10 && count < 4){ // we only need 3 robot names
-                        shortList.push(name);
-                        ++count;
-                    }
-                })
-                shortList.forEach(n=>{
-                    temp.push(new Player("", n, true, false))
-                })
-                
-                setPlayers(temp);
+    const [getLobbyName, setLobbyName] = useState();
+    const url = window.location.href;
+    const getLobbyID = url.substring(url.lastIndexOf('/') + 1);
+
+    axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}`)
+        .then((lobby) => {
+            setLobbyName(lobby.data.name);
+        })
+        .catch(function(error){
+            console.log({
+                message: error.message
             })
-            .catch(function(error){
-                console.log(error)
-            });
-    }},[]);
+        })
+
+    const dispatch = useDispatch();
+    
 
     function setColorAndDispatch(c){
         setColor(c);
@@ -76,7 +57,7 @@ export default function LobbyPage(props){
                         <h1>{getLobbyName}</h1>
                         <h1>{getLobbyID}</h1>
                     </TitleBox>
-                    <PlayerBoxComponent players={players}/>
+                    <PlayerBoxComponent/>
                 </div>
                 <ColorSelectorComponent chooseColorHandler={setColor}/>
             </Container>

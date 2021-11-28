@@ -9,7 +9,8 @@ import { useSelector } from 'react-redux';
 
 
 export default function PlayerBoxComponent(props){
-    const getLobbyID = useSelector(selectLobbyID);
+    const url = window.location.href;
+    const getLobbyID = url.substring(url.lastIndexOf('/') + 1);
 
     const [players, setPlayers] = React.useState([])
     React.useEffect(() => {

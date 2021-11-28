@@ -9,17 +9,14 @@ const leaderboardRecordData = require('../models/leaderboard_record');
 
 /**
  * add scores
- * 
- * add each player socre to the leaderboard
- * iterate through the players and add each score to the leaderboard_record
- * 
- * parameters
- *      -list of player objects (required)
  */
 const add_scores = async(req, res) => {
-    //get all the info from req
+    /**
+     * create a new record
+     * 
+     * save it to the db and return the record
+     */
     const record = req.body;
-    //create new record
     const newRecord = new leaderboardRecordData(record);
 
     await newRecord.save()
@@ -35,10 +32,11 @@ const add_scores = async(req, res) => {
 
 /**
  * get scores
- * 
- * get all data from the leaderboard_record
  */
 const get_scores = async(req, res) => {
+    /**
+     * search for all records in the db and return them all
+     */
     await leaderboardRecordData.find()
     .then((records) => {
         res.status(200).json(records);

@@ -1,6 +1,10 @@
 const express = require('express');
 const api = express.Router();
 
+/**
+ * make the routers and tell the app to use them
+ */
+
 // const emojiRouter = require('./routes/emojis');
 const leaderboardRouter = require('./routes/leaderboard');
 const lobbyRouter = require('./routes/lobbies');
