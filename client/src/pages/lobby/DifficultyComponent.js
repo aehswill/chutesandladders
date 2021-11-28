@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import close from '../../assets/close.png'
 import PopupButton from '../../common/PopupButton';
 import { selectPlayers, setPlayers } from './lobbysetupSlice'
+import { navigate } from 'hookrouter'
 
 export default function DifficultyComponent(props){
     const dispatch = useDispatch();
@@ -25,6 +26,7 @@ export default function DifficultyComponent(props){
         })))
         //backend update handled through redux (lobbysetupSlice)
         //... navigate to game page
+        navigate("/game");
     }
 
     return(
@@ -52,9 +54,8 @@ export default function DifficultyComponent(props){
                 <PopupButton text="Enter Game" isDisabled={false} click={onClick}/>
             </InnerContainer>
         </OuterContainer>
-);
+    );
 }
-//text click isDisabed
 
 // STYLE
 const OuterContainer =styled.div`
@@ -69,32 +70,32 @@ const OuterContainer =styled.div`
     filter: drop-shadow(0px 24px 38px rgba(0,0,0,0.14)) drop-shadow(0px 9px 46px rgba(0,0,0,0.12)) drop-shadow(0px 11px 15px rgba(0,0,0,0.2));
 `;
 const InnerContainer = styled.div`
-position: absolute;
-left: 2.39%;
-right: 2.39%;
-top: 12%;
-bottom: 5.35%;
-padding-bottom: 18px;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: space-around;
-border: 3px solid;
-border-radius: 8px;
-border-image-source: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(255,255,255,0.5) 100%);
-background: #881400;
+    position: absolute;
+    left: 2.39%;
+    right: 2.39%;
+    top: 12%;
+    bottom: 5.35%;
+    padding-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    border: 3px solid;
+    border-radius: 8px;
+    border-image-source: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(255,255,255,0.5) 100%);
+    background: #881400;
 `;
 //background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.25) 100%), #881400;
 const PopupTitle = styled.h2`
-font-family: Poppins;
-font-style: normal;
-font-weight: bold;
-font-size: 35px;
-line-height: 35px;
-margin: 0px;
-margin-top: 20px;
-color: #FFFFFF;
-text-shadow: 0px 2px 4px rgba(91, 26, 26, 0.14), 0px 3px 4px rgba(123,12,12,0.12), 0px 1px 5px rgba(136,13,13,0.2);
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 35px;
+    line-height: 35px;
+    margin: 0px;
+    margin-top: 20px;
+    color: #FFFFFF;
+    text-shadow: 0px 2px 4px rgba(91, 26, 26, 0.14), 0px 3px 4px rgba(123,12,12,0.12), 0px 1px 5px rgba(136,13,13,0.2);
 `;
 const ModalClose = styled.span`
     position: absolute;

@@ -80,7 +80,7 @@ export default function LobbyPage(props){
         const anyBots = getPlayers.map(player=>player.isRobot?"true":"false");
         if(anyBots) dispatch(openModal());
         else{
-            //navigate directly
+            // there are no bots to assign difficulty to, navigate directly to next page
         }
       }
     
