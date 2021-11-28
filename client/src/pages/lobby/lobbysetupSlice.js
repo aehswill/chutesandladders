@@ -7,7 +7,7 @@ export const blue = "#005BF5";
 export const yellow = "#FFE424";
 
 const initialState = {
-    isPublicGame: false, 
+    isPublicGame: true, 
     myColor: 'empty',
     isYellowTaken: false, 
     isPurpleTaken: false, 
@@ -22,20 +22,12 @@ export const lobbysetupSlice = createSlice({
     reducers: {
         setIsPublicGame: (state, action) => {
             state.isPublicGame = action.payload
-            console.log("Setting Public Game: "+state.isPublicGame)
-
+            console.log("Setting privacy to "+state.isPublicGame);
             const url = window.location.href;
             const id = url.substring(url.lastIndexOf('/') + 1);
-            const res =  axios.put(`http://localhost:5000/api/v1/lobbies/${id}`, {
+            axios.put(`http://localhost:5000/api/v1/lobbies/${id}`, {
                 isPublic: (action.payload),
             });
-            res.then(function(response){
-                console.log(response.data);
-            })
-            .catch(function(error){
-                console.log(error);
-            })
-
         },
         setMyColor: (state, action) => {
             state.myColor = action.payload
@@ -57,11 +49,8 @@ export const lobbysetupSlice = createSlice({
             state.isBlueTaken = action.payload
             console.log("Setting blue taken: "+state.isBlueTaken)
         },
-
         setPlayers: (state, action) => {
             state.players = (action.payload).map(player=>JSON.stringify(player))
-            // SEND PLAYER LIST TO BACKEND FROM HERE
-            console.log("Updating player list")
         }
 
     }

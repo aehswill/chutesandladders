@@ -59,6 +59,8 @@ const create_player = async (req, res) => {
  */
 const update_player_color = (req, res) => {
     //unsure of how to implement this
+    // (TW) do we need to add color, difficulty to Player model?
+    // when the player is updated, look for the lobby that contains matching playerID and put
 }
 
 /**

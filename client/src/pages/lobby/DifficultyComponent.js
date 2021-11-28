@@ -27,6 +27,7 @@ export default function DifficultyComponent(props){
         //backend update handled through redux (lobbysetupSlice)
         //... navigate to game page
         navigate("/game");
+        props.close();
     }
 
     return(

@@ -3,10 +3,7 @@ import styled from 'styled-components'
 import Bot from '../../assets/Bot.png'
 import Human from '../../assets/Human.png'
 import { useDispatch} from 'react-redux'
-
 import { setLobbyID, setLobbyNickname} from './gamesetupSlice'
-
-
 
 export default function LobbyEntryComponent(props){
   const dispatch = useDispatch();

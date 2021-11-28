@@ -1,24 +1,46 @@
 import React, { useEffect } from 'react'
-import { useState } from 'react'
 import styled from 'styled-components'
 import PlayerEntryComponent from './PlayerEntryComponent';
 import axios from 'axios';
-import { selectLobbyID, } from '../start/gamesetupSlice'
+import { selectLobbyID} from '../start/gamesetupSlice'
 import { selectPlayers, setPlayers } from './lobbysetupSlice'
 import { useSelector, useDispatch } from 'react-redux';
-
-
+import { setIsBlueTaken, setIsOrangeTaken, setIsPurpleTaken, setIsYellowTaken} from './lobbysetupSlice'
+//import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken} from './lobbysetupSlice'
+import { yellow, orange, purple, blue} from './lobbysetupSlice'
 
 export default function PlayerBoxComponent(props){
     const dispatch = useDispatch();
     const getPlayers = useSelector(selectPlayers);
-    const url = window.location.href;
-    const getLobbyID = url.substring(url.lastIndexOf('/') + 1);
+    //const url = window.location.href;
+    //const getLobbyID = url.substring(url.lastIndexOf('/') + 1);
+    const getLobbyID = useSelector(selectLobbyID);
+    const players = [];
 
-    React.useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players`)
-        .then((players) => {
-            dispatch(setPlayers(players.data));
+    useEffect(() => {
+        const res = axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/`);
+        res.then((lobby) => {
+            (lobby.data.players).forEach(player=>players.push(player));
+            dispatch(setPlayers(players));
+
+            (players).forEach(player=>{
+                switch(player.color){
+                    case orange:
+                        dispatch(setIsOrangeTaken(true));
+                        break;
+                    case yellow:
+                        dispatch(setIsYellowTaken(true));
+                        break;
+                    case purple:
+                        dispatch(setIsPurpleTaken(true));
+                        break;
+                    case blue:
+                        dispatch(setIsBlueTaken(true));
+                        break;
+                    default:
+                        break;
+                }
+            })
         })
         .catch(function(error){
             console.log({
@@ -26,6 +48,7 @@ export default function PlayerBoxComponent(props){
             })
         })
     })
+
     return(
         <Box>
             Players

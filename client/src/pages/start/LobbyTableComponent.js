@@ -1,24 +1,30 @@
 import React from 'react'
+import { useDispatch, useSelector} from 'react-redux'
+import { selectLobbies, setLobbies } from './gamesetupSlice';
 import styled from 'styled-components'
 import LobbyEntryComponent from './LobbyEntryComponent';
-// import lobbies from '../../mockData/mockLobbies'
 import axios from 'axios'
 
 export default function LobbyTable(props){
-
-    
-
-    const [lobbies, setLobbies] = React.useState([]);
+    const dispatch = useDispatch();
+    const lobbies = useSelector(selectLobbies);
 
     React.useEffect(() => {
         axios.get('http://localhost:5000/api/v1/lobbies/public')
         .then((allLobies) => {
-            setLobbies(allLobies.data);
+            dispatch(setLobbies(allLobies.data)); //at some point, maybe compare the data/check for changes and only update when necessary
+            snooze();
         })
         .catch(function(error){
             console.log(error)
         })
     })
+    async function snooze(){
+        await sleep(5000);
+    }
+    function sleep(ms){
+        return new Promise(resolve=>setTimeout(resolve, ms));
+    }
 
     return(
         <ListBox>
