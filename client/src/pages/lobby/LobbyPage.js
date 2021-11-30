@@ -13,6 +13,7 @@ import PlayerBoxComponent from './PlayerBoxComponent'
 import ColorSelectorComponent from './ColorSelectorComponent'
 import Modal from "../../common/Modal"
 import StartButton from '../../common/StartButton'
+import axios from 'axios'
 
 // get lobby info here
 export default function LobbyPage(props){
@@ -35,6 +36,11 @@ export default function LobbyPage(props){
                 else if(!yellowTaken) player.color = yellow;
                 else if(!purpleTaken) player.color = purple;
             }
+            const res = axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players/${player.player_uid}`, player)
+            .catch(function(error){
+                console.log(error)
+            })
+            res.then(console.log(res))
             return player;
         })))
         const anyBots = getPlayers.map(player=>player.isRobot?"true":"false");
@@ -45,12 +51,24 @@ export default function LobbyPage(props){
       }
     
     const colorHandler = (color) => {
-        dispatch(setPlayers(getPlayers.map( (player) => {
+        if(
+            (color === blue && blueTaken) ||
+            (color === purple && purpleTaken) ||
+            (color === yellow && yellowTaken) ||
+            (color === orange && orangeTaken)
+            ) return;
+        else {
+            dispatch(setPlayers(getPlayers.map( (player) => {
             if(player.player_uid === getUserID){
                 player.color = color;
+                const res = axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players/${player.player_uid}`, player)
+                .catch(function(error){
+                    console.log(error)
+                })
+                res.then(console.log(res))
             }
             return player;
-        })))
+        })))}
     }
 
     return(

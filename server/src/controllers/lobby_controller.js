@@ -220,6 +220,37 @@ const get_players = async(req, res) => {
     });
 }
 
+/**
+ * update player color
+ * 
+ * update the player's color variable from null to the passed color
+ * there is no player color var in schema
+ */
+ const update_player_color = async(req, res) => {
+
+    const lobby_id = req.params.id;
+    const player_uid = req.params.uid;
+     await LobbyData.findOne({'id': lobby_id})
+     .then(async(lobby) => {
+        const temp = lobby.players.map(player=>{
+            if(player.player_uid == req.body.player_uid){
+                player.color = req.body.color
+            }
+            return player;
+        })
+        lobby.players = temp;
+        await LobbyData.findByIdAndUpdate(lobby._id, lobby)
+        return res.status(200).json(lobby);
+     })   
+     .catch ((error) => {
+         return res.status(400).json({
+             message: error.message,
+             request: error.request,
+             response: error.response
+         });
+     });
+}
+
 const set_privacy = async(req, res) => {
     /**
      * get the lobby id
@@ -255,5 +286,6 @@ module.exports = {
     get_lobby,
     add_player,
     get_players,
-    set_privacy
+    set_privacy,
+    update_player_color,
 };

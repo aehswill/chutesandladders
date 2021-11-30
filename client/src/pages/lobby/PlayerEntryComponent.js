@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Bot from '../../assets/Bot_w.png'
+import Bot from '../../assets/icons/Bot_w.png'
 
 export default function PlayerEntryComponent(props){
     const color = props.player.color;

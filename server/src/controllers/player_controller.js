@@ -51,17 +51,6 @@ const create_player = async (req, res) => {
         });
 }
 
-/**
- * update player color
- * 
- * update the player's color variable from null to the passed color
- * there is no player color var in schema
- */
-const update_player_color = (req, res) => {
-    //unsure of how to implement this
-    // (TW) do we need to add color, difficulty to Player model?
-    // when the player is updated, look for the lobby that contains matching playerID and put
-}
 
 /**
  * get scores
@@ -101,6 +90,5 @@ const get_scores = async (req, res) => {
 
 module.exports = {
     create_player,
-    update_player_color,
     get_scores,
 }

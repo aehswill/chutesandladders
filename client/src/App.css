@@ -4,7 +4,7 @@ body {
   wider than than it is tall, otherwise just use the gradient.
   */
   /*background: linear-gradient(#56C7FF, #FFFFFF) no-repeat center center fixed;*/
-  background-image: url(./assets/1920x1080_staticClouds.png);
+  background-image: url(./assets/background/1920x1080_staticClouds.png);
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;

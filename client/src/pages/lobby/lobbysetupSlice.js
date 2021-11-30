@@ -30,24 +30,19 @@ export const lobbysetupSlice = createSlice({
             });
         },
         setMyColor: (state, action) => {
-            state.myColor = action.payload
-            console.log("Setting my color to: "+state.myColor)
+            state.myColor = action.payload;
         },
         setIsYellowTaken: (state, action) => {
             state.isYellowTaken = action.payload
-            console.log("Setting yellow taken: "+state.isYellowTaken)
         },
         setIsPurpleTaken: (state, action) => {
             state.isPurpleTaken = action.payload
-            console.log("Setting purple taken: "+state.isPurpleTaken)
         },
         setIsOrangeTaken: (state, action) => {
             state.isOrangeTaken = action.payload
-            console.log("Setting orange taken: "+state.isOrangeTaken)
         },
         setIsBlueTaken: (state, action) => {
             state.isBlueTaken = action.payload
-            console.log("Setting blue taken: "+state.isBlueTaken)
         },
         setPlayers: (state, action) => {
             state.players = (action.payload).map(player=>JSON.stringify(player))

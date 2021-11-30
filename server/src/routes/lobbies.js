@@ -20,6 +20,10 @@ router.put('/:id', lobbyController.set_privacy);
 router.get('/:id/players', lobbyController.get_players);
 router.put('/:id/players', lobbyController.add_player);
 
+//temporary: seems that the players collection is not linked to the lobby collection
+// i e I can't update the player record in players and see the update in lobby
+router.put('/:id/players/:uid', lobbyController.update_player_color)
+
 
 //gamestate routes
 router.get('/:id/gamestate/player', gamestateController.get_active_player);

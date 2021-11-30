@@ -17,8 +17,7 @@ export default function PlayerBoxComponent(props){
     const getLobbyID = useSelector(selectLobbyID);
     const players = [];
 
-    useEffect(() => {
-        const res = axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/`);
+    const res = axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/`);
         res.then((lobby) => {
             (lobby.data.players).forEach(player=>players.push(player));
             dispatch(setPlayers(players));
@@ -47,7 +46,6 @@ export default function PlayerBoxComponent(props){
                 message: error.message
             })
         })
-    })
 
     return(
         <Box>

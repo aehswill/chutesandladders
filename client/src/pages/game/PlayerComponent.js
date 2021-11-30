@@ -19,14 +19,13 @@ const ListItem = styled.li`
     height: 60px;
     display: flex;
     flex-direction: row;
-    justify-content: start;
-    gap: 10px;
+    justify-content: space-around;
     align-items: center;
+    gap: 10px;
     font-size: 24px;
     color: white;
     font-family: Roboto;
     font-weight: 500;
-    font-size: 24px;
 `;
 const ChosenColor = styled.span`
     height: 25px;
@@ -34,4 +33,6 @@ const ChosenColor = styled.span`
     border-radius: 50%;
     display: inline-block;
     background-color: ${props=>props.color};
+    border: 1px dotted yellow;
 `;
+//

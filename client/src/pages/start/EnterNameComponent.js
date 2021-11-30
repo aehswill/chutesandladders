@@ -8,7 +8,7 @@ import { setUser, setUserID } from './gamesetupSlice'
 import { setPlayers, selectPlayers } from '../lobby/lobbysetupSlice';
 import { navigate } from 'hookrouter';
 import { customAlphabet } from 'nanoid';
-import close from '../../assets/close.png'
+import close from '../../assets/icons/close.png'
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import Player from '../../model/Player';

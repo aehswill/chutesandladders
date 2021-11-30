@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import Bot from '../../assets/Bot.png'
-import Human from '../../assets/Human.png'
+import Bot from '../../assets/icons/Bot.png'
+import Human from '../../assets/icons/Human.png'
 import { useDispatch} from 'react-redux'
 import { setLobbyID, setLobbyNickname} from './gamesetupSlice'
 

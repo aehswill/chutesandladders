@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components';
-import close from '../../assets/close.png'
+import close from '../../assets/icons/close.png'
 import PopupButton from '../../common/PopupButton';
 import { selectPlayers, setPlayers } from './lobbysetupSlice'
 import { navigate } from 'hookrouter'

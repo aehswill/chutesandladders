@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
-import die1 from '../../assets/die1.png'
-import die2 from '../../assets/die2.png'
-import die3 from '../../assets/die3.png'
-import die4 from '../../assets/die4.png'
-import die5 from '../../assets/die5.png'
-import die6 from '../../assets/die6.png'
+import die1 from '../../assets/die/die1.png'
+import die2 from '../../assets/die/die2.png'
+import die3 from '../../assets/die/die3.png'
+import die4 from '../../assets/die/die4.png'
+import die5 from '../../assets/die/die5.png'
+import die6 from '../../assets/die/die6.png'
 
 export default function DieComponent(props){
     const [isClicked, setIsClicked] = useState(false);
@@ -38,9 +38,7 @@ export default function DieComponent(props){
 }
 
 const Scene = styled.div`
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    margin-left: 24px;
     width: 75px;
     height: 75px;
     perspective: 225px;  
