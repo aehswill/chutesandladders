@@ -6,7 +6,26 @@ import { setIsPublicGame, selectIsPublicGame } from './lobbysetupSlice';
 export default function ToggleComponent(props){
     const dispatch = useDispatch();
     const getIsPublicGame = useSelector(selectIsPublicGame);
+
     const disabled = props.isDisabled;
+
+
+//     const [isPublic, setIsPublic] = useState(false);
+    const [isPublic, setIsPublic] = useState();
+
+    const url = window.location.href;
+    const getLobbyID = url.substring(url.lastIndexOf('/') + 1);
+    axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}`)
+        .then((lobby) => {
+            setIsPublic(lobby.data.isPublic);
+        })
+        .catch(function(error){
+            console.log({
+                message: error.message
+            })
+        })
+
+
 
     function onPublicClick(){
        if(!disabled){ 

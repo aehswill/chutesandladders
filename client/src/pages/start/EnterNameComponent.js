@@ -17,6 +17,7 @@ import GameState from '../../model/GameState';
 
 
 
+
 const nanoid = customAlphabet("ABCDEF0123456789", 36);
 const input = /^([A-Za-z0-9]{1,10})$/
 const helpText = "Nickname must only contain the following characters: A-Z a-z 0-9"
@@ -31,7 +32,14 @@ export default function EnterNameComponent(props){
     const getPlayers = useSelector(selectPlayers);
 
     const [isInputValid, setIsInputValid] = React.useState(true);
+
     const [textboxValue, setTextBoxValue] = React.useState("");
+
+
+    // go to next page first, send request from there with loading icon
+    const onClick = () => {
+        dispatch(setUser(textboxValue)); // does this need time to execute? returns "empty" here
+
 
     const playerArray = [];
     var self;
@@ -117,6 +125,7 @@ export default function EnterNameComponent(props){
         }
         else{
             setIsInputValid(false);
+
         }
     }
 

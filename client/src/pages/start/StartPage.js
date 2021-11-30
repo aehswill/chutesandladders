@@ -9,6 +9,8 @@ import { openModal } from '../../common/modalSlice'
 import Modal from '../../common/Modal'
 import EnterNameComponent from './EnterNameComponent'
 
+import { selectIsHost, selectLobbyID, selectLobbyNickname, selectUser, selectUserID } from './gamesetupSlice'
+
 export default function StartPage(props){
   const dispatch = useDispatch();
 
@@ -26,8 +28,6 @@ export default function StartPage(props){
 
             <HostComponent onClick={click}/>
 
-            <DevTestContainer>
-            </DevTestContainer>
 
             <JoinComponent onClick={click}/>
 

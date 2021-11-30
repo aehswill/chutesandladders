@@ -2,8 +2,10 @@ import React from 'react'
 import styled from 'styled-components';
 
 import { useSelector, useDispatch } from 'react-redux';
+
 import { setMyColor} from './lobbysetupSlice'
 import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken, selectMyColor} from './lobbysetupSlice'
+
 import { yellow, orange, purple, blue} from './lobbysetupSlice'
 
 
@@ -19,7 +21,9 @@ export default function ColorSelectorComponent(props){
     const orangeTaken = useSelector(selectIsOrangeTaken);
     const purpleTaken = useSelector(selectIsPurpleTaken);
     const yellowTaken = useSelector(selectIsYellowTaken);
+
     const myColor = useSelector(selectMyColor);
+
 
     // should probably make the colors radio buttons but... oh well
     return(
@@ -27,6 +31,7 @@ export default function ColorSelectorComponent(props){
             <Title>Choose your color:</Title>
             <ColorContainer>
                 <ColorButton color={yellow} isTaken={yellowTaken} selected={yellowSelected} onClick={()=>{
+
                     if(!yellowTaken){
                         dispatch(setMyColor(`${yellow}`));
                         setYellow(true); 
@@ -75,6 +80,49 @@ export default function ColorSelectorComponent(props){
                     }
                 }}>
                     {(orangeTaken && myColor !== orange) && <X>&#10005;</X>}
+
+//                     dispatch(setMyColor(`${yellow}`));
+//                     // send color choice to backend
+//                     setYellow(true);
+//                     setPurple(false);
+//                     setBlue(false);
+//                     setOrange(false);
+//                     props.click(`${yellow}`) //update players in redux
+//                 }}>
+//                     {yellowTaken && <X>&#10005;</X>}
+//                 </ColorButton>
+//                 <ColorButton color={purple} isTaken={purpleTaken} selected={purpleSelected} onClick={()=>{
+//                     dispatch(setMyColor(`${purple}`));
+//                     // send color choice to backend
+//                     setYellow(false);
+//                     setPurple(true);
+//                     setBlue(false);
+//                     setOrange(false);
+//                     props.click(`${purple}`) //update players in redux
+//                 }}>
+//                     {purpleTaken && <X>&#10005;</X>}
+//                 </ColorButton>
+//                 <ColorButton color={blue} isTaken={blueTaken} selected={blueSelected} onClick={()=>{
+//                     dispatch(setMyColor(`${blue}`));
+//                     // send color choice to backend
+//                     setYellow(false);
+//                     setPurple(false);
+//                     setBlue(true);
+//                     setOrange(false);
+//                     props.click(`${blue}`) //update players in redux
+//                 }}>
+//                     {blueTaken && <X>&#10005;</X>}
+//                 </ColorButton>
+//                 <ColorButton color={orange} isTaken={orangeTaken} selected={orangeSelected} onClick={()=>{
+//                     dispatch(setMyColor(`${orange}`));
+//                     // send color choice to backend
+//                     setYellow(false);
+//                     setPurple(false);
+//                     setBlue(false);
+//                     setOrange(true);
+//                     props.click(`${orange}`) //update players in redux
+//                 }}>
+//                     {orangeTaken && <X>&#10005;</X>}
                 </ColorButton>
             </ColorContainer>
         </Container>

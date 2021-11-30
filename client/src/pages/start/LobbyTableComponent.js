@@ -6,8 +6,15 @@ import LobbyEntryComponent from './LobbyEntryComponent';
 import axios from 'axios'
 
 export default function LobbyTable(props){
+
     const dispatch = useDispatch();
     const lobbies = useSelector(selectLobbies);
+
+
+    
+
+//     const [lobbies, setLobbies] = React.useState([]);
+
 
     React.useEffect(() => {
         axios.get('http://localhost:5000/api/v1/lobbies/public')

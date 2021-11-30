@@ -52,8 +52,13 @@ export default function PlayerBoxComponent(props){
             Players
             <Separator />
             <List>
+
             {(getPlayers).map(player=>(
                 <PlayerEntryComponent player={player}/>
+
+//             {(players).map(player=>(
+//                  <PlayerEntryComponent player={player}/>
+
 
             ))}
             </List>

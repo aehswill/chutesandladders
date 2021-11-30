@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {selectIsHost, selectLobbyNickname,
@@ -6,27 +7,76 @@ import { openModal } from '../../common/modalSlice'
 import { selectPlayers, setPlayers } from './lobbysetupSlice'
 import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken} from './lobbysetupSlice'
 import { yellow, orange, purple, blue} from './lobbysetupSlice'
+
 import styled from 'styled-components'
 import ToggleComponent from './ToggleComponent'
 import DifficultyComponent from './DifficultyComponent'
 import PlayerBoxComponent from './PlayerBoxComponent'
 import ColorSelectorComponent from './ColorSelectorComponent'
 import Modal from "../../common/Modal"
+
 import StartButton from '../../common/StartButton'
 import axios from 'axios'
-
+// import axios from 'axios'
+// import Player from '../../model/Player'
+// import StartButton from '../../common/StartButton'
+// import PlayerEntryComponent from './PlayerEntryComponent'
+// import { setIsPublicGame, selectIsPublicGame } from './lobbysetupSlice';
+// import Cookies from 'universal-cookie';
+// const nanoid = customAlphabet("ABCDEF0123456789", 36);
 // get lobby info here
 export default function LobbyPage(props){
+
+
+
+
+
+
     const dispatch = useDispatch();
     const getLobbyName = useSelector(selectLobbyNickname);
     const getLobbyID = useSelector(selectLobbyID);
     const getIsHost = useSelector(selectIsHost);
+//     const getUser = useSelector(selectUser);
+
     const getUserID = useSelector(selectUserID);
     const getPlayers = useSelector(selectPlayers);
     const blueTaken = useSelector(selectIsBlueTaken);
     const orangeTaken = useSelector(selectIsOrangeTaken);
     const purpleTaken = useSelector(selectIsPurpleTaken);
     const yellowTaken = useSelector(selectIsYellowTaken);
+
+    // poll for updated players list, check specifically for color changes
+    // check players color and update corresponding IsTaken action in redux
+    
+//     useEffect(()=>{
+//         const temp = [];
+//         const shortList = [];
+//         const user = getUser;
+//         const id = getUserID;
+//         const host = getIsHost;
+//         temp.push(new Player(`${id}`, `${user}`, false, host));
+//         if(host === true){
+//             const res = axios.get('https://api.fungenerators.com/name/generate?category=alien');
+//             res.then(function(response){
+//                 var count = 1;
+//                 (response.data.contents.names).forEach(name =>{
+//                     if(name.length < 10 && count < 4){ // we only need 3 robot names
+//                         shortList.push(name);
+//                         ++count;
+//                     }
+//                 })
+//                 shortList.forEach(n=>{
+//                     temp.push(new Player(nanoid(), n, true, false))
+//                 })
+
+//                 dispatch(setPlayers(temp)); // player list sent to backend when redux is updated (lobbysetupSlice)
+//                 console.log(getPlayers);
+//             })
+//             .catch(function(error){
+//                 console.log(error)
+//             });
+//     }},[]);
+
     const click = () => {
         // auto-assign colors to players who haven't chosen
         dispatch(setPlayers(getPlayers.map( (player) => {
@@ -36,6 +86,7 @@ export default function LobbyPage(props){
                 else if(!yellowTaken) player.color = yellow;
                 else if(!purpleTaken) player.color = purple;
             }
+          
             const res = axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players/${player.player_uid}`, player)
             .catch(function(error){
                 console.log(error)
@@ -47,10 +98,12 @@ export default function LobbyPage(props){
         if(anyBots) dispatch(openModal());
         else{
             // there are no bots to assign difficulty to, navigate directly to next page
+
         }
       }
     
     const colorHandler = (color) => {
+
         if(
             (color === blue && blueTaken) ||
             (color === purple && purpleTaken) ||

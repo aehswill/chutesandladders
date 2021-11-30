@@ -1,5 +1,11 @@
+
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios';
+export const orange = "#FC7438";
+export const purple = "#B117EB";
+export const blue = "#005BF5";
+export const yellow = "#FFE424";
+
 
 export const orange = "#FC7438";
 export const purple = "#B117EB";
@@ -22,12 +28,22 @@ export const lobbysetupSlice = createSlice({
     reducers: {
         setIsPublicGame: (state, action) => {
             state.isPublicGame = action.payload
+
             console.log("Setting privacy to "+state.isPublicGame);
+
             const url = window.location.href;
             const id = url.substring(url.lastIndexOf('/') + 1);
             axios.put(`http://localhost:5000/api/v1/lobbies/${id}`, {
                 isPublic: (action.payload),
             });
+
+//             res.then(function(response){
+//                 console.log(response.data);
+//             })
+//             .catch(function(error){
+//                 console.log(error);
+//             })
+
         },
         setMyColor: (state, action) => {
             state.myColor = action.payload;
@@ -44,8 +60,10 @@ export const lobbysetupSlice = createSlice({
         setIsBlueTaken: (state, action) => {
             state.isBlueTaken = action.payload
         },
+
         setPlayers: (state, action) => {
             state.players = (action.payload).map(player=>JSON.stringify(player))
+
         }
 
     }

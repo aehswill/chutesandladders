@@ -7,6 +7,7 @@ import PopupButton from '../../common/PopupButton';
 import { selectPlayers, setPlayers } from './lobbysetupSlice'
 import { navigate } from 'hookrouter'
 
+
 export default function DifficultyComponent(props){
     const dispatch = useDispatch();
     const getPlayers = useSelector(selectPlayers);
@@ -26,8 +27,10 @@ export default function DifficultyComponent(props){
         })))
         //backend update handled through redux (lobbysetupSlice)
         //... navigate to game page
+
         navigate("/game");
         props.close();
+
     }
 
     return(
@@ -99,6 +102,7 @@ const PopupTitle = styled.h2`
     margin-top: 20px;
     color: #FFFFFF;
     text-shadow: 0px 2px 4px rgba(91, 26, 26, 0.14), 0px 3px 4px rgba(123,12,12,0.12), 0px 1px 5px rgba(136,13,13,0.2);
+
 `;
 const ModalClose = styled.span`
     position: absolute;
