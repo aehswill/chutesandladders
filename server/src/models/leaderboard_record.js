@@ -10,6 +10,7 @@ const leaderboardRecordSchema = mongoose.Schema({
         nickname: String, 
         isRobot: Boolean,
         isHost: Boolean,
+        color: String,
         total_points: Number,
         speed_points: Number,
         trivia_points: Number,
