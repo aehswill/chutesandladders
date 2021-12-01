@@ -6,6 +6,7 @@ import { selectTransformTo, setTransformTo} from './dieSlice';
 import BoardComponent from './BoardComponent';
 import StartButton from '../../common/StartButton'
 import PlayerBox from './HorizonPlayerBoxComponent'
+import MessageBoxComponent from './MessageBoxComponent'
 
 export default function GamePage(props){
     const dispatch = useDispatch();
@@ -28,9 +29,7 @@ export default function GamePage(props){
             </TopContainer>
             <BoardComponent/>
         </OuterContainer>
-        <DevControls>
-
-        </DevControls>
+        <MessageBoxComponent />
         </>
     )
 }
@@ -63,12 +62,4 @@ const ButtonBox = styled.div`
     margin-top: 44px;
     margin-right: 20px;
     margin-left: auto;
-`;
-const DevControls = styled.div`
-    position: absolute;
-    bottom: 12px;
-    left: 12px;
-    height: 300px;
-    width: 400px;
-    background-color: black;
 `;

@@ -8,6 +8,7 @@ export const yellow = "#FFE424";
 
 const initialState = {
     isPublicGame: true, 
+    difficulty: 'easy',
     myColor: 'empty',
     isYellowTaken: false, 
     isPurpleTaken: false, 
@@ -26,7 +27,15 @@ export const lobbysetupSlice = createSlice({
             const url = window.location.href;
             const id = url.substring(url.lastIndexOf('/') + 1);
             axios.put(`http://localhost:5000/api/v1/lobbies/${id}`, {
-                isPublic: (action.payload),
+                isPublic: action.payload,
+            });
+        },
+        setDifficulty: (state, action) => {
+            state.difficulty = action.payload
+            const url = window.location.href;
+            const id = url.substring(url.lastIndexOf('/') + 1);
+            axios.put(`http://localhost:5000/api/v1/lobbies/${id}`, {
+                difficulty: action.payload,
             });
         },
         setMyColor: (state, action) => {
@@ -45,29 +54,30 @@ export const lobbysetupSlice = createSlice({
             state.isBlueTaken = action.payload
         },
         setPlayers: (state, action) => {
-            state.players = (action.payload).map(player=>JSON.stringify(player))
+            const tempArray = (action.payload).map(player=>JSON.stringify(player));
+            state.players = tempArray;
         }
 
     }
 });
 
 export const selectIsPublicGame = (state) => state.lobbysetup.isPublicGame;
+export const selectDifficulty = (state) => state.lobbysetup.difficulty;
 export const selectMyColor = (state) => state.lobbysetup.myColor;
 export const selectIsYellowTaken = (state) => state.lobbysetup.isYellowTaken;
 export const selectIsPurpleTaken = (state) => state.lobbysetup.isPurpleTaken;
 export const selectIsOrangeTaken = (state) => state.lobbysetup.isOrangeTaken;
 export const selectIsBlueTaken = (state) => state.lobbysetup.isBlueTaken;
-
 export const selectPlayers = (state) => (state.lobbysetup.players).map(player=>JSON.parse(player));
 
 
 export const { 
-    setIsPublicGame, 
+    setIsPublicGame,
+    setDifficulty,
     setMyColor, 
     setIsYellowTaken, 
     setIsPurpleTaken, 
     setIsOrangeTaken, 
-
     setIsBlueTaken,
     setPlayers
  } = lobbysetupSlice.actions;

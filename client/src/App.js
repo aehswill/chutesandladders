@@ -8,7 +8,7 @@ import GamePage from './pages/game/GamePage';
 const routes = {
   "/":()=><StartPage />,
   "/lobby/:id":()=><LobbyPage />,
-  "/game":()=><GamePage/>
+  "/lobby/:id/game":()=><GamePage/>
 };
 
 function App() {

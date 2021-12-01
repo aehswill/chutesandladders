@@ -4,8 +4,6 @@ export default class Player{
         this.nickname = name;
         this.isRobot = isRobot;
         this.isHost = isHost;
-        
-        this.difficulty = "";
         this.color = "transparent";
         this.total_points = 0;
         this.speed_points = 0;

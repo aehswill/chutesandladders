@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
  *      -active player
  */
 const gamestateSchema = mongoose.Schema({
+    turn: Number,
     active_trivia_question: String,
     player_trivia_answer: String,
     active_player: {
@@ -18,7 +19,10 @@ const gamestateSchema = mongoose.Schema({
         total_points: Number,
         speed_points: Number,
         trivia_points: Number,
-    }
+    },
+    messages:[{
+        message: String,    
+    }]
 });
 
 // create model and export

@@ -7,5 +7,6 @@ export default class Lobby{
         players.forEach(player=>temp.push(player));
         this.players = temp;
         this.gamestate = gamestate;
+        this.difficulty = "easy"
     }
 }

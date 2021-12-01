@@ -37,6 +37,31 @@ const get_active_player = async(req, res) => {
 }
 
 /**
+ * get gamestate
+ * 
+ * return the gamestate from the lobby
+ */
+ const get_gamestate = async(req, res) => {
+    /**
+     * get the lobby id
+     * 
+     * search the db for that lobby
+     * then return the lobby's active player
+     */
+    
+    const lobby_id = req.params.id;
+    await LobbyData.findOne({'id': lobby_id})
+    .then((lobby) => {
+        res.status(200).json(lobby.gamestate);
+    })
+    .catch ((error) => {
+        res.status(400).json({
+            message: error.message
+        });
+    });
+}
+
+/**
  * get active trivia question
  * 
  * return the active trivia question from the lobby's gamestate
@@ -46,7 +71,7 @@ const get_active_trivia_question = async(req, res) => {
      * get the lobby id
      * 
      * search the db for that lobby
-     * then return the lobby's active question
+     * then return the lobby's gamestate
      */
 
     const lobby_id = req.params.id;
@@ -84,8 +109,37 @@ const check_player_trivia_answer = (req, res) => {
     }
 }
 
+/**
+ * update gamestate
+ * 
+ * update the lobby's gamestate and return updated gamestate
+ */
+ const update_gamestate = async(req, res) => {
+    /**
+     * get the lobby id
+     * 
+     * search the db for that lobby
+     * then update and return the lobby's gamestate
+     */
+    
+    const lobby_id = req.params.id;
+    await LobbyData.findOne({'id': lobby_id})
+    .then(async(lobby) => {
+        lobby.gamestate = req.body.gamestate;
+        await LobbyData.findByIdAndUpdate(lobby._id, lobby);
+        res.status(200).json(lobby.gamestate);
+    })
+    .catch ((error) => {
+        res.status(400).json({
+            message: error.message
+        });
+    });
+}
+
 module.exports = {
     get_active_player,
+    get_gamestate,
     get_active_trivia_question,
-    check_player_trivia_answer
+    check_player_trivia_answer,
+    update_gamestate,
 }

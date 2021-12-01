@@ -251,20 +251,23 @@ const get_players = async(req, res) => {
      });
 }
 
-const set_privacy = async(req, res) => {
+const update_property = async(req, res) => {
     /**
-     * get the lobby id
-     * create a new player
-     * 
      * seach the db for the lobby
-     * set isPrivate to req.body
-     * retutn the new lobby
+     * determine which property to updated based on contents of req.body
+     * update corresponding lobby property with document in req.body
+     * retutn the updated lobby
      * 
      */
      const lobby_id = req.params.id;
      await LobbyData.findOne({'id': lobby_id})
      .then(async(lobby) => {
-        lobby.isPublic = req.body.isPublic;
+        if(JSON.stringify(req.body).includes("isPublic")){
+            lobby.isPublic = req.body.isPublic;
+        }
+        else if(JSON.stringify(req.body).includes("difficulty")){
+            lobby.difficulty = req.body.difficulty;
+        }
         await LobbyData.findByIdAndUpdate(lobby._id, lobby);
         return res.status(200).json(lobby);
      })   
@@ -286,6 +289,6 @@ module.exports = {
     get_lobby,
     add_player,
     get_players,
-    set_privacy,
+    update_property,
     update_player_color,
 };

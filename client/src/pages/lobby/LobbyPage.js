@@ -5,6 +5,7 @@ import {selectIsHost, selectLobbyNickname,
 import { openModal } from '../../common/modalSlice'
 import { selectPlayers, setPlayers } from './lobbysetupSlice'
 import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken} from './lobbysetupSlice'
+import { setIsBlueTaken, setIsOrangeTaken, setIsPurpleTaken, setIsYellowTaken } from './lobbysetupSlice'
 import { yellow, orange, purple, blue} from './lobbysetupSlice'
 import styled from 'styled-components'
 import ToggleComponent from './ToggleComponent'
@@ -27,14 +28,27 @@ export default function LobbyPage(props){
     const orangeTaken = useSelector(selectIsOrangeTaken);
     const purpleTaken = useSelector(selectIsPurpleTaken);
     const yellowTaken = useSelector(selectIsYellowTaken);
+    
     const click = () => {
         // auto-assign colors to players who haven't chosen
         dispatch(setPlayers(getPlayers.map( (player) => {
             if(player.color === "transparent"){
-                if(!blueTaken) player.color = blue;
-                else if(!orangeTaken) player.color = orange;
-                else if(!yellowTaken) player.color = yellow;
-                else if(!purpleTaken) player.color = purple;
+                if(!blueTaken){
+                    player.color = blue;
+                    dispatch(setIsBlueTaken(true));
+                }
+                else if(!orangeTaken){
+                    player.color = orange;
+                    dispatch(setIsOrangeTaken(true));
+                }
+                else if(!yellowTaken){
+                    player.color = yellow;
+                    dispatch(setIsYellowTaken(true));
+                } 
+                else if(!purpleTaken){
+                    player.color = purple;
+                    dispatch(setIsPurpleTaken(true));
+                } 
             }
             const res = axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players/${player.player_uid}`, player)
             .catch(function(error){
@@ -60,6 +74,24 @@ export default function LobbyPage(props){
         else {
             dispatch(setPlayers(getPlayers.map( (player) => {
             if(player.player_uid === getUserID){
+                const oldColor = player.color; 
+                // deselect previous color
+                switch(oldColor){
+                    case yellow:
+                        dispatch(setIsYellowTaken(false));
+                        break;
+                    case orange:
+                        dispatch(setIsOrangeTaken(false));
+                        break;
+                    case purple:
+                        dispatch(setIsPurpleTaken(false));
+                        break;
+                    case blue:
+                        dispatch(setIsBlueTaken(false));
+                        break;
+                    default:
+                        break;
+                }
                 player.color = color;
                 const res = axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players/${player.player_uid}`, player)
                 .catch(function(error){

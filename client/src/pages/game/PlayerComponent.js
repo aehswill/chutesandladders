@@ -4,12 +4,12 @@ import styled from 'styled-components'
 export default function PlayerComponent(props){
     const color = props.player.color;
     const name = props.player.nickname;
-    const isTakingTurn = props.turn;
+    const isActive = props.isActive;
 
     return(
         <ListItem>
             <ChosenColor color={color}/>
-            <span>{name}</span>
+            <Name isActive={isActive}>{name}</Name>
         </ListItem>
     )
 }        
@@ -22,10 +22,6 @@ const ListItem = styled.li`
     justify-content: space-around;
     align-items: center;
     gap: 10px;
-    font-size: 24px;
-    color: white;
-    font-family: Roboto;
-    font-weight: 500;
 `;
 const ChosenColor = styled.span`
     height: 25px;
@@ -33,6 +29,10 @@ const ChosenColor = styled.span`
     border-radius: 50%;
     display: inline-block;
     background-color: ${props=>props.color};
-    border: 1px dotted yellow;
 `;
-//
+const Name = styled.span`
+    font-size: 24px;
+    color: ${props=>props.isActive?"#12FF12":"white"};
+    font-family: Roboto;
+    font-weight: 500;
+`;

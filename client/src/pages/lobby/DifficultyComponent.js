@@ -4,29 +4,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components';
 import close from '../../assets/icons/close.png'
 import PopupButton from '../../common/PopupButton';
-import { selectPlayers, setPlayers } from './lobbysetupSlice'
+import { selectDifficulty, setDifficulty } from './lobbysetupSlice'
+import { selectLobbyID } from '../start/gamesetupSlice';
 import { navigate } from 'hookrouter'
 
 export default function DifficultyComponent(props){
     const dispatch = useDispatch();
-    const getPlayers = useSelector(selectPlayers);
+    const getDifficulty = useSelector(selectDifficulty);
+    const getLobbyID = useSelector(selectLobbyID);
     const [easySelected, selectEasy] = useState(true);
     const [mediumSelected, selectMedium] = useState(false);
     const [hardSelected, selectHard] = useState(false);
 
     function onClick(){
-        dispatch(setPlayers(getPlayers.map(player=>{
-            if(player.isRobot){
-                if(easySelected) player.difficulty = "easy";
-                else if(mediumSelected) player.difficulty = "medium";
-                else if(hardSelected) player.difficulty = "hard";
-            }
-            console.log(player.nickname+" set to "+player.difficulty)
-            return player;
-        })))
-        //backend update handled through redux (lobbysetupSlice)
-        //... navigate to game page
-        navigate("/game");
+        dispatch(setDifficulty(()=>{
+            if(easySelected) return "easy";
+            else if(mediumSelected) return "medium";
+            else if(hardSelected) return "hard";
+        }))
+        console.log(`Lobby difficulty set to ${getDifficulty}`);
+        navigate(`/lobby/${getLobbyID}/game`);
         props.close();
     }
 
