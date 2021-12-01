@@ -17,11 +17,8 @@ export default function DifficultyComponent(props){
     const [hardSelected, selectHard] = useState(false);
 
     function onClick(){
-        dispatch(setDifficulty(()=>{
-            if(easySelected) return "easy";
-            else if(mediumSelected) return "medium";
-            else if(hardSelected) return "hard";
-        }))
+        const mode = easySelected?"easy":(mediumSelected?"medium":"hard");
+        dispatch(setDifficulty(mode));
         console.log(`Lobby difficulty set to ${getDifficulty}`);
         navigate(`/lobby/${getLobbyID}/game`);
         props.close();

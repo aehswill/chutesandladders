@@ -34,8 +34,9 @@ export const lobbysetupSlice = createSlice({
             state.difficulty = action.payload
             const url = window.location.href;
             const id = url.substring(url.lastIndexOf('/') + 1);
+            console.log(JSON.stringify(action.payload));
             axios.put(`http://localhost:5000/api/v1/lobbies/${id}`, {
-                difficulty: action.payload,
+                difficulty: `${action.payload}`,
             });
         },
         setMyColor: (state, action) => {

@@ -2,17 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux';
 import {selectPlayers, setPlayers} from '../lobby/lobbysetupSlice'
-import { selectLobbyID } from '../start/gamesetupSlice'
 import PlayerComponent from './PlayerComponent';
 import axios from 'axios';
 
 export default function HorizonPlayerBoxComponent(props){
     const dispatch = useDispatch();
-    const getLobbyID = useSelector(selectLobbyID);
     const getPlayers = useSelector(selectPlayers);
 
+    const url = window.location.href;
+    const id = url.split("/")[4];
     React.useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players`)
+        axios.get(`http://localhost:5000/api/v1/lobbies/${id}/players`)
         .then((players) => {
             dispatch(setPlayers(players.data));
         })
