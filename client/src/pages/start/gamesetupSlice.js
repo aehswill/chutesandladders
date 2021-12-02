@@ -17,23 +17,18 @@ export const gamesetupSlice = createSlice({
     reducers: {
         setIsHost: (state, action) => {
             state.isHost = action.payload
-            console.log("Setting host: "+state.isHost)
         },
         setLobbyNickname: (state, action) => {
             state.lobbyNickname = action.payload
-            console.log("Setting lobby nickname: "+state.lobbyNickname)
         },
         setLobbyID: (state, action) => {
             state.lobbyID = action.payload
-            console.log("Setting lobby ID: "+state.lobbyID)
         },
         setUser: (state, action) => {
             state.user = action.payload
-            console.log("Setting user name: "+state.user)
         },
         setUserID: (state, action) => {
             state.userID = action.payload
-            console.log("Setting user name: "+state.user)
         },
         setLobbies: (state, action) => {
             state.lobbies = (action.payload).map(lobby=>JSON.stringify(lobby));

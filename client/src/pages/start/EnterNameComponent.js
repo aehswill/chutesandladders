@@ -10,7 +10,7 @@ import { navigate } from 'hookrouter';
 import { customAlphabet } from 'nanoid';
 import close from '../../assets/icons/close.png'
 import axios from 'axios';
-import Cookies from 'universal-cookie';
+import Cookie from 'universal-cookie';
 import Player from '../../model/Player';
 import Lobby from '../../model/Lobby';
 import GameState from '../../model/GameState';
@@ -29,18 +29,27 @@ export default function EnterNameComponent(props){
     const getUser = useSelector(selectUser);
     const getUserID = useSelector(selectUserID);
     const getPlayers = useSelector(selectPlayers);
-
+    const cookie = new Cookie();
     const [isInputValid, setIsInputValid] = React.useState(true);
-    const [textboxValue, setTextBoxValue] = React.useState("");
+    const [name, setName] = React.useState('');
 
+    var textboxValue; 
     const playerArray = [];
     var self;
     async function onClick(){
-        dispatch(setUser(textboxValue));
-        const userID = nanoid();
-        console.log("Generating user id... "+userID);
+        dispatch(setUser(name));
+        // if the cookie hasn't been set, generate a new playerID
+        var userID;
+        if(typeof cookie.get('playerID') === 'undefined'){
+            userID = nanoid();
+            cookie.set('playerID', userID, [{path: '/'},{secure: true}, {sameSite: 'strict'}]);
+        }
+        else{
+            userID = cookie.get('playerID');
+        }
+        
         dispatch(setUserID(userID));
-        const me = createUser(textboxValue, userID);
+        const me = createUser(name, userID);
         if(getIsHost){ 
             createLobby();
         }
@@ -51,14 +60,11 @@ export default function EnterNameComponent(props){
     }
 
     function createUser(name, id){
-        const cookies = new Cookies();
-        console.log('Create new Player');
         self = new Player(`${id}`, `${name}`, false, `${getIsHost}`);
         playerArray.push(self);
         const req = axios.post('http://localhost:5000/api/v1/player', self);
         req.then((res) => {
-            cookies.set('playerID', res.data.id, {path: '/'});
-            console.log(cookies.get('myCat')); // Pacman
+            
         })
         .catch(function(error){
             console.log(error);
@@ -86,7 +92,7 @@ export default function EnterNameComponent(props){
 
             const gamestate = new GameState("triviaq","triviaA",self);
             const lobby = new Lobby(getNickname, getLobby, playerArray, gamestate);
-            
+            // we should remove the old lobby on the backend if player is host
             const req = axios.post(`http://localhost:5000/api/v1/lobbies/`, lobby);
             req.then(res=>console.log("Lobby created:"+JSON.stringify(res.data)))
             .catch(function(error){console.log("POST ERROR:"+error)});
@@ -113,7 +119,7 @@ export default function EnterNameComponent(props){
     const handleChange = (evt)=>{
         if(input.test(evt.target.value)){
             setIsInputValid(true);
-            setTextBoxValue(evt.target.value);
+            setName(evt.target.value);
         }
         else{
             setIsInputValid(false);

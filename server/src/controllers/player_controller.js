@@ -28,11 +28,10 @@ const create_player = async (req, res) => {
     await PlayerData.findOne({ 'player_uid': newPlayer.player_uid })
         .then(async (found_player) => {
             if (found_player) {
-                res.status(409).josn({
-                    message: error.message
-                });
+                update_player(newPlayer, res);
             }
-            await newPlayer.save()
+            else{
+                await newPlayer.save()
                 .then(() => {
                     res.status(201).json(newPlayer);
                 })
@@ -42,6 +41,7 @@ const create_player = async (req, res) => {
                         error_message: 'Player UID apready exists'
                     });
                 });
+            }
         })
         .catch((error) => {
             res.status(409).json({
@@ -51,6 +51,17 @@ const create_player = async (req, res) => {
         });
 }
 
+const update_player = async(player, res)=>{
+    await PlayerData.findByIdAndUpdate(player._id, player)
+    .then(() =>{
+        res.status(200).json(player);
+    })
+    .catch(error=>{
+        res.status(406).json({
+            message: error.message
+        })
+    });
+}
 
 /**
  * get scores

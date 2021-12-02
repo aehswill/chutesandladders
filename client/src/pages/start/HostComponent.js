@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setIsHost, setLobbyNickname, setLobbyID} from './gamesetupSlice'
 import { customAlphabet } from 'nanoid'
 
-const input = /^([A-Za-z0-9', _-]{1,15})$/;
+const input = /^([A-Za-z0-9', _-]{1,10})$/;
 const helpText = "Nickname must only contain the following characters: A-Z a-z 0-9 - _ , '"
 const nanoid = customAlphabet("ABCDEF0123456789", 6); // lobby ID will be uppercase hex, searches need to ignore case
 

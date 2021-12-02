@@ -34,27 +34,26 @@ export default function LobbyPage(props){
         dispatch(setPlayers(getPlayers.map( (player) => {
             if(player.color === "transparent"){
                 if(!blueTaken){
-                    player.color = blue;
                     dispatch(setIsBlueTaken(true));
+                    player.color = blue;
                 }
                 else if(!orangeTaken){
-                    player.color = orange;
                     dispatch(setIsOrangeTaken(true));
+                    player.color = orange;
                 }
                 else if(!yellowTaken){
-                    player.color = yellow;
                     dispatch(setIsYellowTaken(true));
+                    player.color = yellow;
                 } 
                 else if(!purpleTaken){
-                    player.color = purple;
                     dispatch(setIsPurpleTaken(true));
+                    player.color = purple;
                 } 
             }
-            const res = axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players/${player.player_uid}`, player)
+            axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players/${player.player_uid}`, player)
             .catch(function(error){
                 console.log(error)
             })
-            res.then(console.log(res))
             return player;
         })))
         const anyBots = getPlayers.map(player=>player.isRobot?"true":"false");

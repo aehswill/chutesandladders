@@ -2,27 +2,36 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import PlayerEntryComponent from './PlayerEntryComponent';
 import axios from 'axios';
-import { selectLobbyID} from '../start/gamesetupSlice'
-import { selectPlayers, setPlayers } from './lobbysetupSlice'
+import { selectPlayers, setPlayers, setIsPublicGame } from './lobbysetupSlice'
 import { useSelector, useDispatch } from 'react-redux';
 import { setIsBlueTaken, setIsOrangeTaken, setIsPurpleTaken, setIsYellowTaken} from './lobbysetupSlice'
+import { setUser, setUserID, setIsHost, setLobbyID, setLobbyNickname} from '../start/gamesetupSlice'
 //import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken} from './lobbysetupSlice'
 import { yellow, orange, purple, blue} from './lobbysetupSlice'
+import Cookie from 'universal-cookie';
 
 export default function PlayerBoxComponent(props){
     const dispatch = useDispatch();
     const getPlayers = useSelector(selectPlayers);
-    //const url = window.location.href;
-    //const getLobbyID = url.substring(url.lastIndexOf('/') + 1);
-    const getLobbyID = useSelector(selectLobbyID);
     const players = [];
 
-    const res = axios.get(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/`);
-        res.then((lobby) => {
-            (lobby.data.players).forEach(player=>players.push(player));
-            dispatch(setPlayers(players));
 
+    const url = window.location.href;
+    const id = url.split("/")[4];
+    const res = axios.get(`http://localhost:5000/api/v1/lobbies/${id}/`);
+        res.then((lobby) => {
+            // restore redux state from database
+            (lobby.data.players).forEach(player=>players.push(player));
+            dispatch(setLobbyID(lobby.data.id));
+            dispatch(setLobbyNickname(lobby.data.name));
+            dispatch(setPlayers(players));
             (players).forEach(player=>{
+                const cookie = new Cookie();
+                if(cookie.get('playerID') === player.player_uid && player.isHost){
+                    dispatch(setUser(player.nickname));
+                    dispatch(setUserID(player.player_uid));
+                    dispatch(setIsHost(true));
+                }
                 switch(player.color){
                     case orange:
                         dispatch(setIsOrangeTaken(true));
