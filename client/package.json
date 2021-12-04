@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.24.0",
     "framer-motion": "^5.3.3",
+    "he": "^1.2.0",
     "hookrouter": "^1.2.5",
     "nanoid": "^3.1.30",
     "react": "^17.0.2",

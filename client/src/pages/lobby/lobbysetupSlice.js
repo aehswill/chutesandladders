@@ -22,10 +22,9 @@ export const lobbysetupSlice = createSlice({
     initialState,
     reducers: {
         setIsPublicGame: (state, action) => {
-            state.isPublicGame = action.payload
-            console.log("Setting privacy to "+state.isPublicGame);
+            state.isPublicGame = action.payload;
             const url = window.location.href;
-            const id = url.substring(url.lastIndexOf('/') + 1);
+            const id = url.split("/")[4];
             axios.put(`http://localhost:5000/api/v1/lobbies/${id}`, {
                 isPublic: action.payload,
             });
@@ -33,8 +32,7 @@ export const lobbysetupSlice = createSlice({
         setDifficulty: (state, action) => {
             state.difficulty = action.payload
             const url = window.location.href;
-            const id = url.substring(url.lastIndexOf('/') + 1);
-            console.log(JSON.stringify(action.payload));
+            const id = url.split("/")[4];
             axios.put(`http://localhost:5000/api/v1/lobbies/${id}`, {
                 difficulty: `${action.payload}`,
             });
