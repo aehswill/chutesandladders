@@ -2,22 +2,14 @@ const mongoose = require('mongoose');
 
 /**
  * leaderboard record shcema
- *      - player
+ *      - player name
+ *      - each score
  */
 const leaderboardRecordSchema = mongoose.Schema({
-    player: {
-        player_uid: String,
-        nickname: String, 
-        isRobot: Boolean,
-        isHost: Boolean,
-        color: String,
-        total_points: Number,
-        speed_points: Number,
-        trivia_points: Number,
-    },
-    score_ranking: Number,
-    speed_ranking: Number,
-    trivia_ranking: Number
+    player_name: String, 
+    total_score: Number,
+    speed_score: Number,
+    trivia_score: Number
 
 });
 
