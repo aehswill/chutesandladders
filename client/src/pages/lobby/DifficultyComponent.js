@@ -4,9 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components';
 import close from '../../assets/icons/close.png'
 import PopupButton from '../../common/PopupButton';
-import { selectDifficulty, setDifficulty } from './lobbysetupSlice'
+import { selectDifficulty, selectPlayers, setDifficulty } from './lobbysetupSlice'
 import { selectLobbyID } from '../start/gamesetupSlice';
+import {fetchLobby} from '../game/playSlice';
 import { navigate } from 'hookrouter'
+import axios from 'axios';
 
 export default function DifficultyComponent(props){
     const dispatch = useDispatch();
@@ -20,8 +22,31 @@ export default function DifficultyComponent(props){
         const mode = easySelected?"easy":(mediumSelected?"medium":"hard");
         dispatch(setDifficulty(mode));
         console.log(`Lobby difficulty set to ${getDifficulty}`);
+        const url = window.location.href;
+        const id = url.split("/")[4];
+        var gamestate;
+        const res = axios.get(`http://localhost:5000/api/v1/lobbies/${id}/`);
+        console.log(res);
+        res.then((lobby) => {
+            gamestate = lobby.data.gamestate;
+            gamestate.hasStarted = true;
+            const r = axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate/`, gamestate);
+            r.then(response=>{
+                console.log(response);
+            })
+        })
+        .catch(error=>console.log(error));
+        dispatch(fetchLobby());
+        snooze(2000);
         navigate(`/lobby/${getLobbyID}/game`);
         props.close();
+    }
+
+    async function snooze(time){
+        await sleep(time);
+    }
+    function sleep(ms){
+        return new Promise(resolve=>setTimeout(resolve, ms));
     }
 
     return(

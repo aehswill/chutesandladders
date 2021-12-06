@@ -40,12 +40,14 @@ export default function EnterNameComponent(props){
         dispatch(setUser(name));
         // if the cookie hasn't been set, generate a new playerID
         var userID;
-        if(typeof cookie.get('playerID') === 'undefined'){
+        if(typeof cookie.get('player_uid') === 'undefined'){
             userID = nanoid();
-            cookie.set('playerID', userID, [{path: '/'},{secure: true}, {sameSite: 'strict'}]);
+            cookie.set('player_uid', userID, [{path: '/'},{secure: true}, {sameSite: 'strict'}]);
+            cookie.set('player_nickname', name, [{path: '/'},{secure: true}, {sameSite: 'strict'}]);
+            cookie.set('isHost', getIsHost, [{path: '/'},{secure: true}, {sameSite: 'strict'}]);
         }
         else{
-            userID = cookie.get('playerID');
+            userID = cookie.get('player_uid');
         }
         
         dispatch(setUserID(userID));
@@ -90,8 +92,9 @@ export default function EnterNameComponent(props){
             })
             dispatch(setPlayers(playerArray));
 
-            const gamestate = new GameState("triviaq","triviaA",self);
+            const gamestate = new GameState(self);
             const lobby = new Lobby(getNickname, getLobby, playerArray, gamestate);
+            console.log(gamestate);
             // we should remove the old lobby on the backend if player is host
             const req = axios.post(`http://localhost:5000/api/v1/lobbies/`, lobby);
             req.then(res=>console.log("Lobby created:"+JSON.stringify(res.data)))

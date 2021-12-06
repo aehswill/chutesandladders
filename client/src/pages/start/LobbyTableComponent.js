@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector} from 'react-redux'
-import { selectLobbies, setLobbies } from './gamesetupSlice';
+import { selectLobbies, setLobbies} from './gamesetupSlice';
 import styled from 'styled-components'
 import LobbyEntryComponent from './LobbyEntryComponent';
 import axios from 'axios'
@@ -10,15 +10,21 @@ export default function LobbyTable(props){
     const lobbies = useSelector(selectLobbies);
 
     React.useEffect(() => {
-        axios.get('http://localhost:5000/api/v1/lobbies/public')
-        .then((allLobies) => {
-            dispatch(setLobbies(allLobies.data)); //at some point, maybe compare the data/check for changes and only update when necessary
-            snooze();
-        })
-        .catch(function(error){
-            console.log(error)
-        })
+        const interval = setInterval(()=>{
+            axios.get('http://localhost:5000/api/v1/lobbies/public')
+            .then((allLobies) => {
+                dispatch(setLobbies(allLobies.data)); //at some point, maybe compare the data/check for changes and only update when necessary
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+            const url = window.location.href;
+            if(url.split("/").length > 1){
+                clearInterval(interval);
+            }
+        },1000);
     })
+
     async function snooze(){
         await sleep(5000);
     }

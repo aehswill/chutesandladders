@@ -26,6 +26,8 @@ const lobbySchema = mongoose.Schema({
         }
     ],
     gamestate: {
+        hasStarted: Boolean,
+        turn: Number,
         active_trivia_question: String,
         player_trivia_answer: String,
         active_player: {
@@ -37,7 +39,10 @@ const lobbySchema = mongoose.Schema({
             total_points: Number,
             speed_points: Number,
             trivia_points: Number,
-        }
+        },
+        messages:[{
+            message: String,
+        }]
     }
 });
 

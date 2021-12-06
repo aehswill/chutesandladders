@@ -92,11 +92,10 @@ export default function LobbyPage(props){
                         break;
                 }
                 player.color = color;
-                const res = axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players/${player.player_uid}`, player)
+                axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players/${player.player_uid}`, player)
                 .catch(function(error){
                     console.log(error)
                 })
-                res.then(console.log(res))
             }
             return player;
         })))}

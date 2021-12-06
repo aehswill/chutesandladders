@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
  *      -active player
  */
 const gamestateSchema = mongoose.Schema({
+    hasStarted: Boolean,
     turn: Number,
     active_trivia_question: String,
     player_trivia_answer: String,

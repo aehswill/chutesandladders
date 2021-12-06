@@ -13,4 +13,8 @@ export const store = configureStore({
     die: dieReducer,
     play: playReducer,
   },
+  middleware: (getDefaultMiddleware)=>
+    getDefaultMiddleware({
+      serializableCheck: false
+    })
 });

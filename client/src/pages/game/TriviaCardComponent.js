@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { selectTriviaQuestions, addMessage } from './playSlice'
+import { selectTriviaQuestions, addMessage, selectTriviaStatus } from './playSlice'
 import {closeModal} from '../../common/modalSlice'
 import TextBox from '../../common/TextBox'
 import PopupButton from '../../common/PopupButton'
@@ -11,16 +11,26 @@ var he = require('he');
 
 export default function TriviaCardComponent(props){
     const dispatch = useDispatch();
+
     const getTrivia = useSelector(selectTriviaQuestions);
+    const status = useSelector(selectTriviaStatus);
+    var message = "";
+    var correctAnswer = "";
+    if(status === "fulfilled"){
+        const triviaItem = getTrivia[1];
+        message = he.decode(triviaItem.question);
+        correctAnswer = he.decode(triviaItem.correct_answer);
+    }
+    
+
     const [width, setWidth] = useState(500);
     const [messageBack, setMessageBack] = useState("");
     const [isCorrect, setIsCorrect] = useState(true);
     const [playerAnswer, setPlayerAnswer] = useState("");
     const [isFlipped, setIsFlipped] = useState(false);
-    const message = he.decode(getTrivia[0].question);
-    const correctAnswer = he.decode(getTrivia[0].correct_answer);
-    var textboxValue;
+    
 
+    var textboxValue;
     useEffect(()=>{
         setWidth(500);
         const interval = setInterval(() => {
@@ -36,6 +46,8 @@ export default function TriviaCardComponent(props){
     },[])
 
     function evaluate(){
+        //dispatch(addMessage(`Question: ${message}`));
+        
         if((typeof playerAnswer[0] !== 'undefined')&&(playerAnswer.toLowerCase() === (correctAnswer).toLowerCase()
             || playerAnswer[0].toLowerCase() === correctAnswer[0].toLowerCase())){
                 setIsCorrect(true);
@@ -47,6 +59,7 @@ export default function TriviaCardComponent(props){
             }
             setIsFlipped(true);
             sleep(2000)
+
             .then(()=>sendScores());
     }
 
@@ -62,7 +75,7 @@ export default function TriviaCardComponent(props){
         else{
             txt = `Player answered incorrectly. The correct answer is ${correctAnswer}`;
         }
-        dispatch(addMessage(txt));
+        //dispatch(addMessage(txt));
         dispatch(closeModal());
     }
 

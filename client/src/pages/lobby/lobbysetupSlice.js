@@ -15,6 +15,7 @@ const initialState = {
     isOrangeTaken: false,
     isBlueTaken: false,
     players: [],
+    hasStarted: false
 }
 
 export const lobbysetupSlice = createSlice({
@@ -55,6 +56,9 @@ export const lobbysetupSlice = createSlice({
         setPlayers: (state, action) => {
             const tempArray = (action.payload).map(player=>JSON.stringify(player));
             state.players = tempArray;
+        },
+        setHasStarted: (state, action) => {
+            state.hasStarted = action.payload;
         }
 
     }
@@ -68,7 +72,7 @@ export const selectIsPurpleTaken = (state) => state.lobbysetup.isPurpleTaken;
 export const selectIsOrangeTaken = (state) => state.lobbysetup.isOrangeTaken;
 export const selectIsBlueTaken = (state) => state.lobbysetup.isBlueTaken;
 export const selectPlayers = (state) => (state.lobbysetup.players).map(player=>JSON.parse(player));
-
+export const selectHasStarted = (state) => state.lobbysetup.hasStarted;
 
 export const { 
     setIsPublicGame,
@@ -78,7 +82,8 @@ export const {
     setIsPurpleTaken, 
     setIsOrangeTaken, 
     setIsBlueTaken,
-    setPlayers
+    setPlayers,
+    setHasStarted
  } = lobbysetupSlice.actions;
 
 

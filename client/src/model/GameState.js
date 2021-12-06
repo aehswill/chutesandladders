@@ -1,9 +1,10 @@
 export default class GameState{
-    constructor(triviaQ, triviaA, player){
+    constructor(player){
+        this.hasStarted = false;
         this.turn = 0;
-        this.player = player;
-        this.active_trivia_question = triviaQ;
-        this.active_trivia_answer = triviaA;
-        this.messages = [];
+        this.active_player = player;
+        this.active_trivia_question = "empty";
+        this.player_trivia_answer = "empty";
+        this.messages = [{message: "Play!"}];
     }
 }

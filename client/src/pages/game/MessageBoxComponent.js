@@ -1,35 +1,31 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { selectMessages } from "./playSlice";
 
 export default function MessageBoxComponent(props){
-    const getMessages = useSelector(selectMessages);
+    //const messages = props.messages;
+    const messages = [];
 
     return(
         <MessageBox>
             <List>
                 {
-                    getMessages.map((message)=>(
-                        <ListItem>{(new Date()).toLocaleTimeString('en-US') + "   " + message}</ListItem>
+                    messages.map((message)=>(
+                        <ListItem>{message}</ListItem>
                     ))
                 }
             </List>
         </MessageBox>
     )
 }
-
+//TODO: bottom justify list, grow towards top
 
 // Style
 const MessageBox = styled.div`
     position: absolute;
-    bottom: 12px;
+    bottom: 24px;
     left: 20px;
     height: 200px;
     width: 400px;
-    display: flex;
-    justify-contents: center;
-    align-items: center;
     background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(255,255,255,0.45) 100%), #DDF1FF;
     background-blend-mode: soft-light, normal;
     border: 3px solid rgba(255,255,255,0.35);
@@ -37,12 +33,16 @@ const MessageBox = styled.div`
     border-radius: 8px;
 `;
 const List = styled.ul`
+    list-style-type: none;
+    padding: 12px;
     position: absolute;
+    left: 0px;
+    bottom: 0px;
     height: 100%;
     width: 100%;
-    margin: 4px;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
+    gap: 4px;
     overflow: auto;
     scrollbar-width: thin;          /* "auto" or "thin" */
     scrollbar-color:  #eac4ba #881400;   /* scroll thumb and track */
@@ -60,7 +60,7 @@ const List = styled.ul`
       }
 `;
 const ListItem = styled.li`
-    font-size: 24px;
+    font-size: 16px;
     color: black;
     font-family: Roboto;
     font-weight: 500

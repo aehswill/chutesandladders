@@ -2,17 +2,21 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import PlayerEntryComponent from './PlayerEntryComponent';
 import axios from 'axios';
-import { selectPlayers, setPlayers, setIsPublicGame } from './lobbysetupSlice'
+import { selectPlayers, setPlayers, setIsPublicGame, selectHasStarted, setHasStarted } from './lobbysetupSlice'
 import { useSelector, useDispatch } from 'react-redux';
 import { setIsBlueTaken, setIsOrangeTaken, setIsPurpleTaken, setIsYellowTaken} from './lobbysetupSlice'
-import { setUser, setUserID, setIsHost, setLobbyID, setLobbyNickname} from '../start/gamesetupSlice'
+import { setUser, setUserID, setIsHost, setLobbyID, setLobbyNickname, selectIsHost, selectLobbyID} from '../start/gamesetupSlice'
 //import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken} from './lobbysetupSlice'
 import { yellow, orange, purple, blue} from './lobbysetupSlice'
 import Cookie from 'universal-cookie';
+import { navigate } from 'hookrouter';
 
 export default function PlayerBoxComponent(props){
     const dispatch = useDispatch();
     const getPlayers = useSelector(selectPlayers);
+    const getIsHost = useSelector(selectIsHost);
+    const getLobbyID = useSelector(selectLobbyID);
+    const getHasStarted = useSelector(selectHasStarted);
     const players = [];
 
 
@@ -25,9 +29,10 @@ export default function PlayerBoxComponent(props){
             dispatch(setLobbyID(lobby.data.id));
             dispatch(setLobbyNickname(lobby.data.name));
             dispatch(setPlayers(players));
+            dispatch(setHasStarted(lobby.data.gamestate.hasStarted));
             (players).forEach(player=>{
                 const cookie = new Cookie();
-                if(cookie.get('playerID') === player.player_uid && player.isHost){
+                if(cookie.get('player_uid') === player.player_uid && player.isHost){
                     dispatch(setUser(player.nickname));
                     dispatch(setUserID(player.player_uid));
                     dispatch(setIsHost(true));
@@ -49,6 +54,9 @@ export default function PlayerBoxComponent(props){
                         break;
                 }
             })
+            if(getHasStarted && !getIsHost){
+                navigate(`/lobby/${getLobbyID}/game`);
+            }
         })
         .catch(function(error){
             console.log({

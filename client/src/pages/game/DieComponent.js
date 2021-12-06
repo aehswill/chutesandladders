@@ -9,25 +9,26 @@ import die6 from '../../assets/die/die6.png'
 
 export default function DieComponent(props){
     const [isClicked, setIsClicked] = useState(false);
+    const isActive = props.isActive;
     return(
         <Scene onClick={()=>{
-            if(!isClicked){
+            if(!isClicked && isActive){
                 props.roll();
                 setIsClicked(true);
             }
         }}>
             <Cube xform={props.transformTo}>
-                <One><Icon src={die1} alt="1" isClicked={isClicked}/></One>
+                <One><Icon src={die1} alt="1" isClicked={isClicked} isActive={isActive}/></One>
                 <OneInner/>
-                <Two><Icon src={die2} alt="2" isClicked={isClicked}/></Two>
+                <Two><Icon src={die2} alt="2" isClicked={isClicked} isActive={isActive}/></Two>
                 <TwoInner/>
-                <Three><Icon src={die3} alt="3" isClicked={isClicked}/></Three>
+                <Three><Icon src={die3} alt="3" isClicked={isClicked} isActive={isActive}/></Three>
                 <ThreeInner/>
-                <Four><Icon src={die4} alt="4" isClicked={isClicked}/></Four>
+                <Four><Icon src={die4} alt="4" isClicked={isClicked} isActive={isActive}/></Four>
                 <FourInner/>
-                <Five><Icon src={die5} alt="5" isClicked={isClicked}/></Five>
+                <Five><Icon src={die5} alt="5" isClicked={isClicked} isActive={isActive}/></Five>
                 <FiveInner/>
-                <Six><Icon src={die6} alt="6" isClicked={isClicked}/></Six>
+                <Six><Icon src={die6} alt="6" isClicked={isClicked} isActive={isActive}/></Six>
                 <SixInner/>
                 <CoverX/>
                 <CoverY/>
@@ -210,9 +211,9 @@ const Icon = styled.img`
     left:-3px;
     width: 75px;
     height: 75px;
-    border: 3px solid transparent;
+    border: ${props=>props.isClicked?"3px solid transparent":props.isActive?"3px solid yellow":"3px solid transparent"};
     border-radius: 15px;
     &:hover{
-        border: ${props=>props.isClicked?"3px solid transparent":"3px solid yellow"};
+        
     }
 `;

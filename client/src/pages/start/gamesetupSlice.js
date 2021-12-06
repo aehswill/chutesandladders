@@ -8,7 +8,8 @@ const initialState = {
     lobbyID: 'empty', 
     user: 'empty', 
     userID: 'empty',
-    lobbies: []
+    lobbies: [],
+    navigatedAway: false
 }
 
 export const gamesetupSlice = createSlice({
@@ -32,6 +33,9 @@ export const gamesetupSlice = createSlice({
         },
         setLobbies: (state, action) => {
             state.lobbies = (action.payload).map(lobby=>JSON.stringify(lobby));
+        },
+        setNavigatedAway: (state, action) => {
+            state.navigatedAway = action.payload
         }
     }
 });
@@ -42,6 +46,7 @@ export const selectLobbyNickname = (state) => state.gamesetup.lobbyNickname;
 export const selectUser = (state) => state.gamesetup.user;
 export const selectUserID = (state) => state.gamesetup.userID;
 export const selectLobbies = (state) => (state.gamesetup.lobbies).map(lobby=>JSON.parse(lobby));
+export const selectNavigatedAway = (state) => state.gamesetup.navigatedAway;
 
 
 export const { 
@@ -50,6 +55,7 @@ export const {
     setLobbyNickname, 
     setUser, 
     setUserID,
-    setLobbies } = gamesetupSlice.actions;
+    setLobbies,
+    setNavigatedAway } = gamesetupSlice.actions;
 
 export default gamesetupSlice.reducer;

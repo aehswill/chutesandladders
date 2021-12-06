@@ -1,22 +1,26 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPlayers } from '../lobby/lobbysetupSlice'
+import { selectStatus, selectLobby } from './playSlice'
 import PlayerComponent from './PlayerComponent';
 
 export default function HorizonPlayerBoxComponent(props){
-    const dispatch = useDispatch();
-    const getPlayers = useSelector(selectPlayers);
+    const lobby = useSelector(selectLobby);
+    const status = useSelector(selectStatus);
+
 
     return(
-        <Box>
-            <List>
-            {(getPlayers).map(player=>(
-                <PlayerComponent player={player}/>
+        <>
+        {status === "fulfilled" &&   
+            <Box>
+                <List>
+                {(lobby.players).map(player=>(
+                    <PlayerComponent player={player}/>
 
-            ))}
-            </List>
-        </Box>
+                ))}
+                </List>
+            </Box>}
+        </>
     )
 }
 

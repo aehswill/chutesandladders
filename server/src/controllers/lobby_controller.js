@@ -33,7 +33,7 @@ const Player = require('../models/player');
     await LobbyData.findOne({'id' : newLobby.id})
     .then(async(found_lobby) => {
         if(found_lobby){
-            res.status(409).josn({
+            res.status(409).json({
                 message: error.message
             });
         }
