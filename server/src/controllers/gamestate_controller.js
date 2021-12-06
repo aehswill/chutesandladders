@@ -125,7 +125,7 @@ const check_player_trivia_answer = (req, res) => {
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then(async(lobby) => {
-        lobby.gamestate = req.body.gamestate;
+        lobby.gamestate = req.body.data.gamestate;
         await LobbyData.findByIdAndUpdate(lobby._id, lobby);
         res.status(200).json(lobby.gamestate);
     })
