@@ -41,11 +41,12 @@ export default function GamePage(props){
     
     
     React.useEffect(()=>{
-        dispatch(fetchLobby());
+        const url = window.location.href;
+        const id = url.split("/")[4];
+        dispatch(fetchLobby(id));
         if(status === "fulfilled"){
-            console.log(lobby)
             dispatch(fetchTrivia(lobby.difficulty));
-                if(triviaStatus === "fulfilled"){
+            if(triviaStatus === "fulfilled"){
                 const index = lobby.players.findIndex(player=>player.player_uid === cookie.get('player_uid'));
                 dispatch(setUser(lobby.players[index].nickname));
                 dispatch(setUserID(lobby.players[index].player_uid));
@@ -54,6 +55,7 @@ export default function GamePage(props){
                 if(lobby.gamestate.turn===0 && getIsHost){
                     const player = lobby.players.find(player=>player.player_uid===getUserID);
                     const gs = JSON.parse(JSON.stringify(lobby.gamestate));
+                    console.log(gs);
                     gs.active_player = player;
                     dispatch(sendGamestate(gs))
                 }
@@ -98,9 +100,7 @@ export default function GamePage(props){
                     tempGamestate.turn = turnNo;
                     
                     // score
-                    return ()=>{
-                        dispatch(sendGamestate(tempGamestate));
-                    }
+                    dispatch(sendGamestate(tempGamestate, id));
                 }
             }
         }

@@ -36,7 +36,6 @@ export default function DifficultyComponent(props){
             })
         })
         .catch(error=>console.log(error));
-        dispatch(fetchLobby());
         snooze(2000);
         navigate(`/lobby/${getLobbyID}/game`);
         props.close();
