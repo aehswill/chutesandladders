@@ -4,18 +4,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
 
-const url = window.location.href;
-const id = url.split("/")[4];
 
+const url = window.location.href;
+const lobbyID = url.split("/")[4];
 export const fetchLobby = createAsyncThunk(
     'play/fetchLobby',
-    ()=>axios.get(`http://localhost:5000/api/v1/lobbies/${id}`)
+    (id)=>axios.get(`http://localhost:5000/api/v1/lobbies/${id}`)
     .then(response=>response.data)
     .catch(error=>error)
 )
 export const sendGamestate = createAsyncThunk(
     'play/sendGamestate',
-    (gamestate)=>axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate`, gamestate)
+    (gamestate)=>axios.put(`http://localhost:5000/api/v1/lobbies/${lobbyID}/gamestate`, gamestate)
     .then(res=>res.data)
     .catch(error=>error)
 )
@@ -58,7 +58,6 @@ export const playSlice = createSlice({
         },
         [fetchTrivia.fulfilled]: (state, action) => {
             console.log(action.payload);
-            const response = action.payload;
             const temp = (action.payload.results).map((result)=>{
                 return ({question: result.question, correct_answer: result.correct_answer, incorrect_answers: result.incorrect_answers})
             })
