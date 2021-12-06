@@ -30,7 +30,8 @@ export default function DifficultyComponent(props){
         res.then((lobby) => {
             gamestate = lobby.data.gamestate;
             gamestate.hasStarted = true;
-            const r = axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate/`, gamestate);
+            lobby.data.gamestate = gamestate
+            const r = axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate/`, lobby);
             r.then(response=>{
                 console.log(response);
             })
