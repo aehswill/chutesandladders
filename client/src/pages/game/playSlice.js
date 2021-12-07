@@ -7,6 +7,7 @@ import axios from 'axios';
 
 const url = window.location.href;
 const lobbyID = url.split("/")[4];
+
 export const fetchLobby = createAsyncThunk(
     'play/fetchLobby',
     (id)=>axios.get(`http://localhost:5000/api/v1/lobbies/${id}`)
@@ -15,7 +16,7 @@ export const fetchLobby = createAsyncThunk(
 )
 export const sendGamestate = createAsyncThunk(
     'play/sendGamestate',
-    (gamestate, id)=>axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate`, gamestate)
+    (lobby)=>axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate`, lobby)
     .then(res=>res.data)
     .catch(error=>error)
 )

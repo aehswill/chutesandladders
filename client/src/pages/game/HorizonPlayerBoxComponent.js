@@ -7,7 +7,7 @@ import PlayerComponent from './PlayerComponent';
 export default function HorizonPlayerBoxComponent(props){
     //const lobby = useSelector(selectLobby);
     //const status = useSelector(selectStatus);
-    const players = props.players;
+    const players = (typeof props.players === 'undefined')?[{}]:props.players;
 
 
     return(
