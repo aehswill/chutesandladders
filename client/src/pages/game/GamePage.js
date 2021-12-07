@@ -26,6 +26,7 @@ export default function GamePage(props){
     const [bluePosition, setBluePosition] = useState(1);
     const [yellowPosition, setYellowPosition] = useState(1);
     const [isMyTurn, setIsMyTurn] = useState(false);
+    const [players, setPlayers] = useState([]);
     const lobby = useSelector(selectLobby);
     const status = useSelector(selectStatus);
     const triviaStatus = useSelector(selectTriviaStatus);
@@ -40,165 +41,75 @@ export default function GamePage(props){
     const cookie = new Cookie();
     
     
-    React.useEffect(()=>{
+    useState(()=>{
         const url = window.location.href;
         const id = url.split("/")[4];
         dispatch(fetchLobby(id));
-        if(status === "fulfilled"){
-            dispatch(fetchTrivia(lobby.difficulty));
-            if(triviaStatus === "fulfilled"){
-                const index = lobby.players.findIndex(player=>player.player_uid === cookie.get('player_uid'));
-                dispatch(setUser(lobby.players[index].nickname));
-                dispatch(setUserID(lobby.players[index].player_uid));
-                dispatch(setIsHost(lobby.players[index].isHost));
-                
-                if(lobby.gamestate.turn===0 && getIsHost){
-                    const player = lobby.players.find(player=>player.player_uid===getUserID);
-                    const gs = JSON.parse(JSON.stringify(lobby.gamestate));
-                    console.log(gs);
-                    gs.active_player = player;
-                    dispatch(sendGamestate(gs))
-                }
-                const activePlayer = lobby.gamestate.active_player;
-                if(activePlayer.player_uid === getUserID){
-                    setIsMyTurn(true);
-                }
-                else if(activePlayer.isRobot && getIsHost){
-                    const name = activePlayer.nickname;
-                    //dispatch(addMessage(`${name}'s turn'`));
-                    //send
-                    const robotRoll = roll();
-                    //dispatch(addMessage(`${name} rolled a ${robotRoll}`));
-                    //send
-                    setPosition(activePlayer.color, robotRoll);
-                    //send
-
-                    // check if won
-                    const pipesIndex = pipePositions.findIndex(element=>element.start===robotRoll);
-                    if(pipesIndex > -1){
-                        const choice = (Math.floor(Math.random() * (3-1) + 1)) === 1?"true":"false";
-                        //dispatch(addMessage(`Question: ${getTrivia[3].question}`));
-                        var isCorrect = false;
-                        if(choice.toLowerCase() === getTrivia[3].correct_answer.toLowerCase()){
-                            //dispatch(addMessage("Player answered correctly"))
-                            isCorrect = true;
-                        }
-                        else{
-                            //dispatch(addMessage(`Player answered incorrectly. The correct answer is ${getTrivia[3].correct_answer}`))
-                        }
-                        if((isCorrect && pipePositions[pipesIndex].type === 'green') || (!isCorrect && pipePositions[pipesIndex].type === 'red')){
-                            setPosition(activePlayer.color, pipePositions[pipesIndex].end);
-                            // check if won
-                        }
-                    }
-                    const turnNo = lobby.gamestate.turn + 1;
-                    const index = lobby.players[lobby.players.indexOf(activePlayer)];
-                    const nextIndex = index > 3 ? 0 : index;
-                    const nextPlayer = lobby.players[nextIndex];
-                    var tempGamestate = lobby.gamestate;
-                    tempGamestate.active_player = nextPlayer;
-                    tempGamestate.turn = turnNo;
+            if(status === "fulfilled"){
+                dispatch(fetchTrivia(lobby.difficulty));
+                setPlayers(lobby.players);
+                if(triviaStatus === "fulfilled"){
+                    const index = lobby.players.findIndex(player=>player.player_uid === cookie.get('player_uid'));
+                    dispatch(setUser(lobby.players[index].nickname));
+                    dispatch(setUserID(lobby.players[index].player_uid));
+                    dispatch(setIsHost(lobby.players[index].isHost));
                     
-                    // score
-                    dispatch(sendGamestate(tempGamestate, id));
+                    if(lobby.gamestate.turn===0 && getIsHost){
+                        const player = lobby.players.find(player=>player.player_uid===getUserID);
+                        const gs = JSON.parse(JSON.stringify(lobby.gamestate));
+                        gs.active_player = player;
+                        dispatch(sendGamestate(gs))
+                    }
+                    const activePlayer = lobby.gamestate.active_player;
+                    if(activePlayer.player_uid === getUserID){
+                        setIsMyTurn(true);
+                    }
+                    else if(activePlayer.isRobot && getIsHost){
+                        const name = activePlayer.nickname;
+                        //dispatch(addMessage(`${name}'s turn'`));
+                        //send
+                        const robotRoll = roll();
+                        //dispatch(addMessage(`${name} rolled a ${robotRoll}`));
+                        //send
+                        setPosition(activePlayer.color, robotRoll);
+                        //send
+
+                        // check if won
+                        const pipesIndex = pipePositions.findIndex(element=>element.start===robotRoll);
+                        if(pipesIndex > -1){
+                            const choice = (Math.floor(Math.random() * (3-1) + 1)) === 1?"true":"false";
+                            //dispatch(addMessage(`Question: ${getTrivia[3].question}`));
+                            var isCorrect = false;
+                            if(choice.toLowerCase() === getTrivia[3].correct_answer.toLowerCase()){
+                                //dispatch(addMessage("Player answered correctly"))
+                                isCorrect = true;
+                            }
+                            else{
+                                //dispatch(addMessage(`Player answered incorrectly. The correct answer is ${getTrivia[3].correct_answer}`))
+                            }
+                            if((isCorrect && pipePositions[pipesIndex].type === 'green') || (!isCorrect && pipePositions[pipesIndex].type === 'red')){
+                                setPosition(activePlayer.color, pipePositions[pipesIndex].end);
+                                // check if won
+                            }
+                        }
+                        const turnNo = lobby.gamestate.turn + 1;
+                        const index = lobby.players[lobby.players.indexOf(activePlayer)];
+                        const nextIndex = index > 3 ? 0 : index;
+                        const nextPlayer = lobby.players[nextIndex];
+                        var tempGamestate = lobby.gamestate;
+                        tempGamestate.active_player = nextPlayer;
+                        tempGamestate.turn = turnNo;
+                        
+                        // score
+                        dispatch(sendGamestate(tempGamestate, id));
+                    }
                 }
-            }
-        }
+            }   
     })
 
-    
-    //var localActivePlayer = new Player("","", false, false);
-    
-
-        /* const res = axios.get(`http://localhost:5000/api/v1/lobbies/${id}`);
-        res.then((lobby) => {
-            setGamestate(lobby.data.gamestate);
-            (lobby.data.players).forEach(player=>players.push(player));
-            dispatch(setLobbyID(lobby.data.id));
-            dispatch(setLobbyNickname(lobby.data.name));
-            dispatch(setPlayers(players));
-            dispatch(setDifficulty(lobby.data.difficulty));
-            //(lobby.data.gamestate.messages).forEach(message=>dispatch(addMessage(message)));
-            
-            (players).forEach(player=>{
-                const cookie = new Cookie();
-                if(cookie.get('playerID') === player.player_uid){
-                    dispatch(setUser(player.nickname));
-                    dispatch(setUserID(player.player_uid));
-                    if(player.isHost){
-                        dispatch(setIsHost(true));
-                    }
-                }
-            })
-            console.log(`turn ${getTurn}, isHost ${getIsHost}`);
-            if(getTurn===0 && getIsHost){
-                const player = players.find(player=>player.player_uid===getUserID);
-                dispatch(setActivePlayer(player));
-                localActivePlayer = player;
-                var tempGamestate = gamestate;
-                // tempGamestate.active_player = player;
-                // axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate`, tempGamestate)
-                // .then(res=> console.log(res)); 
-            }
-            else{
-                console.log(gamestate)
-                dispatch(setActivePlayer(gamestate.active_player));
-                localActivePlayer = gamestate.active_player;
-                console.log(localActivePlayer);
-            }
-            if(localActivePlayer.player_uid === getUserID){
-                setIsMyTurn(true);
-            }
-            else if(localActivePlayer.isRobot && getIsHost){
-                const name = players.indexOf(localActivePlayer).nickname;
-                dispatch(addMessage(`${name}'s turn'`));
-                //send
-                const robotRoll = roll();
-                dispatch(addMessage(`${name} rolled a ${robotRoll}`));
-                //send
-                setPosition(localActivePlayer.color, robotRoll);
-                //send
-    
-                // check if won
-                const pipesIndex = pipePositions.findIndex(element=>element.start===robotRoll);
-                if(pipesIndex > -1){
-                    const choice = (Math.floor(Math.random() * (3-1) + 1)) === 1?"true":"false";
-                    dispatch(addMessage(`Question: ${getTrivia[3].question}`));
-                    var isCorrect = false;
-                    if(choice.toLowerCase() === getTrivia[3].correct_answer.toLowerCase()){
-                        dispatch(addMessage("Player answered correctly"))
-                        isCorrect = true;
-                    }
-                    else{
-                        dispatch(addMessage(`Player answered incorrectly. The correct answer is ${getTrivia[3].correct_answer}`))
-                    }
-                    if((isCorrect && pipePositions[pipesIndex].type === 'green') || (!isCorrect && pipePositions[pipesIndex].type === 'red')){
-                        setPosition(localActivePlayer.color, pipePositions[pipesIndex].end);
-                        // check if won
-                    }
-                }
-                const turnNo = getTurn + 1;
-                dispatch(setTurn(turnNo));
-                const index = players[players.indexOf(getActivePlayer)];
-                const nextIndex = index > 3 ? 0 : index;
-                dispatch(setActivePlayer(players[nextIndex]));
-                localActivePlayer = players[nextIndex];
-                tempGamestate = gamestate;
-                tempGamestate.active_player = players[nextIndex];
-                tempGamestate.turn = turnNo;
-                axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate`, tempGamestate)
-                .then(res=> console.log(res));
-                // score
-                // send gamestate
-            }
-        })
-        .catch(error=>{
-            console.log({
-                message: error.message
-            })
-        }) */
 
     async function PlayerPlay(roll){
+        console.log("Playing the game")
         //dispatch(addMessage(`${getUser}'s turn`));
         await sleep(2000);
         //dispatch(addMessage(`${getUser} rolled a ${roll}`));
@@ -212,12 +123,12 @@ export default function GamePage(props){
 
             }
         }
-        const tempLobby = lobby;
+        const tempLobby = JSON.parse(JSON.stringify(lobby)); // this shouldn't work but it does
         tempLobby.gamestate.turn++;
         const index = lobby.players[lobby.players.indexOf(lobby.gamestate.active_player)];
         const nextIndex = index > 3 ? 0 : index;
         tempLobby.gamestate.active_player = lobby[nextIndex];
-        dispatch(sendGamestate(tempLobby.gamestate));
+        dispatch(sendGamestate(tempLobby.gamestate, ));
 
     }
 
@@ -268,8 +179,8 @@ export default function GamePage(props){
         <OuterContainer>
             <TopContainer>
                 <ControlBox>
-                    <PlayerBox />
-                    <DieComponent roll={roll} transformTo={getTransform} />
+                    <PlayerBox players={players}/>
+                    <DieComponent roll={roll} transformTo={getTransform} isActive={isMyTurn}/>
                 </ControlBox>
                 <ButtonBox>
                 <button onClick={()=>dispatch(openModal())}>Open Trivia</button>

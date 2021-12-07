@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components';
 import close from '../../assets/icons/close.png'
 import PopupButton from '../../common/PopupButton';
-import { selectDifficulty, selectPlayers, setDifficulty } from './lobbysetupSlice'
+import { selectDifficulty, selectPlayers, setDifficulty, setHasStarted } from './lobbysetupSlice'
 import { selectLobbyID } from '../start/gamesetupSlice';
 import {fetchLobby} from '../game/playSlice';
 import { navigate } from 'hookrouter'
@@ -31,6 +31,7 @@ export default function DifficultyComponent(props){
             gamestate = lobby.data.gamestate;
             gamestate.hasStarted = true;
             lobby.data.gamestate = gamestate
+            dispatch(setHasStarted(true));
             const r = axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate/`, lobby);
             r.then(response=>{
                 console.log(response);

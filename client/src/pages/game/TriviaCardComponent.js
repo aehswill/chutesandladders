@@ -11,16 +11,11 @@ var he = require('he');
 
 export default function TriviaCardComponent(props){
     const dispatch = useDispatch();
-
+    const [message, setMessage] = useState("");
+    const [correctAnswer, setCorrectAnswer] = useState("");
     const getTrivia = useSelector(selectTriviaQuestions);
     const status = useSelector(selectTriviaStatus);
-    var message = "";
-    var correctAnswer = "";
-    if(status === "fulfilled"){
-        const triviaItem = getTrivia[1];
-        message = he.decode(triviaItem.question);
-        correctAnswer = he.decode(triviaItem.correct_answer);
-    }
+    
     
 
     const [width, setWidth] = useState(500);
@@ -32,17 +27,22 @@ export default function TriviaCardComponent(props){
 
     var textboxValue;
     useEffect(()=>{
-        setWidth(500);
-        const interval = setInterval(() => {
-          setWidth((lastWidth) => {
-            const currentWidth = lastWidth - 50;
-            if (currentWidth === 0) {
-                clearInterval(interval);
-                evaluate();
-            }
-            return currentWidth;
-          });
-        }, 1000);
+        if(status === "fulfilled"){
+            const triviaItem = getTrivia[1];
+            setMessage(he.decode(triviaItem.question));
+            setCorrectAnswer(he.decode(triviaItem.correct_answer));
+            setWidth(500);
+            const interval = setInterval(() => {
+                setWidth((lastWidth) => {
+                    const currentWidth = lastWidth - 50;
+                    if (currentWidth === 0) {
+                        clearInterval(interval);
+                        evaluate();
+                    }
+                    return currentWidth;
+                });
+            }, 1000);
+        }
     },[])
 
     function evaluate(){

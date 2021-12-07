@@ -5,21 +5,21 @@ import { selectStatus, selectLobby } from './playSlice'
 import PlayerComponent from './PlayerComponent';
 
 export default function HorizonPlayerBoxComponent(props){
-    const lobby = useSelector(selectLobby);
-    const status = useSelector(selectStatus);
+    //const lobby = useSelector(selectLobby);
+    //const status = useSelector(selectStatus);
+    const players = props.players;
 
 
     return(
         <>
-        {status === "fulfilled" &&   
             <Box>
                 <List>
-                {(lobby.players).map(player=>(
+                {(players).map(player=>(
                     <PlayerComponent player={player}/>
 
                 ))}
                 </List>
-            </Box>}
+            </Box>
         </>
     )
 }

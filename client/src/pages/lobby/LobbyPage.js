@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {selectIsHost, selectLobbyNickname,
     selectLobbyID, selectUserID} from '../start/gamesetupSlice'
@@ -18,6 +18,7 @@ import axios from 'axios'
 
 // get lobby info here
 export default function LobbyPage(props){
+    const [navigated, setNavigated] = useState(false);
     const dispatch = useDispatch();
     const getLobbyName = useSelector(selectLobbyNickname);
     const getLobbyID = useSelector(selectLobbyID);
@@ -112,7 +113,7 @@ export default function LobbyPage(props){
                         <h1>{getLobbyName}</h1>
                         <h1>{getLobbyID}</h1>
                     </TitleBox>
-                    <PlayerBoxComponent players={getPlayers}/>
+                    <PlayerBoxComponent players={getPlayers} navigated={navigated}/>
                 </div>
                 <ColorSelectorComponent click={colorHandler}/>
             </Container>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import PlayerEntryComponent from './PlayerEntryComponent';
 import axios from 'axios';
@@ -13,63 +13,70 @@ import { navigate } from 'hookrouter';
 
 export default function PlayerBoxComponent(props){
     const dispatch = useDispatch();
+    const [players, setPlayersLocal] = useState([]);
     const getPlayers = useSelector(selectPlayers);
     const getIsHost = useSelector(selectIsHost);
     const getLobbyID = useSelector(selectLobbyID);
     const getHasStarted = useSelector(selectHasStarted);
-    const players = [];
 
 
     const url = window.location.href;
     const id = url.split("/")[4];
-    const res = axios.get(`http://localhost:5000/api/v1/lobbies/${id}/`);
-        res.then((lobby) => {
-            // restore redux state from database
-            (lobby.data.players).forEach(player=>players.push(player));
-            dispatch(setLobbyID(lobby.data.id));
-            dispatch(setLobbyNickname(lobby.data.name));
-            dispatch(setPlayers(players));
-            dispatch(setHasStarted(lobby.data.gamestate.hasStarted));
-            (players).forEach(player=>{
-                const cookie = new Cookie();
-                if(cookie.get('player_uid') === player.player_uid && player.isHost){
-                    dispatch(setUser(player.nickname));
-                    dispatch(setUserID(player.player_uid));
-                    dispatch(setIsHost(true));
-                }
-                switch(player.color){
-                    case orange:
-                        dispatch(setIsOrangeTaken(true));
-                        break;
-                    case yellow:
-                        dispatch(setIsYellowTaken(true));
-                        break;
-                    case purple:
-                        dispatch(setIsPurpleTaken(true));
-                        break;
-                    case blue:
-                        dispatch(setIsBlueTaken(true));
-                        break;
-                    default:
-                        break;
+    useState(()=>{
+        const interval = setInterval(()=> {
+            const res = axios.get(`http://localhost:5000/api/v1/lobbies/${id}/`);
+            res.then((lobby) => {
+                // restore redux state from database
+                const temp = [];
+                (lobby.data.players).forEach(player=>temp.push(player));
+                dispatch(setLobbyID(lobby.data.id));
+                dispatch(setLobbyNickname(lobby.data.name));
+                dispatch(setPlayers(temp));
+                dispatch(setHasStarted(lobby.data.gamestate.hasStarted));
+                setPlayersLocal(temp);
+                (players).forEach(player=>{
+                    const cookie = new Cookie();
+                    if(cookie.get('player_uid') === player.player_uid && player.isHost){
+                        dispatch(setUser(player.nickname));
+                        dispatch(setUserID(player.player_uid));
+                        dispatch(setIsHost(true));
+                    }
+                    switch(player.color){
+                        case orange:
+                            dispatch(setIsOrangeTaken(true));
+                            break;
+                        case yellow:
+                            dispatch(setIsYellowTaken(true));
+                            break;
+                        case purple:
+                            dispatch(setIsPurpleTaken(true));
+                            break;
+                        case blue:
+                            dispatch(setIsBlueTaken(true));
+                            break;
+                        default:
+                            break;
+                    }
+                })
+                if(getHasStarted){
+                    clearInterval(interval);
+                    if(!getIsHost){
+                        navigate(`/lobby/${getLobbyID}/game`);
+                    }
                 }
             })
-            if(getHasStarted && !getIsHost){
-                navigate(`/lobby/${getLobbyID}/game`);
-            }
-        })
-        .catch(function(error){
-            console.log({
-                message: error.message
+            .catch(function(error){
+                console.log({message: error.message})
             })
-        })
+        }, 1000)
+    },[])
 
     return(
         <Box>
             Players
             <Separator />
             <List>
-            {(getPlayers).map(player=>(
+            {(players).map(player=>(
                 <PlayerEntryComponent player={player}/>
 
             ))}

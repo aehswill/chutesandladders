@@ -15,7 +15,7 @@ export const fetchLobby = createAsyncThunk(
 )
 export const sendGamestate = createAsyncThunk(
     'play/sendGamestate',
-    (gamestate)=>axios.put(`http://localhost:5000/api/v1/lobbies/${lobbyID}/gamestate`, gamestate)
+    (gamestate, id)=>axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate`, gamestate)
     .then(res=>res.data)
     .catch(error=>error)
 )
@@ -57,7 +57,6 @@ export const playSlice = createSlice({
             state.lobby.gamestate = action.payload;
         },
         [fetchTrivia.fulfilled]: (state, action) => {
-            console.log(action.payload);
             const temp = (action.payload.results).map((result)=>{
                 return ({question: result.question, correct_answer: result.correct_answer, incorrect_answers: result.incorrect_answers})
             })
