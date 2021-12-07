@@ -8,7 +8,7 @@ const gamestateController = require('../controllers/gamestate_controller');
 router.get('/', lobbyController.get_lobbies);
 router.post('/', lobbyController.create_lobby);
 
-//kpublic lobby routes
+//public lobby routes
 router.get('/public', lobbyController.get_public_lobbies);
 
 //lobby routes for specific lobbies

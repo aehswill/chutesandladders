@@ -121,19 +121,37 @@ const check_player_trivia_answer = (req, res) => {
      * search the db for that lobby
      * then update and return the lobby's gamestate
      */
-    
+
+
     const lobby_id = req.params.id;
-    await LobbyData.findOne({'id': lobby_id})
-    .then(async(lobby) => {
-        lobby.gamestate = req.body.data.gamestate;
-        await LobbyData.findByIdAndUpdate(lobby._id, lobby);
-        res.status(200).json(lobby.gamestate);
+    const gamestate = {
+        gamestate: req.body.gamestate
+    }
+    await LobbyData.findOneAndUpdate({'id': lobby_id}, gamestate, {
+        new: true
     })
-    .catch ((error) => {
+    .then((lobby) => {
+        res.status(200).json(lobby.gamestate);
+        // console.log(req.body.data.gamestate);
+        // console.log(lobby.gamestate)
+        // lobby.gamestate = req.body.data.gamestate;
+        // await LobbyData.findOneAndUpdate({'id': lobby_id}, lobby, {
+        //     new: true
+        // })
+        // .then((return_lobby) => {
+        //     console.log(return_lobby.gamestate);
+        //     res.status(200);
+        // })
+        // .catch((error) => {
+        //     console.log(error.message)
+        // })
+        
+    })
+    .catch((error) => {
         res.status(400).json({
             message: error.message
-        });
-    });
+        })
+    })
 }
 
 module.exports = {
