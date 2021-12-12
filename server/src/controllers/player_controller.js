@@ -6,7 +6,6 @@ const PlayerData = require('../models/player');
  * functions 
  *      -create player
  *      -update player color
- *      -get scores
  */
 
 /**

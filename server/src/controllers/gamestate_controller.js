@@ -184,8 +184,12 @@ const update_position = async(req, res) => {
         
 }
 
-const set_active_player = async(req, res) => {
+const update_scores = async(req, res) => {
     const lobby_id = req.params.id;
+    await LobbyData.findOne({'id': lobby_id})
+    .then(lobby=>{
+        //tara is sending me a player so I can update the socres
+    })
 
 }
 
