@@ -14,17 +14,7 @@ const gamestateSchema = mongoose.Schema({
     turn: Number,
     active_trivia_question: String,
     player_trivia_answer: String,
-    active_player: {
-        player_uid: String,
-        nickname: String,
-        isRobot: Boolean,
-        isHost: Boolean,
-        color: String,
-        position: Number,
-        total_points: Number,
-        speed_points: Number,
-        trivia_points: Number,
-    },
+    active_player_uid: String,
     messages:[{
         message: String,    
     }]

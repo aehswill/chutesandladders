@@ -26,8 +26,12 @@ const get_active_player = async(req, res) => {
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then((lobby) => {
-        const player = lobby.gamestate.active_player;
-        res.status(200).json(player);
+        let player_to_return;
+        lobby.players.forEach(player => {
+            if(player.player_uid === lobby.gamestate.active_player_uid)
+                player_to_return = player;
+        });
+        res.status(200).json(player_to_return);
     })
     .catch ((error) => {
         res.status(400).json({
@@ -140,7 +144,7 @@ const get_players = async(req, res) => {
         const players = lobby.players.map(player=>{
             return({
                 'player': player, 
-                'isTurn': (lobby.gamestate.active_player.player_uid === player.player_uid)
+                'isTurn': (lobby.gamestate.active_player_uid === player.player_uid)
             })
         })
         res.status(200).json(players);
@@ -154,8 +158,15 @@ const update_position = async(req, res) => {
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then(lobby=>{
+        //redo
         const active_player = lobby.gamestate.active_player;
+        
     })
+}
+
+const set_active_player = async(req, res) => {
+    const lobby_id = req.params.id;
+
 }
 
 module.exports = {
