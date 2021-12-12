@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser, setUserID, setIsHost } from '../start/gamesetupSlice'
-import {selectUserID, selectIsHost, selectUser} from '../start/gamesetupSlice'
 import { yellow, orange, purple, blue} from '../lobby/lobbysetupSlice'
 import DieComponent from './DieComponent';
 import { selectTransformTo, setTransformTo} from './dieSlice';
@@ -39,89 +37,8 @@ export default function GamePage(props){
                 console.log("A robot is playing");
             }
         })
-        /* .then(res=>{
-            setLobby(res.data);
-            initValues(res.data);
-        
-
-            const int = setInterval(()=>{
-                const url = window.location.href;
-                const id = url.split("/")[4];
-                if(status === 'playing'){
-                    setIsMyTurn(true);
-                    console.log('playing')
-                }
-                else if(status === 'waiting'){
-                    setIsMyTurn(false);
-                    // enable loading component?
-                    
-                        var lob = getLobby(id);
-                        setOrangePosition(lob.gamestate.board_positions.orange);
-                        setBluePosition(lob.gamestate.board_positions.blue);
-                        setPurplePosition(lob.gamestate.board_positions.purple);
-                        setYellowPosition(lob.gamestate.board_positions.yellow);
-                        
-                        initValues(lob);
-                
-                    
-                } 
-            }, 1000)
-        }) */
     },[])
-/* 
-    function initValues(lob){
-        console.log(lob);
-        setPlayers(lob.players);
-        setMessages(lob.messages);
-        let me = (new Cookie()).get('player_uid');
-        if(lob.gamestate.turn === 0){
-            players.forEach(player=>{
-                if(me === player.player_uid){
-                    if(player.isHost){
-                        const lobbyCopy = JSON.parse(JSON.stringify(lob));
-                        setIsHost(true);
-                        setIsMyTurn(true);
-                        lobbyCopy.gamestate.turn++;
-                        lobbyCopy.gamestate.active_player = me;
-                        updateLobby(lobbyCopy);
-                        setStatus('playing');
-                        console.log('playing')
-                    }
-                    else{
-                        setStatus('waiting');
-                        console.log('waiting')
-                    }
-                }
-            })
-        }
-        else{
-            console.log(lob);
-            if(lob.gamestate.active_player.isRobot && isHost){
-                // robot play
-                console.log("robots turn");
-            }
-            else if(lob.gamestate.active_player.player_uid === me){
-                // play                
-                console.log("my turn");
 
-            }
-            else{
-                // wait
-                console.log("waiting");
-
-            }
-        }
-    }
-
-    function getLobby(id){
-        axios.get(`http://localhost:5000/api/v1/lobbies/${id}`)
-        .then(lobby=>{
-            return lobby.data;
-        })
-        .catch(error=>{
-            return("Error in GameHelper.getLobby: " + error);
-        })
-    } */
 
     function roll(){
         const result = Math.floor(Math.random() * (7-1) + 1);
@@ -139,6 +56,7 @@ export default function GamePage(props){
                     dispatch(openModal());
                 }
                 else{
+                    // didn't land on a pipe
                     // all done, put API call to increment turn and get next player
                 }
             })
@@ -146,38 +64,7 @@ export default function GamePage(props){
         return result;
     }
 
-/* 
-    function updateLobby(lobby){
-        axios.put(`http://localhost:5000/api/v1/lobbies/${lobby.id}/gamestate`, lobby)
-            .then(gamestate=>{
-                return gamestate.data
-            })
-            .catch(error=>{
-                console.log("Error in GameHelper.updateGamestate: " + error);
-                return null;
-            })
-    }
-    
-    function setPosition(color, position){
-        switch(color){
-            case blue:
-                setBluePosition(position);
-                break;
-            case purple:
-                setPurplePosition(position);
-                break;
-            case orange:
-                setOrangePosition(position);
-                break;
-            case yellow:
-                setYellowPosition(position);
-                break;
-            default:
-                break;
-        }
-        // set backend
-    }
-
+/*
     function pushMessage(message){
         var lobbyCopy = JSON.parse(JSON.stringify(lobby));
         lobbyCopy.gamestate.messages.push(`[${(new Date()).toLocaleTimeString('en-US')}] ${message}`);
