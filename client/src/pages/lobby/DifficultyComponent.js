@@ -90,7 +90,7 @@ export default function DifficultyComponent(props){
                     tempLobby.players = newColors;
                     tempLobby.gamestate.hasStarted = true;
                     tempLobby.gamestate.turn = 1;
-                    tempLobby.gamestate.active_player_uid = newColors[0].player_uid;
+                    tempLobby.gamestate.active_player = newColors[0];
                     console.log(tempLobby);
                     axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate/`, tempLobby)
                     .then(response=>{
