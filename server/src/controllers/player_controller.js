@@ -63,43 +63,8 @@ const update_player = async(player, res)=>{
     });
 }
 
-/**
- * get scores
- * 
- * return all the score variables
- *      -total points
- *      -speed points
- *      -trivia points
- */
-const get_scores = async (req, res) => {
-   /**
-    * get the id
-    * 
-    * find the player and return an object of
-    *       -player nickname
-    *       -total score
-    *       -speed score
-    *       -trivia score
-    */
-
-    const player_uid = req.params.id;
-    await PlayerData.findOne({ 'id': player_uid })
-        .then((player) => {
-            res.status(200).json({
-                player_name: player.nickname,
-                total_points: player.total_points,
-                speed_points: player.speed_points,
-                trivia_points: player.trivia_points
-            })
-        })
-        .catch((error) => {
-            res.status(404).json({
-                message: error.message
-            })
-        });
-}
 
 module.exports = {
     create_player,
-    get_scores,
+    update_player,
 }
