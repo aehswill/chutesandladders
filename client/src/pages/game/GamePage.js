@@ -29,7 +29,7 @@ export default function GamePage(props){
     const [self, setSelf] = useState({});
 
     useEffect(()=>{
-        axios.get(`http://localhost:5000/api/v1/lobbies/${lobbyID}/gamestate/players`)
+        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
         .then(res=>{
             setPlayers(res.data);
             const meIndex = (res.data).findIndex(element=>element.player.player_uid === (new Cookie()).get('player_uid'));
@@ -125,7 +125,7 @@ export default function GamePage(props){
         const result = Math.floor(Math.random() * (7-1) + 1);
         if(isMyTurn){
             dispatch(setTransformTo(result));
-            axios.put(`http://localhost:5000/api/v1/lobbies/${lobbyID}/gamestate`)
+            axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate`)
         }
         return result;
     }
