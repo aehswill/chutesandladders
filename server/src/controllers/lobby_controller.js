@@ -1,6 +1,7 @@
 const Lobby = require('../models/lobby');
 const LobbyData = require('../models/lobby');
 const Player = require('../models/player');
+const { check_player_trivia_answer } = require('./gamestate_controller');
 
 /**
  * Lobby Controller
@@ -223,24 +224,28 @@ const get_players = async(req, res) => {
 /**
  * update player color
  * 
- * update the player's color variable from null to the passed color
- * there is no player color var in schema
+ * update the player's color variable from transparent to the passed color
  */
  const update_player_color = async(req, res) => {
 
     const lobby_id = req.params.id;
-    const player_uid = req.params.uid;
      await LobbyData.findOne({'id': lobby_id})
      .then(async(lobby) => {
-        const temp = lobby.players.map(player=>{
-            if(player.player_uid == req.body.player_uid){
-                player.color = req.body.color
-            }
-            return player;
+         /* if(req.body.length <= 1){
+             lobby.players.forEach(player=>{
+                 if(player.player_uid === req.body.player_uid){
+                     player.color = req.body.color;
+                 }
+             })
+         }
+         else{
+             
+         } */
+         lobby.players = req.body;
+        await LobbyData.findByIdAndUpdate(lobby._id, lobby, {new:true})
+        .then(res2=>{
+            return res.status(200).json(res2);
         })
-        lobby.players = temp;
-        await LobbyData.findByIdAndUpdate(lobby._id, lobby)
-        return res.status(200).json(lobby);
      })   
      .catch ((error) => {
          return res.status(400).json({
@@ -265,10 +270,15 @@ const update_property = async(req, res) => {
         if(JSON.stringify(req.body).includes("isPublic")){
             lobby.isPublic = req.body.isPublic;
         }
-        else if(JSON.stringify(req.body).includes("difficulty")){
+        if(JSON.stringify(req.body).includes("difficulty")){
             lobby.difficulty = req.body.difficulty;
         }
-        await LobbyData.findByIdAndUpdate(lobby._id, lobby);
+        if(JSON.stringify(req.body).includes("hasStarted")){
+            lobby.gamestate.hasStarted = req.body.hasStarted;
+            lobby.gamestate.turn = 1;
+            lobby.gamestate.active_player = lobby.players[0];
+        }
+        await LobbyData.findByIdAndUpdate(lobby._id, lobby, {new: true});
         return res.status(200).json(lobby);
      })   
      .catch ((error) => {

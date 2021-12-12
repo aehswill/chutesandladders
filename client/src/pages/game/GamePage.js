@@ -3,146 +3,147 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser, setUserID, setIsHost } from '../start/gamesetupSlice'
 import {selectUserID, selectIsHost, selectUser} from '../start/gamesetupSlice'
-import { fetchTrivia, fetchLobby, sendGamestate} from './playSlice'
-import {selectTriviaQuestions, selectLobby, selectStatus, selectTriviaStatus} from './playSlice'
 import { yellow, orange, purple, blue} from '../lobby/lobbysetupSlice'
 import DieComponent from './DieComponent';
 import { selectTransformTo, setTransformTo} from './dieSlice';
 import BoardComponent from './BoardComponent';
-import StartButton from '../../common/StartButton'
-import PlayerBox from './HorizonPlayerBoxComponent'
-import MessageBoxComponent from './MessageBoxComponent'
+import StartButton from '../../common/StartButton';
+import PlayerBox from './HorizonPlayerBoxComponent';
+import MessageBoxComponent from './MessageBoxComponent';
 import TriviaCardComponent from './TriviaCardComponent';
-import Modal from '../../common/Modal'
+import Modal from '../../common/Modal';
 import {openModal} from '../../common/modalSlice';
-import Cookie from 'universal-cookie'
-import axios from 'axios'
-import Player from '../../model/Player';
+import Cookie from 'universal-cookie';
+import axios from 'axios';
 
 export default function GamePage(props){
     const dispatch = useDispatch();
-    const [orangePosition, setOrangePosition] = useState(1);
-    const [purplePosition, setPurplePosition] = useState(1);
-    const [bluePosition, setBluePosition] = useState(1);
-    const [yellowPosition, setYellowPosition] = useState(1);
-    const [isMyTurn, setIsMyTurn] = useState(false);
-    const [players, setPlayers] = useState([]);
-    const lobby = useSelector(selectLobby);
-    const status = useSelector(selectStatus);
-    const triviaStatus = useSelector(selectTriviaStatus);
-
     const getTransform = useSelector(selectTransformTo);
-    const getTrivia = useSelector(selectTriviaQuestions);
+    const [messages, setMessages] = useState([]);
+    const [players, setPlayers] = useState([]);
+    const [isMyTurn, setIsMyTurn] = useState(false);
+    const [isHost, setIsHost] = useState(false);
+    const [status, setStatus] = useState("");
+    const [update, incrementUpdate] = useState(0);
 
-    const getIsHost = useSelector(selectIsHost);
-    const getUserID = useSelector(selectUserID);
-    const getUser = useSelector(selectUser);
+    useEffect(()=>{
+        const url = window.location.href;
+        const id = url.split("/")[4];
+        axios.get(`http://localhost:5000/api/v1/lobbies/${id}/gamestate/players`)
+        .then(res=>{
+            setPlayers(res.data);
+            const meIndex = (res.data).findIndex(element=>element.player.player_uid === (new Cookie()).get('player_uid'));
+            console.log(res.data[meIndex])
+            setIsHost((res.data)[meIndex].player.isHost);
+            console.log(isHost);
+            setIsMyTurn((res.data)[meIndex].isTurn);
+            console.log(isMyTurn);
+            console.log(players);
+        })
+        /* .then(res=>{
+            setLobby(res.data);
+            initValues(res.data);
+        
 
-    const cookie = new Cookie();
-    
-    
-    const url = window.location.href;
-    const id = url.split("/")[4];
-    dispatch(fetchLobby(id));
-    if(status === "fulfilled"){
-        dispatch(fetchTrivia(lobby.difficulty));
-        setPlayers(lobby.players);
-        if(triviaStatus === "fulfilled"){
-            const index = lobby.players.findIndex(player=>player.player_uid === cookie.get('player_uid'));
-            dispatch(setUser(lobby.players[index].nickname));
-            dispatch(setUserID(lobby.players[index].player_uid));
-            dispatch(setIsHost(lobby.players[index].isHost));
-            
-            if(lobby.gamestate.turn===0 && getIsHost){
-                const player = lobby.players.find(player=>player.player_uid===getUserID);
-                const lob = JSON.parse(JSON.stringify(lobby));
-                lob.gamestate.active_player = player;
-                dispatch(sendGamestate(lob))
-            }
-            const activePlayer = lobby.gamestate.active_player;
-            if(activePlayer.player_uid === getUserID){
-                setIsMyTurn(true);
-            }
-            else if(activePlayer.isRobot && getIsHost){
-                const name = activePlayer.nickname;
-                //dispatch(addMessage(`${name}'s turn'`));
-                //send
-                const robotRoll = roll();
-                //dispatch(addMessage(`${name} rolled a ${robotRoll}`));
-                //send
-                setPosition(activePlayer.color, robotRoll);
-                //send
-
-                // check if won
-                const pipesIndex = pipePositions.findIndex(element=>element.start===robotRoll);
-                if(pipesIndex > -1){
-                    const choice = (Math.floor(Math.random() * (3-1) + 1)) === 1?"true":"false";
-                    //dispatch(addMessage(`Question: ${getTrivia[3].question}`));
-                    var isCorrect = false;
-                    if(choice.toLowerCase() === getTrivia[3].correct_answer.toLowerCase()){
-                        //dispatch(addMessage("Player answered correctly"))
-                        isCorrect = true;
+            const int = setInterval(()=>{
+                const url = window.location.href;
+                const id = url.split("/")[4];
+                if(status === 'playing'){
+                    setIsMyTurn(true);
+                    console.log('playing')
+                }
+                else if(status === 'waiting'){
+                    setIsMyTurn(false);
+                    // enable loading component?
+                    
+                        var lob = getLobby(id);
+                        setOrangePosition(lob.gamestate.board_positions.orange);
+                        setBluePosition(lob.gamestate.board_positions.blue);
+                        setPurplePosition(lob.gamestate.board_positions.purple);
+                        setYellowPosition(lob.gamestate.board_positions.yellow);
+                        
+                        initValues(lob);
+                
+                    
+                } 
+            }, 1000)
+        }) */
+    },[])
+/* 
+    function initValues(lob){
+        console.log(lob);
+        setPlayers(lob.players);
+        setMessages(lob.messages);
+        let me = (new Cookie()).get('player_uid');
+        if(lob.gamestate.turn === 0){
+            players.forEach(player=>{
+                if(me === player.player_uid){
+                    if(player.isHost){
+                        const lobbyCopy = JSON.parse(JSON.stringify(lob));
+                        setIsHost(true);
+                        setIsMyTurn(true);
+                        lobbyCopy.gamestate.turn++;
+                        lobbyCopy.gamestate.active_player = me;
+                        updateLobby(lobbyCopy);
+                        setStatus('playing');
+                        console.log('playing')
                     }
                     else{
-                        //dispatch(addMessage(`Player answered incorrectly. The correct answer is ${getTrivia[3].correct_answer}`))
-                    }
-                    if((isCorrect && pipePositions[pipesIndex].type === 'green') || (!isCorrect && pipePositions[pipesIndex].type === 'red')){
-                        setPosition(activePlayer.color, pipePositions[pipesIndex].end);
-                        // check if won
+                        setStatus('waiting');
+                        console.log('waiting')
                     }
                 }
-                const turnNo = lobby.gamestate.turn + 1;
-                const index = lobby.players[lobby.players.indexOf(activePlayer)];
-                const nextIndex = index > 3 ? 0 : index;
-                const nextPlayer = lobby.players[nextIndex];
-                var tempLobby = lobby;
-                tempLobby.gamestate.active_player = nextPlayer;
-                tempLobby.gamestate.turn = turnNo;
-                
-                // score
-                dispatch(sendGamestate(tempLobby));
-            }
+            })
         }
-    }   
+        else{
+            console.log(lob);
+            if(lob.gamestate.active_player.isRobot && isHost){
+                // robot play
+                console.log("robots turn");
+            }
+            else if(lob.gamestate.active_player.player_uid === me){
+                // play                
+                console.log("my turn");
 
-
-    async function PlayerPlay(roll){
-        console.log("Playing the game")
-        //dispatch(addMessage(`${getUser}'s turn`));
-        await sleep(2000);
-        //dispatch(addMessage(`${getUser} rolled a ${roll}`));
-        setPosition(lobby.gamestate.active_player.color, roll);
-        const pipesIndex = pipePositions.findIndex(element=>element.start===roll);
-        if(pipesIndex > -1){
-            dispatch(openModal());
-            if((lobby.gamestate.player_trivia_answer && pipePositions[pipesIndex].type === 'green') || (!lobby.gamestate.player_trivia_answer && pipePositions[pipesIndex].type === 'red')){
-                setPosition(lobby.gamestate.active_player.color.color, pipePositions[pipesIndex].end);
-                // check if won
+            }
+            else{
+                // wait
+                console.log("waiting");
 
             }
         }
-        const tempLobby = JSON.parse(JSON.stringify(lobby)); // this shouldn't work but it does
-        tempLobby.gamestate.turn++;
-        const index = lobby.players[lobby.players.indexOf(lobby.gamestate.active_player)];
-        const nextIndex = index > 3 ? 0 : index;
-        tempLobby.gamestate.active_player = lobby[nextIndex];
-        dispatch(sendGamestate(tempLobby));
-
     }
 
-    async function snooze(time){
-        await sleep(time);
-    }
-    function sleep(ms){
-        return new Promise(resolve=>setTimeout(resolve, ms));
+    function getLobby(id){
+        axios.get(`http://localhost:5000/api/v1/lobbies/${id}`)
+        .then(lobby=>{
+            return lobby.data;
+        })
+        .catch(error=>{
+            return("Error in GameHelper.getLobby: " + error);
+        })
+    } */
+
+    function roll(){
+        const result = Math.floor(Math.random() * (7-1) + 1);
+        if(isMyTurn){
+            dispatch(setTransformTo(result));
+        }
+        return result;
     }
 
-    function processWin(){
-        // calculate all scores
-        // send to db
-        // navigate to lobby page
+/* 
+    function updateLobby(lobby){
+        axios.put(`http://localhost:5000/api/v1/lobbies/${lobby.id}/gamestate`, lobby)
+            .then(gamestate=>{
+                return gamestate.data
+            })
+            .catch(error=>{
+                console.log("Error in GameHelper.updateGamestate: " + error);
+                return null;
+            })
     }
-
+    
     function setPosition(color, position){
         switch(color){
             case blue:
@@ -160,17 +161,29 @@ export default function GamePage(props){
             default:
                 break;
         }
+        // set backend
     }
 
-    function roll(){
-        const result = Math.floor(Math.random() * (7-1) + 1);
-        if(lobby.gamestate.active_player.player_uid === getUserID){
-            dispatch(setTransformTo(result));
-            PlayerPlay(result);
+    function pushMessage(message){
+        var lobbyCopy = JSON.parse(JSON.stringify(lobby));
+        lobbyCopy.gamestate.messages.push(`[${(new Date()).toLocaleTimeString('en-US')}] ${message}`);
+        return lobbyCopy;
+    }
+
+    function getNextPlayer(players){
+        let indexOfCurrent = players[players.indexOf(lobby.gamestate.active_player)];
+        // if we're at the end of the list, start over at the begining
+        let indexOfNext = indexOfCurrent > 3 ? 0 : indexOfCurrent + 1;
+        return players[indexOfNext];
+    } */
+
+    function findPlayerPosition(color){
+        const index = players.findIndex(e=>e.player.color===color)
+        if(index < 0){
+            return 1;
         }
-        return result;
+        else return players[index].player.position;
     }
-
     return(
         <>
         <Modal content={TriviaCardComponent}/>
@@ -185,10 +198,13 @@ export default function GamePage(props){
                     <StartButton text="QUIT"/>
                 </ButtonBox>
             </TopContainer>
-            <BoardComponent orangePosition={orangePosition} yellowPosition={yellowPosition}
-             bluePosition={bluePosition} purplePosition={purplePosition}/>
+            <BoardComponent 
+                orangePosition={findPlayerPosition(orange)} 
+                yellowPosition={findPlayerPosition(yellow)} 
+                bluePosition={findPlayerPosition(blue)} 
+                purplePosition={findPlayerPosition(purple)} />
         </OuterContainer>
-        <MessageBoxComponent />
+        <MessageBoxComponent messages={messages}/>
             
         </>
     )
@@ -216,6 +232,8 @@ const pipePositions = [
     {type:"red", start:95, end:75},
     {type:"red", start:98, end:78}
 ]
+
+
 
 // STYLE
 const OuterContainer = styled.div`

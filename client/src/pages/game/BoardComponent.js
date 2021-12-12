@@ -15,6 +15,8 @@ export default function BoardComponent(props){
     const purplePosition = props.purplePosition;
     const positions = [];
 
+    console.log(props);
+
     let rowLine = 1;
     let columnLine = 1;
     rowStarts.forEach(num=>{

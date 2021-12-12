@@ -90,8 +90,6 @@ const get_active_trivia_question = async(req, res) => {
 /**
  * check player trivia question
  * 
- * i think we can do this in the front end?
- * 
  */
 const check_player_trivia_answer = (req, res) => {
     const id = req.params.id;
@@ -124,33 +122,32 @@ const check_player_trivia_answer = (req, res) => {
 
 
     const lobby_id = req.params.id;
-    const gamestate = {
-        gamestate: req.body.gamestate
-    }
-    await LobbyData.findOneAndUpdate({'id': lobby_id}, gamestate, {
-        new: true
-    })
+    await LobbyData.findOneAndUpdate({'id': lobby_id}, req.body.gamestate, {new: true})
     .then((lobby) => {
+        console.log(lobby);
         res.status(200).json(lobby.gamestate);
-        // console.log(req.body.data.gamestate);
-        // console.log(lobby.gamestate)
-        // lobby.gamestate = req.body.data.gamestate;
-        // await LobbyData.findOneAndUpdate({'id': lobby_id}, lobby, {
-        //     new: true
-        // })
-        // .then((return_lobby) => {
-        //     console.log(return_lobby.gamestate);
-        //     res.status(200);
-        // })
-        // .catch((error) => {
-        //     console.log(error.message)
-        // })
-        
     })
     .catch((error) => {
         res.status(400).json({
             message: error.message
         })
+    })
+}
+
+const get_players = async(req, res) => {
+    const lobby_id = req.params.id;
+    await LobbyData.findOne({'id': lobby_id})
+    .then(lobby=>{
+        const players = lobby.players.map(player=>{
+            return({
+                'player': player, 
+                'isTurn': (lobby.gamestate.active_player === player.player_uid)
+            })
+        })
+        res.status(200).json(players);
+    })
+    .catch(error=>{
+        res.status(400).json({message:error.message});
     })
 }
 
@@ -160,4 +157,5 @@ module.exports = {
     get_active_trivia_question,
     check_player_trivia_answer,
     update_gamestate,
+    get_players,
 }

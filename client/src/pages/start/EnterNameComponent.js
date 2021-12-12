@@ -37,28 +37,30 @@ export default function EnterNameComponent(props){
     const playerArray = [];
     var self;
     async function onClick(){
-        dispatch(setUser(name));
-        // if the cookie hasn't been set, generate a new playerID
-        var userID;
-        if(typeof cookie.get('player_uid') === 'undefined'){
-            userID = nanoid();
-            cookie.set('player_uid', userID, [{path: '/'},{secure: true}, {sameSite: 'strict'}]);
-            cookie.set('player_nickname', name, [{path: '/'},{secure: true}, {sameSite: 'strict'}]);
-            cookie.set('isHost', getIsHost, [{path: '/'},{secure: true}, {sameSite: 'strict'}]);
+        if(name !== ''){
+            dispatch(setUser(name));
+            // if the cookie hasn't been set, generate a new playerID
+            var userID;
+            if(typeof cookie.get('player_uid') === 'undefined'){
+                userID = nanoid();
+                cookie.set('player_uid', userID, [{path: '/'},{secure: true}, {sameSite: 'strict'}]);
+                cookie.set('player_nickname', name, [{path: '/'},{secure: true}, {sameSite: 'strict'}]);
+                cookie.set('isHost', getIsHost, [{path: '/'},{secure: true}, {sameSite: 'strict'}]);
+            }
+            else{
+                userID = cookie.get('player_uid');
+            }
+            
+            dispatch(setUserID(userID));
+            const me = createUser(name, userID);
+            if(getIsHost){ 
+                createLobby();
+            }
+            else joinLobby(me);
+            await sleep(3000);
+            navigate('/lobby/'+getLobby);
+            props.close();
         }
-        else{
-            userID = cookie.get('player_uid');
-        }
-        
-        dispatch(setUserID(userID));
-        const me = createUser(name, userID);
-        if(getIsHost){ 
-            createLobby();
-        }
-        else joinLobby(me);
-        await sleep(3000);
-        navigate('/lobby/'+getLobby);
-        props.close();
     }
 
     function createUser(name, id){
@@ -110,7 +112,7 @@ export default function EnterNameComponent(props){
     }
 
     const joinLobby = (self) => {
-        const req = axios.put(`http://localhost:5000/api/v1/lobbies/${getLobby}/players`, self);
+        const req = axios.post(`http://localhost:5000/api/v1/lobbies/${getLobby}/players`, self);
         req.then(function(res){
             console.log(res.data)
         })

@@ -14,6 +14,7 @@ export default function TriviaCardComponent(props){
     const [message, setMessage] = useState("");
     const [correctAnswer, setCorrectAnswer] = useState("");
     const getTrivia = useSelector(selectTriviaQuestions);
+    const [trivia, setTrivia] = useState({});
     const status = useSelector(selectTriviaStatus);
     
     
@@ -24,10 +25,10 @@ export default function TriviaCardComponent(props){
     const [playerAnswer, setPlayerAnswer] = useState("");
     const [isFlipped, setIsFlipped] = useState(false);
     
-
     var textboxValue;
     useEffect(()=>{
-        if(status === "fulfilled"){
+        if(status === "filfilled"){
+            setTrivia(getTrivia[4]);
             const triviaItem = getTrivia[1];
             setMessage(he.decode(triviaItem.question));
             setCorrectAnswer(he.decode(triviaItem.correct_answer));
@@ -42,6 +43,7 @@ export default function TriviaCardComponent(props){
                     return currentWidth;
                 });
             }, 1000);
+
         }
     },[])
 

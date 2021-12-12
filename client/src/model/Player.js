@@ -5,6 +5,7 @@ export default class Player{
         this.isRobot = isRobot;
         this.isHost = isHost;
         this.color = "transparent";
+        this.position = 1;
         this.total_points = 0;
         this.speed_points = 0;
         this.trivia_points = 0;

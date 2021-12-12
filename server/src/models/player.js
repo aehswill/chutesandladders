@@ -15,6 +15,7 @@ const playerSchema = mongoose.Schema({
     isRobot: Boolean,
     isHost: Boolean,
     color: String,
+    position: Number,
     total_points: Number,
     speed_points: Number,
     trivia_points: Number

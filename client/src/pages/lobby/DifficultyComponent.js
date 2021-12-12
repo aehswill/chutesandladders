@@ -4,50 +4,102 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components';
 import close from '../../assets/icons/close.png'
 import PopupButton from '../../common/PopupButton';
-import { selectDifficulty, selectPlayers, setDifficulty, setHasStarted } from './lobbysetupSlice'
-import { selectLobbyID } from '../start/gamesetupSlice';
-import {fetchLobby} from '../game/playSlice';
+import { selectPlayers, setDifficulty, setHasStarted, setPlayers } from './lobbysetupSlice'
+import { yellow, orange, purple, blue} from './lobbysetupSlice'
+import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken} from './lobbysetupSlice'
+import { setIsBlueTaken, setIsOrangeTaken, setIsPurpleTaken, setIsYellowTaken } from './lobbysetupSlice'
+import { selectLobbyID, selectUserID } from '../start/gamesetupSlice';
 import { navigate } from 'hookrouter'
 import axios from 'axios';
 
 export default function DifficultyComponent(props){
     const dispatch = useDispatch();
-    const getDifficulty = useSelector(selectDifficulty);
+    const getUserID = useSelector(selectUserID);
     const getLobbyID = useSelector(selectLobbyID);
+    const getPlayers = useSelector(selectPlayers);
     const [easySelected, selectEasy] = useState(true);
     const [mediumSelected, selectMedium] = useState(false);
     const [hardSelected, selectHard] = useState(false);
 
-    function onClick(){
-        const mode = easySelected?"easy":(mediumSelected?"medium":"hard");
-        dispatch(setDifficulty(mode));
-        console.log(`Lobby difficulty set to ${getDifficulty}`);
-        const url = window.location.href;
-        const id = url.split("/")[4];
-        var gamestate;
-        const res = axios.get(`http://localhost:5000/api/v1/lobbies/${id}/`);
-        console.log(res);
-        res.then((lobby) => {
-            gamestate = lobby.data.gamestate;
-            gamestate.hasStarted = true;
-            lobby.data.gamestate = gamestate
-            dispatch(setHasStarted(true));
-            const r = axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate/`, lobby);
-            r.then(response=>{
-                console.log(response);
-            })
-        })
-        .catch(error=>console.log(error));
-        snooze(2000);
-        navigate(`/lobby/${getLobbyID}/game`);
-        props.close();
-    }
+    const blueTaken = useSelector(selectIsBlueTaken);
+    const orangeTaken = useSelector(selectIsOrangeTaken);
+    const purpleTaken = useSelector(selectIsPurpleTaken);
+    const yellowTaken = useSelector(selectIsYellowTaken);
 
-    async function snooze(time){
-        await sleep(time);
-    }
-    function sleep(ms){
-        return new Promise(resolve=>setTimeout(resolve, ms));
+    function onClick(){
+
+        var bt = false;
+        var ot = false;
+        var yt = false;
+        var pt = false;
+        const newColors = [];
+        getPlayers.forEach((player)=>{
+            if(player.player_uid === getUserID){
+                switch(player.color){
+                    case blue:
+                        bt = true;
+                        break;
+                    case purple:
+                        pt = true;
+                        break;
+                    case orange:
+                        ot = true;
+                        break;
+                    case yellow:
+                        yt = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if(player.color === "transparent"){
+                if(!blueTaken && !bt){
+                    dispatch(setIsBlueTaken(true));
+                    player.color = blue;
+                    bt = true;
+                }
+                else if(!orangeTaken && !ot){
+                    dispatch(setIsOrangeTaken(true));
+                    player.color = orange;
+                    ot = true;
+                }
+                else if(!yellowTaken && !yt){
+                    dispatch(setIsYellowTaken(true));
+                    player.color = yellow;
+                    yt = true;
+                } 
+                else if(!purpleTaken && !pt){
+                    dispatch(setIsPurpleTaken(true));
+                    player.color = purple;
+                    pt = true;
+                } 
+            }
+            newColors.push(player);
+        })
+        console.log(newColors);
+        dispatch(setPlayers(newColors));
+            console.log(getPlayers)
+            const mode = easySelected?"easy":(mediumSelected?"medium":"hard");
+                dispatch(setDifficulty(mode));
+                const url = window.location.href;
+                const id = url.split("/")[4];
+                var tempLobby;
+                axios.get(`http://localhost:5000/api/v1/lobbies/${id}/`)
+                .then((lobby) => {
+                    tempLobby = lobby.data;
+                    tempLobby.players = newColors;
+                    tempLobby.gamestate.hasStarted = true;
+                    tempLobby.gamestate.turn = 1;
+                    tempLobby.gamestate.active_player = newColors[0];
+                    console.log(tempLobby);
+                    axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate/`, tempLobby)
+                    .then(response=>{
+                        dispatch(setHasStarted(true));
+                        props.close();
+                        navigate(`/lobby/${getLobbyID}/game`);
+                    })
+                })
+                .catch(error=>console.log(error));
     }
 
     return(

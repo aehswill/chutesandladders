@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import PlayerEntryComponent from './PlayerEntryComponent';
 import axios from 'axios';
-import { selectPlayers, setPlayers, setIsPublicGame, selectHasStarted, setHasStarted } from './lobbysetupSlice'
+import { selectHasStarted, setPlayers, setHasStarted} from './lobbysetupSlice'
 import { useSelector, useDispatch } from 'react-redux';
 import { setIsBlueTaken, setIsOrangeTaken, setIsPurpleTaken, setIsYellowTaken} from './lobbysetupSlice'
-import { setUser, setUserID, setIsHost, setLobbyID, setLobbyNickname, selectIsHost, selectLobbyID} from '../start/gamesetupSlice'
+import { setUser, setUserID, setIsHost, setLobbyID, setLobbyNickname, selectLobbyID} from '../start/gamesetupSlice'
 //import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYellowTaken} from './lobbysetupSlice'
 import { yellow, orange, purple, blue} from './lobbysetupSlice'
 import Cookie from 'universal-cookie';
@@ -14,15 +14,13 @@ import { navigate } from 'hookrouter';
 export default function PlayerBoxComponent(props){
     const dispatch = useDispatch();
     const [players, setPlayersLocal] = useState([]);
-    const getPlayers = useSelector(selectPlayers);
-    const getIsHost = useSelector(selectIsHost);
     const getLobbyID = useSelector(selectLobbyID);
     const getHasStarted = useSelector(selectHasStarted);
 
 
     const url = window.location.href;
     const id = url.split("/")[4];
-    useState(()=>{
+    useEffect(()=>{
         const interval = setInterval(()=> {
             const res = axios.get(`http://localhost:5000/api/v1/lobbies/${id}/`);
             res.then((lobby) => {
@@ -58,11 +56,10 @@ export default function PlayerBoxComponent(props){
                             break;
                     }
                 })
+                
                 if(getHasStarted){
                     clearInterval(interval);
-                    if(!getIsHost){
-                        navigate(`/lobby/${getLobbyID}/game`);
-                    }
+                    navigate(`/lobby/${getLobbyID}/game`);
                 }
             })
             .catch(function(error){

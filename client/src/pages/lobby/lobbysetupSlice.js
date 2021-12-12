@@ -15,7 +15,7 @@ const initialState = {
     isOrangeTaken: false,
     isBlueTaken: false,
     players: [],
-    hasStarted: false
+    hasStarted: false,
 }
 
 export const lobbysetupSlice = createSlice({
@@ -58,8 +58,8 @@ export const lobbysetupSlice = createSlice({
             state.players = tempArray;
         },
         setHasStarted: (state, action) => {
-            state.hasStarted = action.payload;
-        }
+            state.hasStarted = action.payload
+        },
 
     }
 });
@@ -83,7 +83,7 @@ export const {
     setIsOrangeTaken, 
     setIsBlueTaken,
     setPlayers,
-    setHasStarted
+    setHasStarted,
  } = lobbysetupSlice.actions;
 
 

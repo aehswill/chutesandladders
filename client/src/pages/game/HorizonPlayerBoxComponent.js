@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux';
-import { selectStatus, selectLobby } from './playSlice'
 import PlayerComponent from './PlayerComponent';
 
 export default function HorizonPlayerBoxComponent(props){
@@ -15,7 +13,7 @@ export default function HorizonPlayerBoxComponent(props){
             <Box>
                 <List>
                 {(players).map(player=>(
-                    <PlayerComponent player={player}/>
+                    <PlayerComponent player={player.player}/>
 
                 ))}
                 </List>

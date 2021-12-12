@@ -31,38 +31,9 @@ export default function LobbyPage(props){
     const yellowTaken = useSelector(selectIsYellowTaken);
     
     const click = () => {
-        // auto-assign colors to players who haven't chosen
-        dispatch(setPlayers(getPlayers.map( (player) => {
-            if(player.color === "transparent"){
-                if(!blueTaken){
-                    dispatch(setIsBlueTaken(true));
-                    player.color = blue;
-                }
-                else if(!orangeTaken){
-                    dispatch(setIsOrangeTaken(true));
-                    player.color = orange;
-                }
-                else if(!yellowTaken){
-                    dispatch(setIsYellowTaken(true));
-                    player.color = yellow;
-                } 
-                else if(!purpleTaken){
-                    dispatch(setIsPurpleTaken(true));
-                    player.color = purple;
-                } 
-            }
-            axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players/${player.player_uid}`, player)
-            .catch(function(error){
-                console.log(error)
-            })
-            return player;
-        })))
-        const anyBots = getPlayers.map(player=>player.isRobot?"true":"false");
-        if(anyBots) dispatch(openModal());
-        else{
-            // there are no bots to assign difficulty to, navigate directly to next page
-        }
-      }
+        
+        dispatch(openModal());
+    }
     
     const colorHandler = (color) => {
         if(
@@ -93,13 +64,14 @@ export default function LobbyPage(props){
                         break;
                 }
                 player.color = color;
-                axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players/${player.player_uid}`, player)
+            }
+            return player;
+        })))
+        axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players`, getPlayers)
                 .catch(function(error){
                     console.log(error)
                 })
-            }
-            return player;
-        })))}
+    }
     }
 
     return(
