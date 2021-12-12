@@ -14,7 +14,7 @@ export default function TriviaCardComponent(props){
     const dispatch = useDispatch();
     const [message, setMessage] = useState("");
     const [correctAnswer, setCorrectAnswer] = useState("");
-    const [question, setQuestion] = useState({});
+    const [question, setQuestion] = useState("");
     
     
 
@@ -28,11 +28,11 @@ export default function TriviaCardComponent(props){
     useEffect(()=>{
         axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/trivia`)
         .then(formattedTrivia=>{
-            console.log(formattedTrivia);
-            setQuestion(he.decode(formattedTrivia[2].question));
-            setCorrectAnswer(he.decode(formattedTrivia[2].correct_answer));
+            console.log(formattedTrivia.data[2]);
+            setQuestion(he.decode(formattedTrivia.data[2].question));
+            setCorrectAnswer(he.decode(formattedTrivia.data[2].correct_answer));
             setMessage(question);
-        })
+        
             setWidth(500);
             const interval = setInterval(() => {
                 setWidth((lastWidth) => {
@@ -44,6 +44,7 @@ export default function TriviaCardComponent(props){
                     return currentWidth;
                 });
             }, 1000);
+        })
     },[])
 
     function evaluate(){
@@ -92,7 +93,7 @@ export default function TriviaCardComponent(props){
         <CardContainer>
             <Card isFlipped={isFlipped}>
                 <CardFront isFlipped={isFlipped}>
-                    <label>{message}</label>
+                    <label>{question}</label>
                     <TextBox placeholder="True or False" value={textboxValue}
                     onChange={handleChange} bg="white" isValid={true}/>
                     <PopupButton text="Enter" click={evaluate} isDisabled={false}/>
