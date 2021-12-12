@@ -27,5 +27,6 @@ router.put('/:id/players', lobbyController.update_player_color);
 router.get('/:id/gamestate/', gamestateController.get_gamestate);
 router.put('/:id/gamestate/', gamestateController.update_gamestate);
 router.get('/:id/gamestate/players', gamestateController.get_players);
+router.get('/:id/gamestate/trivia', gamestateController.get_trivia);
 
 module.exports = router;

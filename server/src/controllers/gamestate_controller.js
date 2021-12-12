@@ -1,6 +1,4 @@
-const GamestateData = require('../models/gamestate');
 const LobbyData = require('../models/lobby');
-const PlayerData = require('../models/player');
 /**
  * gamestate controller
  * 
@@ -159,13 +157,53 @@ const update_position = async(req, res) => {
     await LobbyData.findOne({'id': lobby_id})
     .then(lobby=>{
         //redo
-        const active_player = lobby.gamestate.active_player;
-        
+        var updatedPlayer = lobby.players.find(player=>player.player_uid === req.body.player_uid)
+        lobby.players = lobby.players.map(player=>{
+            if(player.player_uid === req.body.player_uid){
+                player.position = req.body.position
+            }
+        })
     })
+
+    //player list
+    await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
+    .then(lobby=>{
+        const players = lobby.players.map(player=>{
+            return({
+                'player': player, 
+                'isTurn': (lobby.gamestate.active_player_uid === player.player_uid)
+            })
+        })
+        res.status(200).json(players);
+    })
+    .catch(error=>{
+        res.status(400).json({message:error.message});
+    })
+        
 }
 
 const set_active_player = async(req, res) => {
     const lobby_id = req.params.id;
+
+}
+
+const get_trivia = async(req, res) => {
+    const lobby_id = req.params.id;
+    await LobbyData.findOne({'id': lobby_id})
+    .then((lobby) => {
+        axios.get(`https://opentdb.com/api.php?amount=10&difficulty=${lobby.difficulty}&type=boolean`)
+        .then(res=>{
+            const temp = (res.data.results).map((result)=>{
+                return ({question: result.question, correct_answer: result.correct_answer})
+            })
+            res.status(200).json(temp);
+        })
+        .catch(error=>{
+            res.status(400).json({
+                message: error.message
+            })
+        })
+    })
 
 }
 
@@ -176,4 +214,5 @@ module.exports = {
     check_player_trivia_answer,
     update_gamestate,
     get_players,
+    get_trivia,
 }
