@@ -122,10 +122,9 @@ const check_player_trivia_answer = (req, res) => {
 
 
     const lobby_id = req.params.id;
-    await LobbyData.findOneAndUpdate({'id': lobby_id}, req.body.gamestate, {new: true})
+    await LobbyData.findOneAndUpdate({'id': lobby_id}, req.body, {new: true})
     .then((lobby) => {
-        console.log(lobby);
-        res.status(200).json(lobby.gamestate);
+        res.status(200).json(lobby);
     })
     .catch((error) => {
         res.status(400).json({
@@ -141,13 +140,21 @@ const get_players = async(req, res) => {
         const players = lobby.players.map(player=>{
             return({
                 'player': player, 
-                'isTurn': (lobby.gamestate.active_player === player.player_uid)
+                'isTurn': (lobby.gamestate.active_player.player_uid === player.player_uid)
             })
         })
         res.status(200).json(players);
     })
     .catch(error=>{
         res.status(400).json({message:error.message});
+    })
+}
+
+const update_position = async(req, res) => {
+    const lobby_id = req.params.id;
+    await LobbyData.findOne({'id': lobby_id})
+    .then(lobby=>{
+        const active_player = lobby.gamestate.active_player;
     })
 }
 

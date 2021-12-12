@@ -16,6 +16,8 @@ import {openModal} from '../../common/modalSlice';
 import Cookie from 'universal-cookie';
 import axios from 'axios';
 
+export const lobbyID = window.location.href.split("/")[4];
+
 export default function GamePage(props){
     const dispatch = useDispatch();
     const getTransform = useSelector(selectTransformTo);
@@ -24,21 +26,16 @@ export default function GamePage(props){
     const [isMyTurn, setIsMyTurn] = useState(false);
     const [isHost, setIsHost] = useState(false);
     const [status, setStatus] = useState("");
-    const [update, incrementUpdate] = useState(0);
+    const [self, setSelf] = useState({});
 
     useEffect(()=>{
-        const url = window.location.href;
-        const id = url.split("/")[4];
-        axios.get(`http://localhost:5000/api/v1/lobbies/${id}/gamestate/players`)
+        axios.get(`http://localhost:5000/api/v1/lobbies/${lobbyID}/gamestate/players`)
         .then(res=>{
             setPlayers(res.data);
             const meIndex = (res.data).findIndex(element=>element.player.player_uid === (new Cookie()).get('player_uid'));
-            console.log(res.data[meIndex])
+            setSelf((res.data)[meIndex].player);
             setIsHost((res.data)[meIndex].player.isHost);
-            console.log(isHost);
             setIsMyTurn((res.data)[meIndex].isTurn);
-            console.log(isMyTurn);
-            console.log(players);
         })
         /* .then(res=>{
             setLobby(res.data);
@@ -128,6 +125,7 @@ export default function GamePage(props){
         const result = Math.floor(Math.random() * (7-1) + 1);
         if(isMyTurn){
             dispatch(setTransformTo(result));
+            axios.put(`http://localhost:5000/api/v1/lobbies/${lobbyID}/gamestate`)
         }
         return result;
     }
