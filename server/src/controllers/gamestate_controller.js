@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 const LobbyData = require('../models/lobby');
 /**
  * gamestate controller
