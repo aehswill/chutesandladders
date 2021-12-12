@@ -25,7 +25,6 @@ export default function GamePage(props){
     const [players, setPlayers] = useState([]);
     const [isMyTurn, setIsMyTurn] = useState(false);
     const [isHost, setIsHost] = useState(false);
-    const [status, setStatus] = useState("");
     const [self, setSelf] = useState({});
 
     useEffect(()=>{
@@ -36,6 +35,9 @@ export default function GamePage(props){
             setSelf((res.data)[meIndex].player);
             setIsHost((res.data)[meIndex].player.isHost);
             setIsMyTurn((res.data)[meIndex].isTurn);
+            if(!isMyTurn && isHost && players.find(e=>e.isTurn === true).isRobot){
+                console.log("A robot is playing");
+            }
         })
         /* .then(res=>{
             setLobby(res.data);
@@ -125,7 +127,21 @@ export default function GamePage(props){
         const result = Math.floor(Math.random() * (7-1) + 1);
         if(isMyTurn){
             dispatch(setTransformTo(result));
-            axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate`)
+            var tempSelf = self;
+            tempSelf.position = result;
+            setSelf(tempSelf);
+            axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate`, self)
+            .then(res=>{
+                // expecting an updated players list in nice format
+                setPlayers(res.data);
+                let pipeIndex = pipePositions.findIndex(element=> element.start === result);
+                if(pipeIndex > -1){
+                    dispatch(openModal());
+                }
+                else{
+                    // all done, put API call to increment turn and get next player
+                }
+            })
         }
         return result;
     }

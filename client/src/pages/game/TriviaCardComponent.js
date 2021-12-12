@@ -6,6 +6,7 @@ import {closeModal} from '../../common/modalSlice'
 import TextBox from '../../common/TextBox'
 import PopupButton from '../../common/PopupButton'
 import './latinise'
+import axios from 'axios'
 var he = require('he');
 
 
@@ -13,9 +14,7 @@ export default function TriviaCardComponent(props){
     const dispatch = useDispatch();
     const [message, setMessage] = useState("");
     const [correctAnswer, setCorrectAnswer] = useState("");
-    const getTrivia = useSelector(selectTriviaQuestions);
-    const [trivia, setTrivia] = useState({});
-    const status = useSelector(selectTriviaStatus);
+    const [question, setQuestion] = useState({});
     
     
 
@@ -27,11 +26,13 @@ export default function TriviaCardComponent(props){
     
     var textboxValue;
     useEffect(()=>{
-        if(status === "filfilled"){
-            setTrivia(getTrivia[4]);
-            const triviaItem = getTrivia[1];
-            setMessage(he.decode(triviaItem.question));
-            setCorrectAnswer(he.decode(triviaItem.correct_answer));
+        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/trivia`)
+        .then(formattedTrivia=>{
+            console.log(formattedTrivia);
+            setQuestion(he.decode(formattedTrivia[2].question));
+            setCorrectAnswer(he.decode(formattedTrivia[2].correct_answer));
+            setMessage(question);
+        })
             setWidth(500);
             const interval = setInterval(() => {
                 setWidth((lastWidth) => {
@@ -43,8 +44,6 @@ export default function TriviaCardComponent(props){
                     return currentWidth;
                 });
             }, 1000);
-
-        }
     },[])
 
     function evaluate(){
@@ -69,7 +68,7 @@ export default function TriviaCardComponent(props){
         return new Promise(resolve=>setTimeout(resolve, ms));
     }
 
-    function sendScores(){
+    function sendScores(){ // TARA TODO: from here, either useContext to update game page
         var txt = "";
         if(isCorrect){
             txt = "Player answered correctly"
