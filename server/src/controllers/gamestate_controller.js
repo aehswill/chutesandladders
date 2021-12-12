@@ -215,6 +215,7 @@ module.exports = {
     get_active_trivia_question,
     check_player_trivia_answer,
     update_gamestate,
+    update_position,
     get_players,
     get_trivia,
 }
