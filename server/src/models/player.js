@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 /**
  * player shcema
- *      - plauer uid
+ *      - player uid
  *      - nickname
  *      - isRobot
  *      - isHost

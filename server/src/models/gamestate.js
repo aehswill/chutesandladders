@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
  *      -active trivia question
  *      -answer to trivia question
  *      -active player
+ *      -turn
+ *      -hasStarted
+ *      -message array
  */
 const gamestateSchema = mongoose.Schema({
     hasStarted: Boolean,
