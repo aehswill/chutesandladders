@@ -275,26 +275,25 @@ const get_next_player = async(req, res) => {
             if(player.player_uid === lobby.gamestate.active_player_uid)
                 indexOfCurrent = lobby.players.indexOf(player);
         })
-
-
         let indexOfNext = indexOfCurrent > 3 ? 0 : indexOfCurrent + 1;
         lobby.gamestate.active_player_uid = lobby.players[indexOfNext].player_uid;
         lobby.gamestate.turn++;
         await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
-        await LobbyData.findOne({'id': lobby_id})
-        .then((lobby) => {
-            const players = lobby.players.map(player=>{
-                return({
-                    'player': player, 
-                    'isTurn': (lobby.gamestate.active_player_uid === player.player_uid)
+        .then(() => {
+            await LobbyData.findOne({'id': lobby_id})
+            .then((lobby) => {
+                const players = lobby.players.map(player=>{
+                    return({
+                        'player': player, 
+                        'isTurn': (lobby.gamestate.active_player_uid === player.player_uid)
+                    })
                 })
+                res.status(200).json(players);
             })
-            res.status(200).json(players);
+            .catch(error=>{
+                res.status(400).json({message:error.message});
+            })
         })
-        .catch(error=>{
-            res.status(400).json({message:error.message});
-        })
-
     })
     .catch((error) => {
         res.status(400).json({
