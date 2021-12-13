@@ -147,7 +147,7 @@ export default class GameHelper{
 
     // "Internal" functions
     getLobby = () => {
-        axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}`)
+        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}`)
         .then(lobby=>{
             return lobby.data;
         })
@@ -157,7 +157,7 @@ export default class GameHelper{
     }
 
     getGamestate = () => {
-        axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}/gamestate`)
+        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}/gamestate`)
         .then(gamestate=>{
             return gamestate.data;
         })
@@ -168,7 +168,7 @@ export default class GameHelper{
     }
 
     static getFormattedTriviaBank = (difficulty) => {
-        axios.get(`https://opentdb.com/api.php?amount=10&difficulty=${difficulty}&type=boolean`)
+        axios.get(`httpss://opentdb.com/api.php?amount=10&difficulty=${difficulty}&type=boolean`)
         .then(res=>{
             const temp = (res.data.results).map((result)=>{
                 return ({question: result.question, correct_answer: result.correct_answer, incorrect_answers: result.incorrect_answers})
@@ -182,7 +182,7 @@ export default class GameHelper{
     }
 
     updateGamestate = (lobby) => {
-        axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}/gamestate`, lobby)
+        axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}/gamestate`, lobby)
         .then(gamestate=>{
             return gamestate.data
         })
