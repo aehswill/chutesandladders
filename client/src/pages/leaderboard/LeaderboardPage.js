@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import BoardComponent from "../game/BoardComponent";
+import LeaderBoardComponent from "./LeaderBoardComponent";
 
 
 // useEffect, pull leaderboard from the API once on load
@@ -13,37 +13,46 @@ export default function LeaderboardPage(props){
 
 
     return(
-        <FlexContainer>
-            <BoardComponent/>
-            <LocalScores>
-                <ScoreBox>
-                    <Title color="yellow">WINNER!</Title>
-                    <Title color="white">{winner}</Title>
-                </ScoreBox>
-                <ScoreBox>
-                    <Title color="yellow">Highest Trivia</Title>
-                    <Title color="white">{trivia}</Title>
-                </ScoreBox>
-                <ScoreBox>
-                    <Title color="yellow">Highest Trivia</Title>
-                    <Title color="white">{speed}</Title>
-                </ScoreBox>
-            </LocalScores>
-        </FlexContainer>
+        <OuterContainer>
+            <FlexContainer>
+                <LeaderBoardComponent/>
+                <LocalScores>
+                    <ScoreBox>
+                        <Title color="yellow">WINNER!</Title>
+                        <Title color="white">{winner}</Title>
+                    </ScoreBox>
+                    <ScoreBox>
+                        <Title color="yellow">Highest Trivia</Title>
+                        <Title color="white">{trivia}</Title>
+                    </ScoreBox>
+                    <ScoreBox>
+                        <Title color="yellow">Highest Trivia</Title>
+                        <Title color="white">{speed}</Title>
+                    </ScoreBox>
+                </LocalScores>
+            </FlexContainer>
+        </OuterContainer>
     );
 }
 
 
 
 // STYLE
-const FlexContainer = styled.div`
+const OuterContainer=styled.div`
+    position: absolute;
     height: 100%;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+`;
+const FlexContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center
     align-items: center;
-    gap: 50px;
+    gap: 100px;
 `;
 
 const LocalScores = styled.div`
@@ -55,7 +64,7 @@ const LocalScores = styled.div`
 `;
 
 const ScoreBox = styled.div`
-
+    
 
 `;
 

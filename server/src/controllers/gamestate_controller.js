@@ -276,7 +276,7 @@ const get_next_player = async(req, res) => {
             if(player.player_uid === lobby.gamestate.active_player_uid)
                 indexOfCurrent = lobby.players.indexOf(player);
         })
-        let indexOfNext = indexOfCurrent > 3 ? 0 : indexOfCurrent + 1;
+        let indexOfNext = (indexOfCurrent + 1 > 3) ? 0 : indexOfCurrent + 1;
         lobby.gamestate.active_player_uid = lobby.players[indexOfNext].player_uid;
         lobby.gamestate.turn++;
         await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})

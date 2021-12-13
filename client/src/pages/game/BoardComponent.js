@@ -42,10 +42,10 @@ export default function BoardComponent(props){
     return(
         <BoardContainer board={board}>
             <OverlayGrid>
-                <Token column={positions.find(i=> i.position === bluePosition).column} row={positions.find(i=> i.position === bluePosition).row} src={blueT} alt="blue token"/>
-                <Token column={positions.find(i=> i.position === purplePosition).column} row={positions.find(i=> i.position === purplePosition).row} src={purpleT} alt="purple token"/>
-                <Token column={positions.find(i=> i.position === orangePosition).column} row={positions.find(i=> i.position === orangePosition).row} src={orangeT} alt="orange token"/>
-                <Token column={positions.find(i=> i.position === yellowPosition).column} row={positions.find(i=> i.position === yellowPosition).row} src={yellowT} alt="yellow token"/>
+                <Token column={(positions.find(i=> i.position === bluePosition) ?? 0).column} row={(positions.find(i=> i.position === bluePosition) ?? 0).row} src={blueT} alt="blue token"/>
+                <Token column={(positions.find(i=> i.position === purplePosition) ?? 0).column} row={(positions.find(i=> i.position === purplePosition) ?? 0).row} src={purpleT} alt="purple token"/>
+                <Token column={(positions.find(i=> i.position === orangePosition) ?? 0).column} row={(positions.find(i=> i.position === orangePosition) ?? 0).row} src={orangeT} alt="orange token"/>
+                <Token column={(positions.find(i=> i.position === yellowPosition) ?? 0).column} row={(positions.find(i=> i.position === yellowPosition) ?? 0).row} src={yellowT} alt="yellow token"/>
                 {
                     positions.map(num=>{
                         return (

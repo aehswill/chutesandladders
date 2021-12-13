@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { setTriviaResult } from './playSlice'
+import { setTriviaResult, setTriviaDone } from './playSlice'
 import {closeModal} from '../../common/modalSlice'
 import TextBox from '../../common/TextBox'
 import PopupButton from '../../common/PopupButton'
@@ -86,6 +86,8 @@ export default function TriviaCardComponent(props){
             player.player.trivia_points += isCorrect? 10 : -10;
             axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/scores`, player)
             .then(res=>{
+                dispatch(setTriviaResult({player_uid: player.player.uid, isCorrect: isCorrect}));
+                dispatch(setTriviaDone(true));
                 dispatch(closeModal());
             })
         })
