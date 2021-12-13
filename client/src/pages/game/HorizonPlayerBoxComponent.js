@@ -13,7 +13,7 @@ export default function HorizonPlayerBoxComponent(props){
             <Box>
                 <List>
                 {(players).map(player=>(
-                    <PlayerComponent player={player.player}/>
+                    <PlayerComponent player={player.player} isActive={player.isTurn}/>
 
                 ))}
                 </List>

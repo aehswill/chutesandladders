@@ -47,7 +47,7 @@ export default function GamePage(props){
             var tempSelf = self;
             tempSelf.position = result;
             setSelf(tempSelf);
-            axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate`, self)
+            axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, self)
             .then(res=>{
                 // expecting an updated players list in nice format
                 setPlayers(res.data);
@@ -56,27 +56,15 @@ export default function GamePage(props){
                     dispatch(openModal());
                 }
                 else{
-                    // didn't land on a pipe
-                    // all done, put API call to increment turn and get next player
+                    axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
+                    .then(res=>{
+                        console.log(res.data);
+                    })
                 }
             })
         }
         return result;
     }
-
-/*
-    function pushMessage(message){
-        var lobbyCopy = JSON.parse(JSON.stringify(lobby));
-        lobbyCopy.gamestate.messages.push(`[${(new Date()).toLocaleTimeString('en-US')}] ${message}`);
-        return lobbyCopy;
-    }
-
-    function getNextPlayer(players){
-        let indexOfCurrent = players[players.indexOf(lobby.gamestate.active_player)];
-        // if we're at the end of the list, start over at the begining
-        let indexOfNext = indexOfCurrent > 3 ? 0 : indexOfCurrent + 1;
-        return players[indexOfNext];
-    } */
 
     function findPlayerPosition(color){
         const index = players.findIndex(e=>e.player.color===color)

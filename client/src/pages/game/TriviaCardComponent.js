@@ -28,9 +28,9 @@ export default function TriviaCardComponent(props){
     useEffect(()=>{
         axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/trivia`)
         .then(formattedTrivia=>{
-            console.log(formattedTrivia.data[2]);
-            setQuestion(he.decode(formattedTrivia.data[2].question));
-            setCorrectAnswer(he.decode(formattedTrivia.data[2].correct_answer));
+            console.log(formattedTrivia.data[0]);
+            setQuestion(he.decode(formattedTrivia.data[0].question));
+            setCorrectAnswer(he.decode(formattedTrivia.data[0].correct_answer));
             setMessage(question);
         
             setWidth(500);
