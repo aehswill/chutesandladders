@@ -169,7 +169,7 @@ const update_position = async(req, res) => {
 
     //player list
     await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
-    .then(lobby=>{
+    .then((lobby) => {
         const players = lobby.players.map(player=>{
             return({
                 'player': player, 
