@@ -26,7 +26,7 @@ export const lobbysetupSlice = createSlice({
             state.isPublicGame = action.payload;
             const url = window.location.href;
             const id = url.split("/")[4];
-            axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}`, {
+            axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}/`, {
                 isPublic: action.payload,
             }, {
                 headers: {
@@ -39,7 +39,7 @@ export const lobbysetupSlice = createSlice({
             state.difficulty = action.payload
             const url = window.location.href;
             const id = url.split("/")[4];
-            axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}`, {
+            axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}/`, {
                 difficulty: `${action.payload}`,
             }, {
                 headers: {

@@ -147,7 +147,12 @@ export default class GameHelper{
 
     // "Internal" functions
     getLobby = () => {
-        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}`)
+        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}/`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+        })
         .then(lobby=>{
             return lobby.data;
         })
@@ -157,7 +162,12 @@ export default class GameHelper{
     }
 
     getGamestate = () => {
-        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}/gamestate`)
+        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}/gamestate/`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+        })
         .then(gamestate=>{
             return gamestate.data;
         })
@@ -182,7 +192,12 @@ export default class GameHelper{
     }
 
     updateGamestate = (lobby) => {
-        axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}/gamestate`, lobby)
+        axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}/gamestate/`, lobby, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+        })
         .then(gamestate=>{
             return gamestate.data
         })

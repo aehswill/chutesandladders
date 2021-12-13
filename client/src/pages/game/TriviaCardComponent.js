@@ -26,7 +26,12 @@ export default function TriviaCardComponent(props){
     
     var textboxValue;
     useEffect(()=>{
-        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/trivia`)
+        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/trivia/`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+        })
             .then(formattedTrivia=>{
                 console.log(formattedTrivia.data[0]);
                 setQuestion(he.decode(formattedTrivia.data[0].question));
@@ -77,14 +82,24 @@ export default function TriviaCardComponent(props){
         else{
             txt = `Player answered incorrectly. The correct answer is ${correctAnswer}`;
         }
-        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
+        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players/`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+        })
         .then(players=>{
             console.log(players)
             var player = players.data.find(p=>p.isTurn === true);
             console.log(player)
             player.player.speed_points += timeLeft;
             player.player.trivia_points += isCorrect? 10 : -10;
-            axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/scores`, player)
+            axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/scores/`, player, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+            })
             .then(res=>{
                 dispatch(setTriviaResult({player_uid: player.player.uid, isCorrect: isCorrect}));
                 dispatch(setTriviaDone(true));

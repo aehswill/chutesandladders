@@ -122,7 +122,7 @@ export default function EnterNameComponent(props){
     }
 
     const joinLobby = (self) => {
-        const req = axios.post(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${getLobby}/players`, self, {
+        const req = axios.post(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${getLobby}/players/`, self, {
             headers: {
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",

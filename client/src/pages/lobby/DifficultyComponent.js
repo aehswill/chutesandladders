@@ -84,7 +84,12 @@ export default function DifficultyComponent(props){
                 const url = window.location.href;
                 const id = url.split("/")[4];
                 var tempLobby;
-                axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}/`)
+                axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}/`, {
+                    headers: {
+                      "Content-Type": "application/json",
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+                })
                 .then((lobby) => {
                     tempLobby = lobby.data;
                     tempLobby.players = newColors;
@@ -92,7 +97,12 @@ export default function DifficultyComponent(props){
                     tempLobby.gamestate.turn = 1;
                     tempLobby.gamestate.active_player_uid = newColors[0].player_uid;
                     console.log(tempLobby);
-                    axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}/gamestate/`, tempLobby)
+                    axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}/gamestate/`, tempLobby, {
+                        headers: {
+                          "Content-Type": "application/json",
+                          "Access-Control-Allow-Origin": "*",
+                          "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+                    })
                     .then(response=>{
                         dispatch(setHasStarted(true));
                         props.close();

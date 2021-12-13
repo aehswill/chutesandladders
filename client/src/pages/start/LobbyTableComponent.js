@@ -11,7 +11,7 @@ export default function LobbyTable(props){
 
     React.useEffect(() => {
         const interval = setInterval(()=>{
-            axios.get('https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/public',{
+            axios.get('https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/public/',{
                 headers: {
                   "Content-Type": "application/json",
                   "Access-Control-Allow-Origin": "*",

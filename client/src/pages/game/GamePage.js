@@ -51,7 +51,12 @@ export default function GamePage(props){
 
     useEffect(()=>{
         // get lobby once on load
-        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
+        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players/`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+        })
         .then(res=>{
             setPlayers(players=> players = res.data);
             const meIndex = (res.data).findIndex(element=>element.player.player_uid === (new Cookie()).get('player_uid'));
@@ -66,7 +71,12 @@ export default function GamePage(props){
     },[])
 
     useInterval(async ()=>{
-        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
+        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players/`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+        })
         .then(res=>{
             if(getTriviaDone){
                 moveAgain();
@@ -104,11 +114,21 @@ export default function GamePage(props){
             }
         }
         if(moved){
-            axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, player)
+            axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players/`, player, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+            })
             .then(res=>{
                 setPlayers(res.data);
                 /// make sure no win
-                axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
+                axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next/`, {
+                    headers: {
+                      "Content-Type": "application/json",
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+                })
                     .then(res=>{
                         setPlayers(res.data);
                     })
@@ -125,7 +145,12 @@ export default function GamePage(props){
             if(tempSelf.position + result <= 100){
                 tempSelf.position += result;
                 setSelf(tempSelf);
-                axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, self)
+                axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players/`, self, {
+                    headers: {
+                      "Content-Type": "application/json",
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+                })
                 .then(res=>{
                     // expecting an updated players list in nice format
                     setPlayers(res.data);
@@ -134,7 +159,12 @@ export default function GamePage(props){
                         dispatch(openModal());
                     }
                     else{
-                        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
+                        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next/`, {
+                            headers: {
+                              "Content-Type": "application/json",
+                              "Access-Control-Allow-Origin": "*",
+                              "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+                        })
                         .then(res=>{
                             setPlayers(res.data);
                         })
@@ -156,7 +186,12 @@ export default function GamePage(props){
         //pushMessage(`${bot.nickname} rolled a ${result}`);
         if(bot.position + result <= 100){
             bot.position += result;
-            axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, bot)
+            axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players/`, bot, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+            })
             .then(res=>{
                 // expecting an updated players list in nice format
                 setPlayers(res.data);
@@ -172,7 +207,12 @@ export default function GamePage(props){
                         }
                     }
                     else{
-                        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
+                        axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next/`, {
+                            headers: {
+                              "Content-Type": "application/json",
+                              "Access-Control-Allow-Origin": "*",
+                              "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+                        })
                             .then(res=>{
                                 setPlayers(res.data);
                             })

@@ -67,7 +67,7 @@ export default function LobbyPage(props){
             }
             return player;
         })))
-        axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${getLobbyID}/players`, getPlayers, {
+        axios.put(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${getLobbyID}/players/`, getPlayers, {
                 headers: {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
