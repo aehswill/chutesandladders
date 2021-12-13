@@ -218,7 +218,6 @@ export default function GamePage(props){
                 bluePosition={findPlayerPosition(blue)} 
                 purplePosition={findPlayerPosition(purple)} />
         </OuterContainer>
-        <MessageBoxComponent />
             
         </>
     )
