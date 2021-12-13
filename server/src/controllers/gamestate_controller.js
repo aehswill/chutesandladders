@@ -159,7 +159,7 @@ const update_position = async(req, res) => {
     await LobbyData.findOne({'id': lobby_id})
     .then(async (lobby) => {
         var updatedPlayer = lobby.players.find(player=>player.player_uid === req.body.player_uid)
-        lobby.players = lobby.players.map(player=>{
+        lobby.players.map(player=>{
             if(player.player_uid === req.body.player_uid){
                 player.position = req.body.position;
             }
@@ -176,11 +176,11 @@ const update_position = async(req, res) => {
             res.status(200).json(players);
         })
         .catch(error=>{
-            res.status(400).json({message:error.message});
+            res.status(403).json({message:error.message});
         })
     })
     .catch(error=>{
-        res.status(400).json({message:error.message});
+        res.status(404).json({message:error.message});
     })
 
 
