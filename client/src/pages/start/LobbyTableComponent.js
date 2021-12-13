@@ -11,7 +11,7 @@ export default function LobbyTable(props){
 
     React.useEffect(() => {
         const interval = setInterval(()=>{
-            axios.get('http://localhost:5000/api/v1/lobbies/public')
+            axios.get('http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/public')
             .then((allLobies) => {
                 dispatch(setLobbies(allLobies.data)); //at some point, maybe compare the data/check for changes and only update when necessary
             })

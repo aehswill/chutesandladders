@@ -51,7 +51,7 @@ export default function GamePage(props){
 
     useEffect(()=>{
         // get lobby once on load
-        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
+        axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
         .then(res=>{
             setPlayers(players=> players = res.data);
             const meIndex = (res.data).findIndex(element=>element.player.player_uid === (new Cookie()).get('player_uid'));
@@ -66,7 +66,7 @@ export default function GamePage(props){
     },[])
 
     useInterval(async ()=>{
-        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
+        axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
         .then(res=>{
             if(getTriviaDone){
                 moveAgain();
@@ -104,11 +104,11 @@ export default function GamePage(props){
             }
         }
         if(moved){
-            axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, player)
+            axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, player)
             .then(res=>{
                 setPlayers(res.data);
                 /// make sure no win
-                axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
+                axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
                     .then(res=>{
                         setPlayers(res.data);
                     })
@@ -125,7 +125,7 @@ export default function GamePage(props){
             if(tempSelf.position + result <= 100){
                 tempSelf.position += result;
                 setSelf(tempSelf);
-                axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, self)
+                axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, self)
                 .then(res=>{
                     // expecting an updated players list in nice format
                     setPlayers(res.data);
@@ -134,7 +134,7 @@ export default function GamePage(props){
                         dispatch(openModal());
                     }
                     else{
-                        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
+                        axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
                         .then(res=>{
                             setPlayers(res.data);
                         })
@@ -156,7 +156,7 @@ export default function GamePage(props){
         //pushMessage(`${bot.nickname} rolled a ${result}`);
         if(bot.position + result <= 100){
             bot.position += result;
-            axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, bot)
+            axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, bot)
             .then(res=>{
                 // expecting an updated players list in nice format
                 setPlayers(res.data);
@@ -172,7 +172,7 @@ export default function GamePage(props){
                         }
                     }
                     else{
-                        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
+                        axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
                             .then(res=>{
                                 setPlayers(res.data);
                             })
