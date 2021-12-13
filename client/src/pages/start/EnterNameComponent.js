@@ -66,7 +66,7 @@ export default function EnterNameComponent(props){
     function createUser(name, id){
         self = new Player(`${id}`, `${name}`, false, `${getIsHost}`);
         playerArray.push(self);
-        const req = axios.post('https://puzzlingpipes-api.azurewebsites.net/api/v1/player', self, {
+        const req = axios.post('https://puzzlingpipes-api.azurewebsites.net/api/v1/player/', self, {
             headers: {
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
