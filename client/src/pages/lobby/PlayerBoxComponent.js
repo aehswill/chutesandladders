@@ -22,7 +22,7 @@ export default function PlayerBoxComponent(props){
     const id = url.split("/")[4];
     useEffect(()=>{
         const interval = setInterval(()=> {
-            const res = axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}/`, {
+            const res = axios.get(`https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}/`, {
                 headers: {
                   "Content-Type": "application/json",
                   "Access-Control-Allow-Origin": "*",
