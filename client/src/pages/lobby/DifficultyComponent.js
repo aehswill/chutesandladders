@@ -94,6 +94,7 @@ export default function DifficultyComponent(props){
                     console.log(tempLobby);
                     axios.put(`http://localhost:5000/api/v1/lobbies/${id}/gamestate/`, tempLobby)
                     .then(response=>{
+                        console.log(response.data)
                         dispatch(setHasStarted(true));
                         props.close();
                         navigate(`/lobby/${getLobbyID}/game`);

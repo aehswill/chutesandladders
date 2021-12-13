@@ -32,6 +32,7 @@ const lobbySchema = mongoose.Schema({
         trivia_question: String,
         trivia_answer: String,
         player_answer: String,
+        active_player_uid: String,
         messages:[{
             message: String,
         }]

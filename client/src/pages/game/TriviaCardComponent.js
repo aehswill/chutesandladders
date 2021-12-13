@@ -26,11 +26,7 @@ export default function TriviaCardComponent(props){
     
     var textboxValue;
     useEffect(()=>{
-        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
-        .then(players=>{
-            var tempplayer = players.data.find(p=>p.isTurn);
-            setPlayer(tempplayer)
-            axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/trivia`)
+        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/trivia`)
             .then(formattedTrivia=>{
                 console.log(formattedTrivia.data[0]);
                 setQuestion(he.decode(formattedTrivia.data[0].question));
@@ -38,9 +34,6 @@ export default function TriviaCardComponent(props){
                 setMessage(question);
             
                 setWidth(500);
-                if(tempplayer.player.isRobot){
-                    evaluate(true);
-                }
                 const interval = setInterval(() => {
                     setWidth((lastWidth) => {
                         const currentWidth = lastWidth - 50;
@@ -53,31 +46,23 @@ export default function TriviaCardComponent(props){
                     setTimeLeft(timeLeft-1 >= 0 ? timeLeft-1 : 0);
                 }, 1000);
             })
-        })
     },[])
 
-    function evaluate(isBot){
+    function evaluate(){
         //dispatch(addMessage(`Question: ${message}`));
-        if(isBot){
-            setIsCorrect(Math.floor(Math.random() * (3-1) + 1)===1);
-            if(isCorrect) setMessageBack("Genius!");
-            else{ setMessageBack("Better luck next time!")}
-            setIsFlipped(true);
-            sendScores();
-        }
-        else if((typeof playerAnswer[0] !== 'undefined')&&(playerAnswer.toLowerCase() === (correctAnswer).toLowerCase()
+        if((typeof playerAnswer[0] !== 'undefined')&&(playerAnswer.toLowerCase() === (correctAnswer).toLowerCase()
             || playerAnswer[0].toLowerCase() === correctAnswer[0].toLowerCase())){
                 setIsCorrect(true);
                 setMessageBack("Genius!");
-            }
-            else{
-                setIsCorrect(false);
-                setMessageBack("Better luck next time!");
-            }
-            setIsFlipped(true);
-            sleep(2000)
+        }
+        else{
+            setIsCorrect(false);
+            setMessageBack("Better luck next time!");
+        }
+        setIsFlipped(true);
+        sleep(2000)
 
-            .then(()=>sendScores());
+        .then(()=>sendScores());
     }
 
     function sleep(ms){
@@ -92,11 +77,17 @@ export default function TriviaCardComponent(props){
         else{
             txt = `Player answered incorrectly. The correct answer is ${correctAnswer}`;
         }
-        player.player.speed_points += timeLeft;
-        player.player.trivia_points += player.isRobot? 0 : isCorrect? 10 : -10; 
-        axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/scores`, player)
-        .then(res=>{
-            dispatch(closeModal());
+        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
+        .then(players=>{
+            console.log(players)
+            var player = players.data.find(p=>p.isTurn === true);
+            console.log(player)
+            player.player.speed_points += timeLeft;
+            player.player.trivia_points += isCorrect? 10 : -10;
+            axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/scores`, player)
+            .then(res=>{
+                dispatch(closeModal());
+            })
         })
     }
 

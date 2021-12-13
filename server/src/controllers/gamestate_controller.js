@@ -225,7 +225,7 @@ const get_trivia = async(req, res) => {
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then((lobby) => {
-        axios.get(`https://opentdb.com/api.php?amount=10&difficulty=${lobby.difficulty}&type=boolean`)
+        axios.get(`https://opentdb.com/api.php?amount=1&difficulty=${lobby.difficulty}&type=boolean`)
         .then(result=>{
             const temp = (result.data.results).map((trivia)=>{
                 return ({question: trivia.question, correct_answer: trivia.correct_answer})
