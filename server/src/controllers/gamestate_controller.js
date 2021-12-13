@@ -158,12 +158,12 @@ const update_position = async(req, res) => {
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then(async (lobby) => {
-        //redo
         var updatedPlayer = lobby.players.find(player=>player.player_uid === req.body.player_uid)
         lobby.players = lobby.players.map(player=>{
             if(player.player_uid === req.body.player_uid){
-                player.position = req.body.position
+                player.position = req.body.position;
             }
+            return player;
         })
         await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
         .then((lobby) => {
