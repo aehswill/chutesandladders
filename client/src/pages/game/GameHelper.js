@@ -147,7 +147,7 @@ export default class GameHelper{
 
     // "Internal" functions
     getLobby = () => {
-        axios.get(`http://localhost:5000/api/v1/lobbies/${this.lobbyID}`)
+        axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}`)
         .then(lobby=>{
             return lobby.data;
         })
@@ -157,7 +157,7 @@ export default class GameHelper{
     }
 
     getGamestate = () => {
-        axios.get(`http://localhost:5000/api/v1/lobbies/${this.lobbyID}/gamestate`)
+        axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}/gamestate`)
         .then(gamestate=>{
             return gamestate.data;
         })
@@ -182,7 +182,7 @@ export default class GameHelper{
     }
 
     updateGamestate = (lobby) => {
-        axios.put(`http://localhost:5000/api/v1/lobbies/${this.lobbyID}/gamestate`, lobby)
+        axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${this.lobbyID}/gamestate`, lobby)
         .then(gamestate=>{
             return gamestate.data
         })

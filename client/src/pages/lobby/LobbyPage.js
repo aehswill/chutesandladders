@@ -67,7 +67,7 @@ export default function LobbyPage(props){
             }
             return player;
         })))
-        axios.put(`http://localhost:5000/api/v1/lobbies/${getLobbyID}/players`, getPlayers)
+        axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${getLobbyID}/players`, getPlayers)
                 .catch(function(error){
                     console.log(error)
                 })

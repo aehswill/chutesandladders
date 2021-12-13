@@ -22,7 +22,7 @@ export default function PlayerBoxComponent(props){
     const id = url.split("/")[4];
     useEffect(()=>{
         const interval = setInterval(()=> {
-            const res = axios.get(`http://localhost:5000/api/v1/lobbies/${id}/`);
+            const res = axios.get(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}/`);
             res.then((lobby) => {
                 // restore redux state from database
                 const temp = [];
