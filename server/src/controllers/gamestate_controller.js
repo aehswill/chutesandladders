@@ -166,7 +166,9 @@ const update_position = async(req, res) => {
             return player;
         })
         await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
+        await LobbyData.findOne({'id': lobby_id})
         .then((lobby) => {
+            console.log(lobby);
             const players = lobby.players.map(player=>{
                 return({
                     'player': player, 
@@ -279,6 +281,7 @@ const get_next_player = async(req, res) => {
         lobby.gamestate.active_player_uid = lobby.players[indexOfNext].player_uid;
         lobby.gamestate.turn++;
         await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
+        await LobbyData.findOne({'id': lobby_id})
         .then((lobby) => {
             const players = lobby.players.map(player=>{
                 return({
