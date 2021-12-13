@@ -30,4 +30,11 @@ router.get('/:id/gamestate/players', gamestateController.get_players);
 router.get('/:id/gamestate/trivia', gamestateController.get_trivia);
 router.put('/:id/gamestate/players', gamestateController.update_position);
 
+router.get('/:id/gamestate/next', gamestateController.get_next_player);
+
+router.put('/:id/gamestate/scores', gamestateController.update_scores);
+
+router.get('/:id/gamestate/messages', gamestateController.get_messages);
+router.put('/:id/gamestate/messages', gamestateController.update_messages);
+
 module.exports = router;

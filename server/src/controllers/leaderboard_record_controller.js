@@ -18,10 +18,9 @@ const add_scores = (req, res) => {
      * save it to the db and return the record
      */
     const lobby = req.body;
-    const newLobby = new LobbyData(lobby)
 
     // console.log(newLobby.players)
-    newLobby.players.forEach(async (player) => {
+    lobby.players.forEach(async (player) => {
         if(player.isRobot == false){
             const newRecord = new LeaderboardRecordData({
                 player_name: player.nickname, 

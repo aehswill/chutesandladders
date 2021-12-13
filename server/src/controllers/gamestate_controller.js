@@ -187,8 +187,28 @@ const update_position = async(req, res) => {
 const update_scores = async(req, res) => {
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
-    .then(lobby=>{
-        //tara is sending me a player so I can update the socres
+    .then(async(lobby) => {
+        lobby.players.forEach(player => {
+            if(player.player_uid === req.body.player_uid){
+                player.total_points = req.body.total_points;
+                player.trivia_points = req.body.trivia_points;
+                player.speed_points = req.body.speed_points;
+            }
+        });
+        await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
+        .then((lobby) => {
+            res.status(200).json(lobby);
+        })
+        .catch((error) => {
+            res.status(400).json({
+                message: error.message
+            })
+        })
+    })
+    .catch((error) => {
+        res.status(400).json({
+            message: error.message
+        })
     })
 
 }
@@ -213,6 +233,68 @@ const get_trivia = async(req, res) => {
 
 }
 
+const get_messages = async(req, res) => {
+    const lobby_id = req.params.id;
+    await LobbyData.findOne({'id': lobby_id})
+    .then(async(lobby) => {
+        res.status(200).json(lobby.gamestate.messages)
+    })
+    .catch((error) => {
+        res.status(400).json({
+            message: error.message
+        })
+    })
+}
+
+const update_messages = async(req, res) => {
+    const lobby_id = req.params.id;
+    await LobbyData.findOneAndUpdate({'id': lobby_id}, lobby.gamestate.messages, {new: true})
+    .then(() => {
+        res.status(200).json(lobby.gamestate.messages)
+    })
+    .catch((error) => {
+        res.status(400).json({
+            message: error.message
+        })
+    })
+}
+
+const get_next_player = async(req, res) => {
+    const lobby_id = req.params.id;
+    await LobbyData.findOne({'id': lobby_id})
+    .then(async(lobby) => {
+        let indexOfCurrent;
+        lobby.players.forEach(player => {
+            if(player.player_uid === lobby.gamestate.active_player_uid)
+                indexOfCurrent = lobby.players.indexOf(player);
+        })
+
+
+        let indexOfNext = indexOfCurrent > 3 ? 0 : indexOfCurrent + 1;
+        lobby.gamestate.active_player_uid = lobby.players[indexOfNext].player_uid;
+        lobby.gamestate.turn++;
+        await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
+        .then((lobby) => {
+            const players = lobby.players.map(player=>{
+                return({
+                    'player': player, 
+                    'isTurn': (lobby.gamestate.active_player_uid === player.player_uid)
+                })
+            })
+            res.status(200).json(players);
+        })
+        .catch(error=>{
+            res.status(400).json({message:error.message});
+        })
+
+    })
+    .catch((error) => {
+        res.status(400).json({
+            message: error.message
+        })
+    })
+}
+
 module.exports = {
     get_active_player,
     get_gamestate,
@@ -222,4 +304,8 @@ module.exports = {
     update_position,
     get_players,
     get_trivia,
+    update_scores,
+    get_messages,
+    update_messages,
+    get_next_player
 }
