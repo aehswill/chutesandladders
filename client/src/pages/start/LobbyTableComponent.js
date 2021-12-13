@@ -1,18 +1,37 @@
 import React from 'react'
+import { useDispatch, useSelector} from 'react-redux'
+import { selectLobbies, setLobbies} from './gamesetupSlice';
 import styled from 'styled-components'
 import LobbyEntryComponent from './LobbyEntryComponent';
-import lobbies from '../../mockData/mockLobbies'
-
+import axios from 'axios'
 
 export default function LobbyTable(props){
+    const dispatch = useDispatch();
+    const lobbies = useSelector(selectLobbies);
 
-    
-    function getLobbies(){
-        // GET lobbies API call
-        // this function shall return a JSON document of the lobbies (see mockLobbies file for format)
+    React.useEffect(() => {
+        const interval = setInterval(()=>{
+            axios.get('http://localhost:5000/api/v1/lobbies/public')
+            .then((allLobies) => {
+                dispatch(setLobbies(allLobies.data)); //at some point, maybe compare the data/check for changes and only update when necessary
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+            const url = window.location.href;
+            if(url.split("/").length > 1){
+                clearInterval(interval);
+            }
+        },1000);
+    })
+
+    async function snooze(){
+        await sleep(5000);
+    }
+    function sleep(ms){
+        return new Promise(resolve=>setTimeout(resolve, ms));
     }
 
-export default function LobbyTable(){
     return(
         <ListBox>
             <InnerScroll>
@@ -27,8 +46,8 @@ export default function LobbyTable(){
 // STYLE
 const ListBox = styled.ul`
   list-style-type: none;
-  height: 390px;
-  width: 550px;
+  height: 350px;
+  width: 600px;
   background: #881400;
   box-shadow: 0px 6px 10px rgba(0,0,0,0.14), 0px 1px 18px rgba(0,0,0,0.12), 0px 3px 5px rgba(0,0,0,0.2);
   border: 2px solid rgba(10,10,10,0.25);
@@ -39,7 +58,7 @@ const ListBox = styled.ul`
   text-align: center;
   letter-spacing: -0.015em;
   color: #504F4F;
-  padding: 24px 12px;
+  padding: 12px;
   
   overflow-x: hidden;
   overflow-y: auto;
@@ -48,10 +67,24 @@ const ListBox = styled.ul`
 const InnerScroll = styled.div`
     overflow-x: hidden;
     overflow-y: auto;
-    height: 390px;
-    width: 550px;
+    height: 350px;
+    width: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
+    scrollbar-width: thin;          /* "auto" or "thin" */
+    scrollbar-color:  #eac4ba #881400;   /* scroll thumb and track */
+    &::-webkit-scrollbar{
+        border-radius: 16px;
+        width: 12px; 
+    }
+    &::-webkit-scrollbar-track {
+        background: #881400;        /* color of the tracking area */
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #eac4ba;    /* color of the scroll thumb */
+        border-radius: 20px;       /* roundness of the scroll thumb */
+        border: 3px solid #881400;  /* creates padding around scroll thumb */
+      }
 `;

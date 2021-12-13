@@ -1,6 +1,7 @@
 const Lobby = require('../models/lobby');
 const LobbyData = require('../models/lobby');
 const Player = require('../models/player');
+const { check_player_trivia_answer } = require('./gamestate_controller');
 
 /**
  * Lobby Controller
@@ -15,139 +16,278 @@ const Player = require('../models/player');
 
 /**
  * create lobby
- * 
- * create a new instance of lobby
- *      -add single player to the player list
- *      -set lobby name
- *      -generate id
  */
  const create_lobby = async(req, res) => {
-    //take the info from req and create a lobby
+    /**
+     * create a new lobby
+     * 
+     * seach for the new lobby in the db unsing the new lobby id
+     * if a lobby is found
+     *      return a 409
+     * else
+     *      save and return the new lobby
+     */
     const lobby = req.body;
 
     const newLobby = new LobbyData(lobby);
 
-    try {
-        await newLobby.save();
-        res.status(201).json(newLobby);
-        
-    } catch (error) {
-        res.status(500).josn({
+    await LobbyData.findOne({'id' : newLobby.id})
+    .then(async(found_lobby) => {
+        if(found_lobby){
+            res.status(409).json({
+                message: error.message
+            });
+        }
+        await newLobby.save()
+        .then(() => {
+            res.status(201).json(newLobby);
+        })
+        .catch ((error) => {
+            res.status(409).json({
+                message: error.message
+            });
+        });
+    })
+    .catch ((error) => {
+        res.status(409).json({
             message: error.message
         });
-    }
+    });
 }
 
 /**
  * delete lobby
- * 
- * delete an instance of lobby 
  */
 const delete_lobby = async(req, res) => {
-    const id = req.params.id;
-
-    try {
-        await LobbyData.findByIdAndDelete(id);
+    /**
+     * get the lobby id
+     * 
+     * seach the db for a lobby using the lobby id
+     * 
+     * if a lobby is found
+     *  delete the lobby
+     * else
+     *  return a 404
+     */
+    const lobby_id = req.params.id;
+    
+    await LobbyData.findOneAndDelete({'id': lobby_id})
+    .then((lobby) => {
         res.status(200);
-    } catch (error) {
-        res.status(500).json({
+    })
+    .catch ((error) => {
+        res.status(404).json({
             message: error.message
         })
-    }
+    });
 }
 
 /**
  * get lobbies
- * 
- * if lobby id is passed
- *      -return the single lobby instance
- * 
- * else
- *      -return all lobby instances
  */
 const get_lobbies = async(req, res) => {
-    try {
-        const allLobbies = await LobbyData.find();
-        res.status(200).json(allLobbies);
-    } catch (error) {
+
+    /**
+     * seach the db for all lobbies and return all lobbies
+     */
+    await LobbyData.find()
+    .then((lobbies) => {
+        res.status(200).json(lobbies);
+    })
+    .catch ((error) => {
         res.status(400).json({
             message: error.message
         });
-    }
+    });
+}
+
+/**
+ * get public lobbies
+ */
+ const get_public_lobbies = async(req, res) => {
+
+    /**
+     * seach the db for all lobbies where isPrivate is false and return those lobbies
+     */
+    await LobbyData.find({ isPublic : true}).exec()
+    .then((public_lobbies) => {
+        res.status(200).json(public_lobbies);
+    })
+    .catch ((error) => {
+        res.status(400).json({
+            message: error.message
+        });
+    });
 }
 
 const get_lobby = async(req, res) => {
-    const id = req.params.id
-    try {
-        const lobby = await LobbyData.findById(id);
+    /**
+     * get the lobby id
+     * 
+     * seach the db for a lobby using the id
+     * if no lobby is found
+     *  send a 404
+     * else
+     *  return the lobby
+     */
+    const lobby_id = req.params.id;
+    await LobbyData.findOne({'id': lobby_id})
+    .then((lobby) => {
+        if(lobby == null){
+            res.status(404).json({
+                message: error.message
+            })
+        }
         res.status(200).json(lobby);
-    } catch (error) {
+    })
+    .catch((error) => {
         res.status(404).json({
             message: error.message
         })
-    }
+    });
 }
 
 /**
  * add player
- * 
- * parameters
- *      -player
- *      -lobby id
- * 
- * add the player to this lobby
  */
 const add_player = async(req, res) => {
-    const id = req.params.id;
+    /**
+     * get the lobby id
+     * create a new player
+     * 
+     * seach the db for the lobby
+     * loop through the lobby's players
+     *  if a robot appears
+     *      replace the robot with a human player
+     *      set playerAdded to true
+     * 
+     * if playerAdded is true
+     *  update the lobby and return the lobby
+     * else 
+     *  give a "lobby is full" error
+     * 
+     */
+    const lobby_id = req.params.id;
     const newPlayer = new Player(req.body);
-    try{
-        const lobby = await LobbyData.findById(id);
-        const playerList = lobby['players'];
-        if(playerList.player2.isRobot == true){
-            playerList.player2 = newPlayer;
+
+    await LobbyData.findOne({'id': lobby_id})
+    .then(async(lobby) => {
+        var playerAdded = false;
+        for(var i = 0; i<lobby.players.length; i++){
+            if(lobby.players[i].isRobot == true){
+                lobby.players[i] = newPlayer;
+                playerAdded = true;
+                break;
+            }
         }
-        else if (playerList.player3.isRobot == true) {
-            playerList.player3 = newPlayer;
+        if(playerAdded == true){
+            await LobbyData.findByIdAndUpdate(lobby._id, lobby);
+            return res.status(200).json(lobby);
         }
-        else if (playerList.player4.isRobot == true) {
-            playerList.player4 = newPlayer;
+        else{
+            return res.status(406).json({
+                message: 'Lobby is full'
+            });
         }
-        else {
-            console.log('Lobby is full');
-        }
-        await LobbyData.findByIdAndUpdate(id, lobby);
-        res.status(200).json(lobby);
-        
-    } catch (error) {
-        res.status(400).json({
-            message: error.message
+    })   
+    .catch ((error) => {
+        return res.status(400).json({
+            message: error.message,
+            request: error.request,
+            response: error.response
         });
-    }
-    
-    
+    });
+
 }
 
 /**
  * get players
- * 
- * parameters 
- *      -lobby id
- * 
- * return all players in this lobby
  */
 const get_players = async(req, res) => {
+    /**
+     * get the id
+     * 
+     * search the db for the lobby using the id
+     * return all the players from the lobby
+     */
+    const lobby_id = req.params.id;
     
-    const id = req.params.id;
+    await LobbyData.findOne({'id': lobby_id})
+    .then((lobby) => {
+        res.status(200).json(lobby.players);
+    })
+    .catch((error) => {
+        res.status(400).json(error.message)
+    });
+}
 
-    try{
-        const lobby = await LobbyData.findById(id);
-        //send lobby players and status 200
-        res.status(200).json(lobby.players)
-    } catch (error) {
-        res.status(400).json({
-            message: error.message
-        });
-    }
+/**
+ * update player color
+ * 
+ * update the player's color variable from transparent to the passed color
+ */
+ const update_player_color = async(req, res) => {
+
+    const lobby_id = req.params.id;
+     await LobbyData.findOne({'id': lobby_id})
+     .then(async(lobby) => {
+         /* if(req.body.length <= 1){
+             lobby.players.forEach(player=>{
+                 if(player.player_uid === req.body.player_uid){
+                     player.color = req.body.color;
+                 }
+             })
+         }
+         else{
+             
+         } */
+         lobby.players = req.body;
+        await LobbyData.findByIdAndUpdate(lobby._id, lobby, {new:true})
+        .then(res2=>{
+            return res.status(200).json(res2);
+        })
+     })   
+     .catch ((error) => {
+         return res.status(400).json({
+             message: error.message,
+             request: error.request,
+             response: error.response
+         });
+     });
+}
+
+const update_property = async(req, res) => {
+    /**
+     * seach the db for the lobby
+     * determine which property to updated based on contents of req.body
+     * update corresponding lobby property with document in req.body
+     * retutn the updated lobby
+     * 
+     */
+     const lobby_id = req.params.id;
+     await LobbyData.findOne({'id': lobby_id})
+     .then(async(lobby) => {
+        if(JSON.stringify(req.body).includes("isPublic")){
+            lobby.isPublic = req.body.isPublic;
+        }
+        if(JSON.stringify(req.body).includes("difficulty")){
+            lobby.difficulty = req.body.difficulty;
+        }
+        if(JSON.stringify(req.body).includes("hasStarted")){
+            lobby.gamestate.hasStarted = req.body.hasStarted;
+            lobby.gamestate.turn = 1;
+            lobby.gamestate.active_player = lobby.players[0];
+        }
+        await LobbyData.findByIdAndUpdate(lobby._id, lobby, {new: true});
+        return res.status(200).json(lobby);
+     })   
+     .catch ((error) => {
+         return res.status(400).json({
+             message: error.message,
+             request: error.request,
+             response: error.response
+         });
+     });
 }
 
 
@@ -155,7 +295,10 @@ module.exports = {
     create_lobby,
     delete_lobby,
     get_lobbies,
+    get_public_lobbies,
     get_lobby,
     add_player,
     get_players,
+    update_property,
+    update_player_color,
 };

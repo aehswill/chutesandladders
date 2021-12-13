@@ -1,4 +1,5 @@
-const leaderboardRecordData = require('../models/leaderboard_record');
+const LeaderboardRecordData = require('../models/leaderboard_record');
+const LobbyData = require('../models/lobby');
 /**
  * Leaderboard Controller
  * 
@@ -9,43 +10,59 @@ const leaderboardRecordData = require('../models/leaderboard_record');
 
 /**
  * add scores
- * 
- * add each player socre to the leaderboard
- * iterate through the players and add each score to the leaderboard_record
- * 
- * parameters
- *      -list of player objects (required)
  */
-const add_scores = async(req, res) => {
-    //get all the info from req
-    const record = req.body;
-    //create new record
-    const newRecord = new leaderboardRecordData(record);
+const add_scores = (req, res) => {
+    /**
+     * create a new record
+     * 
+     * save it to the db and return the record
+     */
+    const lobby = req.body;
 
-    try {
-        await newRecord.save();
-        res.status(201).json(newRecord);
-    } catch (error) {
+    // console.log(newLobby.players)
+    lobby.players.forEach(async (player) => {
+        if(player.isRobot == false){
+            const newRecord = new LeaderboardRecordData({
+                player_name: player.nickname, 
+                total_score: player.total_points,
+                speed_score: player.speed_points,
+                trivia_score: player.trivia_points
+            });
+            add_scores_helper()
+        }
+    })
+}
+
+const add_scores_helper = async (record, res) => {
+    const newRecord = new LeaderboardRecordData(record);
+    await newRecord.save()
+    .then(() => {
+        res.status(201);
+    })
+    .catch ((error) => {
         res.status(409).json({
             message: error.message
         })
-    }
+    });
+    
 }
 
 /**
  * get scores
- * 
- * get all data from the leaderboard_record
  */
 const get_scores = async(req, res) => {
-    try {
-        const allRecords = await leaderboardRecordData.find();
-        res.status(200).json(allRecords);
-    } catch (error) {
+    /**
+     * search for all records in the db and return them all
+     */
+    await LeaderboardRecordData.find()
+    .then((records) => {
+        res.status(200).json(records);
+    })
+    .catch ((error) => {
         res.status(404).json({
             message: error.message
         })
-    }
+    });
 }
 
 module.exports = {

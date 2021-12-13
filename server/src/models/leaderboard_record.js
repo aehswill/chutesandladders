@@ -1,29 +1,18 @@
 const mongoose = require('mongoose');
-const Player = require('./player')
-
 
 /**
  * leaderboard record shcema
- * 
- * i dont think im importing Player correctly
- * 
+ *      - player name
+ *      - each score
  */
 const leaderboardRecordSchema = mongoose.Schema({
-    player: {
-        player_uid: String,
-        nickname: String,
-        ip: String, 
-        isRobot: Boolean,
-        total_points: Number,
-        speed_points: Number,
-        trivia_points: Number,
-    },
-    score_ranking: Number,
-    speed_ranking: Number,
-    trivia_ranking: Number
+    player_name: String, 
+    total_score: Number,
+    speed_score: Number,
+    trivia_score: Number
 
 });
 
+//create model and export
 const LeaderboardRecord = mongoose.model('LeaderboardRecord', leaderboardRecordSchema);
-
 module.exports = LeaderboardRecord;
