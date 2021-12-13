@@ -28,8 +28,8 @@ export default function TriviaCardComponent(props){
     useEffect(()=>{
         axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
         .then(players=>{
-            var player = players.data.find(p=>p.isTurn);
-            setPlayer(player)
+            var tempplayer = players.data.find(p=>p.isTurn);
+            setPlayer(tempplayer)
             axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/trivia`)
             .then(formattedTrivia=>{
                 console.log(formattedTrivia.data[0]);
@@ -38,7 +38,7 @@ export default function TriviaCardComponent(props){
                 setMessage(question);
             
                 setWidth(500);
-                if(player.player.isRobot){
+                if(tempplayer.player.isRobot){
                     evaluate(true);
                 }
                 const interval = setInterval(() => {
@@ -96,7 +96,6 @@ export default function TriviaCardComponent(props){
         player.player.trivia_points += player.isRobot? 0 : isCorrect? 10 : -10; 
         axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/scores`, player)
         .then(res=>{
-            dispatch(setTriviaResult({player_uid: player.player.player_uid, isCorrect: isCorrect}));
             dispatch(closeModal());
         })
     }

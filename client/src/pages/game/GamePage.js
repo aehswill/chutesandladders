@@ -75,6 +75,22 @@ export default function GamePage(props){
         }
     },[trigger]) */
 
+    function updateState(){
+        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
+        .then(res=>{
+            console.log(res.data);
+            setPlayers(res.data);
+            const meIndex = (res.data).findIndex(element=>element.player.player_uid === (new Cookie()).get('player_uid'));
+            setSelf((res.data)[meIndex].player);
+            setIsHost((res.data)[meIndex].player.isHost);
+            setIsMyTurn((res.data)[meIndex].isTurn);
+            console.log(`${isMyTurn} + ${isHost} + ${res.data.find(e=>e.isTurn === true).player.isRobot}`);
+            if(!isMyTurn && isHost && res.data.find(e=>e.isTurn === true).player.isRobot){
+                console.log("A robot is playing");
+                robotPlay();
+            }
+        })
+    }
 
     function roll(){
         const result = Math.floor(Math.random() * (7-1) + 1);
@@ -90,12 +106,13 @@ export default function GamePage(props){
                 let pipeIndex = pipePositions.findIndex(element=> element.start === self.position);
                 if(pipeIndex > -1){
                     dispatch(openModal());
-                    setTrigger(!trigger);
+                    updateState();
                 }
                 else{
                     axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
                     .then(res=>{
                         setPlayers(res.data);
+                        updateState();
                     })
                 }
             })
@@ -106,6 +123,7 @@ export default function GamePage(props){
     function robotPlay(){
         const result = Math.floor(Math.random() * (7-1) + 1);
         dispatch(setTransformTo(result));
+        console.log("robot rolled a "+result);
         // message robot rolled a <result>
         var bot = players.find(player=>player.isTurn === true)
         bot.position += result;
@@ -119,6 +137,7 @@ export default function GamePage(props){
             axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
                 .then(res=>{
                     setPlayers(res.data);
+                    setTrigger(!trigger);
                 })
         }
     }
