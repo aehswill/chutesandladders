@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { selectTriviaQuestions, addMessage, selectTriviaStatus } from './playSlice'
+import { setTriviaResult } from './playSlice'
 import {closeModal} from '../../common/modalSlice'
 import TextBox from '../../common/TextBox'
 import PopupButton from '../../common/PopupButton'
@@ -15,8 +15,8 @@ export default function TriviaCardComponent(props){
     const [message, setMessage] = useState("");
     const [correctAnswer, setCorrectAnswer] = useState("");
     const [question, setQuestion] = useState("");
-    
-    
+    const [timeLeft, setTimeLeft] = useState(10);
+    const [player, setPlayer] = useState({});
 
     const [width, setWidth] = useState(500);
     const [messageBack, setMessageBack] = useState("");
@@ -26,31 +26,46 @@ export default function TriviaCardComponent(props){
     
     var textboxValue;
     useEffect(()=>{
-        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/trivia`)
-        .then(formattedTrivia=>{
-            console.log(formattedTrivia.data[0]);
-            setQuestion(he.decode(formattedTrivia.data[0].question));
-            setCorrectAnswer(he.decode(formattedTrivia.data[0].correct_answer));
-            setMessage(question);
-        
-            setWidth(500);
-            const interval = setInterval(() => {
-                setWidth((lastWidth) => {
-                    const currentWidth = lastWidth - 50;
-                    if (currentWidth === 0) {
-                        clearInterval(interval);
-                        evaluate();
-                    }
-                    return currentWidth;
-                });
-            }, 1000);
+        axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
+        .then(players=>{
+            var player = players.data.find(p=>p.isTurn);
+            setPlayer(player)
+            axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/trivia`)
+            .then(formattedTrivia=>{
+                console.log(formattedTrivia.data[0]);
+                setQuestion(he.decode(formattedTrivia.data[0].question));
+                setCorrectAnswer(he.decode(formattedTrivia.data[0].correct_answer));
+                setMessage(question);
+            
+                setWidth(500);
+                if(player.player.isRobot){
+                    evaluate(true);
+                }
+                const interval = setInterval(() => {
+                    setWidth((lastWidth) => {
+                        const currentWidth = lastWidth - 50;
+                        if (currentWidth === 0) {
+                            clearInterval(interval);
+                            evaluate();
+                        }
+                        return currentWidth;
+                    });
+                    setTimeLeft(timeLeft-1 >= 0 ? timeLeft-1 : 0);
+                }, 1000);
+            })
         })
     },[])
 
-    function evaluate(){
+    function evaluate(isBot){
         //dispatch(addMessage(`Question: ${message}`));
-        
-        if((typeof playerAnswer[0] !== 'undefined')&&(playerAnswer.toLowerCase() === (correctAnswer).toLowerCase()
+        if(isBot){
+            setIsCorrect(Math.floor(Math.random() * (3-1) + 1)===1);
+            if(isCorrect) setMessageBack("Genius!");
+            else{ setMessageBack("Better luck next time!")}
+            setIsFlipped(true);
+            sendScores();
+        }
+        else if((typeof playerAnswer[0] !== 'undefined')&&(playerAnswer.toLowerCase() === (correctAnswer).toLowerCase()
             || playerAnswer[0].toLowerCase() === correctAnswer[0].toLowerCase())){
                 setIsCorrect(true);
                 setMessageBack("Genius!");
@@ -77,8 +92,13 @@ export default function TriviaCardComponent(props){
         else{
             txt = `Player answered incorrectly. The correct answer is ${correctAnswer}`;
         }
-        //dispatch(addMessage(txt));
-        dispatch(closeModal());
+        player.player.speed_points += timeLeft;
+        player.player.trivia_points += player.isRobot? 0 : isCorrect? 10 : -10; 
+        axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/scores`, player)
+        .then(res=>{
+            dispatch(setTriviaResult({player_uid: player.player.player_uid, isCorrect: isCorrect}));
+            dispatch(closeModal());
+        })
     }
 
     const handleChange = (evt)=>{

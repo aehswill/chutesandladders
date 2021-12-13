@@ -203,6 +203,7 @@ const update_scores = async(req, res) => {
             }
         });
         await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
+        await LobbyData.findOne({'id': lobby_id})
         .then((lobby) => {
             res.status(200).json(lobby);
         })
@@ -279,7 +280,7 @@ const get_next_player = async(req, res) => {
         lobby.gamestate.active_player_uid = lobby.players[indexOfNext].player_uid;
         lobby.gamestate.turn++;
         await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
-        .then(() => {
+        .then(async() => {
             await LobbyData.findOne({'id': lobby_id})
             .then((lobby) => {
                 const players = lobby.players.map(player=>{

@@ -12,8 +12,9 @@ const mongoose = require('mongoose');
 const gamestateSchema = mongoose.Schema({
     hasStarted: Boolean,
     turn: Number,
-    active_trivia_question: String,
-    player_trivia_answer: String,
+    trivia_question: String,
+    trivia_answer: String,
+    player_answer: String,
     active_player_uid: String,
     messages:[{
         message: String,    

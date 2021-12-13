@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux'
 import { yellow, orange, purple, blue} from '../lobby/lobbysetupSlice'
+import { setTriviaResult, selectTriviaResult } from './playSlice';
 import DieComponent from './DieComponent';
 import { selectTransformTo, setTransformTo} from './dieSlice';
 import BoardComponent from './BoardComponent';
@@ -18,26 +19,61 @@ export const lobbyID = window.location.href.split("/")[4];
 
 export default function GamePage(props){
     const dispatch = useDispatch();
+    const getTriviaResult = useSelector(selectTriviaResult)
     const getTransform = useSelector(selectTransformTo);
     const [messages, setMessages] = useState([]);
     const [players, setPlayers] = useState([]);
     const [isMyTurn, setIsMyTurn] = useState(false);
     const [isHost, setIsHost] = useState(false);
     const [self, setSelf] = useState({});
+    const [trigger, setTrigger] = useState(false);
 
     useEffect(()=>{
         axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`)
         .then(res=>{
+            console.log(res.data);
             setPlayers(res.data);
             const meIndex = (res.data).findIndex(element=>element.player.player_uid === (new Cookie()).get('player_uid'));
             setSelf((res.data)[meIndex].player);
             setIsHost((res.data)[meIndex].player.isHost);
             setIsMyTurn((res.data)[meIndex].isTurn);
-            if(!isMyTurn && isHost && players.find(e=>e.isTurn === true).isRobot){
+            console.log(`${isMyTurn} + ${isHost} + ${res.data.find(e=>e.isTurn === true).player.isRobot}`);
+            if(!isMyTurn && isHost && res.data.find(e=>e.isTurn === true).player.isRobot){
                 console.log("A robot is playing");
+                robotPlay();
             }
         })
-    },[])
+    },[trigger])
+
+    /* useEffect(()=>{
+        var player = players.find(player=>player.isTurn&&player.player.player_uid===getTriviaResult.player_uid);
+        var pipeIndex = pipePositions.findIndex(element=>element.start === player.position);
+        var moved = false;
+        if(getTriviaResult.isCorrect){
+            
+            if(pipeIndex > -1 && pipePositions[pipeIndex].type === 'green'){
+                player.position = pipePositions[pipeIndex].end;
+                moved = true;
+            }
+        }
+        else{
+            if(pipeIndex > -1 && pipePositions[pipeIndex].type === 'red'){
+                player.position = pipePositions[pipeIndex].end;
+                moved = true;
+            }
+        }
+        if(moved){
+            axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, player)
+            .then(res=>{
+                setPlayers(res.data);
+                /// make sure no win
+                axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
+                    .then(res=>{
+                        setPlayers(res.data);
+                    })
+            });
+        }
+    },[trigger]) */
 
 
     function roll(){
@@ -45,25 +81,46 @@ export default function GamePage(props){
         if(isMyTurn){
             dispatch(setTransformTo(result));
             var tempSelf = self;
-            tempSelf.position = result;
+            tempSelf.position += result;
             setSelf(tempSelf);
             axios.put(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/players`, self)
             .then(res=>{
                 // expecting an updated players list in nice format
                 setPlayers(res.data);
-                let pipeIndex = pipePositions.findIndex(element=> element.start === result);
+                let pipeIndex = pipePositions.findIndex(element=> element.start === self.position);
                 if(pipeIndex > -1){
                     dispatch(openModal());
+                    setTrigger(!trigger);
                 }
                 else{
                     axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
                     .then(res=>{
-                        console.log(res.data);
+                        setPlayers(res.data);
                     })
                 }
             })
         }
         return result;
+    }
+
+    function robotPlay(){
+        const result = Math.floor(Math.random() * (7-1) + 1);
+        dispatch(setTransformTo(result));
+        // message robot rolled a <result>
+        var bot = players.find(player=>player.isTurn === true)
+        bot.position += result;
+        // update
+        let pipeIndex = pipePositions.findIndex(element=> element.start === bot.position);
+        if(pipeIndex > -1){
+            dispatch(openModal());
+            setTrigger(!trigger);
+        }
+        else{
+            axios.get(`http://localhost:5000/api/v1/lobbies/${window.location.href.split("/")[4]}/gamestate/next`)
+                .then(res=>{
+                    setPlayers(res.data);
+                })
+        }
     }
 
     function findPlayerPosition(color){
