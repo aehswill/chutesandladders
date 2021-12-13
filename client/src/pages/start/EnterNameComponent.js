@@ -66,7 +66,12 @@ export default function EnterNameComponent(props){
     function createUser(name, id){
         self = new Player(`${id}`, `${name}`, false, `${getIsHost}`);
         playerArray.push(self);
-        const req = axios.post('http://puzzlingpipes-api.azurewebsites.net/api/v1/player', self);
+        const req = axios.post('http://puzzlingpipes-api.azurewebsites.net/api/v1/player', self, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+        });
         req.then((res) => {
             
         })
@@ -98,7 +103,12 @@ export default function EnterNameComponent(props){
             const lobby = new Lobby(getNickname, getLobby, playerArray, gamestate);
             console.log(gamestate);
             // we should remove the old lobby on the backend if player is host
-            const req = axios.post(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/`, lobby);
+            const req = axios.post(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/`, lobby, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+            });
             req.then(res=>console.log("Lobby created:"+JSON.stringify(res.data)))
             .catch(function(error){console.log("POST ERROR:"+error)});
         })
@@ -112,7 +122,12 @@ export default function EnterNameComponent(props){
     }
 
     const joinLobby = (self) => {
-        const req = axios.post(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${getLobby}/players`, self);
+        const req = axios.post(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${getLobby}/players`, self, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+        });
         req.then(function(res){
             console.log(res.data)
         })

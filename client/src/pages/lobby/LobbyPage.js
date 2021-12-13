@@ -67,10 +67,15 @@ export default function LobbyPage(props){
             }
             return player;
         })))
-        axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${getLobbyID}/players`, getPlayers)
-                .catch(function(error){
-                    console.log(error)
-                })
+        axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${getLobbyID}/players`, getPlayers, {
+                headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
+            })
+            .catch(function(error){
+                console.log(error)
+            })
     }
     }
 

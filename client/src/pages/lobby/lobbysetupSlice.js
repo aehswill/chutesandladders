@@ -28,6 +28,11 @@ export const lobbysetupSlice = createSlice({
             const id = url.split("/")[4];
             axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}`, {
                 isPublic: action.payload,
+            }, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
             });
         },
         setDifficulty: (state, action) => {
@@ -36,6 +41,11 @@ export const lobbysetupSlice = createSlice({
             const id = url.split("/")[4];
             axios.put(`http://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/${id}`, {
                 difficulty: `${action.payload}`,
+            }, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": 'POST, GET, PUT, DELETE, OPTIONS'}
             });
         },
         setMyColor: (state, action) => {
