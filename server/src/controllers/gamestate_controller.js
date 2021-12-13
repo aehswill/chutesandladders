@@ -140,7 +140,7 @@ const check_player_trivia_answer = (req, res) => {
 const get_players = async(req, res) => {
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
-    .then(lobby=>{
+    .then((lobby) => {
         const players = lobby.players.map(player=>{
             return({
                 'player': player, 
@@ -157,7 +157,7 @@ const get_players = async(req, res) => {
 const update_position = async(req, res) => {
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
-    .then(lobby=>{
+    .then((lobby) => {
         //redo
         var updatedPlayer = lobby.players.find(player=>player.player_uid === req.body.player_uid)
         lobby.players = lobby.players.map(player=>{
