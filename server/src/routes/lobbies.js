@@ -19,7 +19,6 @@ router.put('/:id', lobbyController.update_property);
 //lobby routes to access players in specific lobbies
 router.get('/:id/players', lobbyController.get_players);
 router.post('/:id/players', lobbyController.add_player);
-
 router.put('/:id/players', lobbyController.update_player_color);
 
 
@@ -29,11 +28,10 @@ router.put('/:id/gamestate/', gamestateController.update_gamestate);
 router.get('/:id/gamestate/players', gamestateController.get_players);
 router.get('/:id/gamestate/trivia', gamestateController.get_trivia);
 router.put('/:id/gamestate/players', gamestateController.update_position);
-
 router.get('/:id/gamestate/next', gamestateController.get_next_player);
-
 router.put('/:id/gamestate/scores', gamestateController.update_scores);
 
+//message routes
 router.get('/:id/gamestate/messages', gamestateController.get_messages);
 router.put('/:id/gamestate/messages', gamestateController.update_messages);
 

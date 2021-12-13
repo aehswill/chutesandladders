@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
  * gamestate shcema
  *      -active trivia question
  *      -answer to trivia question
- *      -active player
+ *      -active player uid
  *      -turn
  *      -hasStarted
  *      -message array

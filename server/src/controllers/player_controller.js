@@ -50,7 +50,17 @@ const create_player = async (req, res) => {
         });
 }
 
+/**
+ * update player
+ * 
+ */
 const update_player = async(player, res)=>{
+    /**
+     * update plaeyr
+     * 
+     * search the db for the player to update
+     * and update the player useing the passed player
+     */
     await PlayerData.findByIdAndUpdate(player._id, player)
     .then(() =>{
         res.status(200).json(player);

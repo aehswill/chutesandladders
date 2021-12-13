@@ -1,7 +1,5 @@
-const Lobby = require('../models/lobby');
 const LobbyData = require('../models/lobby');
 const Player = require('../models/player');
-const { check_player_trivia_answer } = require('./gamestate_controller');
 
 /**
  * Lobby Controller
@@ -9,9 +7,13 @@ const { check_player_trivia_answer } = require('./gamestate_controller');
  * functions 
  *      -create lobby
  *      -get lobbies
- *      -delete_lobby
+ *      -delete lobby
+ *      -get public lobbies
+ *      -get lobby
  *      -add player
  *      -get players
+ *      -update player color
+ *      -update property
  */
 
 /**
@@ -120,6 +122,10 @@ const get_lobbies = async(req, res) => {
     });
 }
 
+/**
+ * get lobby
+ * 
+ */
 const get_lobby = async(req, res) => {
     /**
      * get the lobby id
@@ -227,20 +233,14 @@ const get_players = async(req, res) => {
  * update the player's color variable from transparent to the passed color
  */
  const update_player_color = async(req, res) => {
+    /**
+     * find the lobby
+     * update the lobby using the passed lobby that contains the player colors
+     */
 
     const lobby_id = req.params.id;
      await LobbyData.findOne({'id': lobby_id})
      .then(async(lobby) => {
-         /* if(req.body.length <= 1){
-             lobby.players.forEach(player=>{
-                 if(player.player_uid === req.body.player_uid){
-                     player.color = req.body.color;
-                 }
-             })
-         }
-         else{
-             
-         } */
          lobby.players = req.body;
         await LobbyData.findByIdAndUpdate(lobby._id, lobby, {new:true})
         .then(res2=>{
@@ -256,6 +256,10 @@ const get_players = async(req, res) => {
      });
 }
 
+/**
+ * update property
+ * 
+ */
 const update_property = async(req, res) => {
     /**
      * seach the db for the lobby

@@ -7,7 +7,10 @@ const mongoose = require('mongoose');
  *      - isRobot
  *      - isHost
  *      - color
+ *      - position
  *      - points fields
+ * 
+ * Requirement 3.1
  */
 const playerSchema = mongoose.Schema({
     player_uid: String,

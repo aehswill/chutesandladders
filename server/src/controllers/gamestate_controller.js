@@ -7,7 +7,15 @@ const LobbyData = require('../models/lobby');
  * functions
  *      -get active player
  *      -get active trivia question
- *      -check player trivia answer
+ *      -get gamestate
+ *      -update gamestate
+ *      -get players
+ *      -update position
+ *      -update scores
+ *      -get trivia
+ *      -get messages
+ *      -update messages
+ *      -get next player
  */
 
 /**
@@ -92,26 +100,6 @@ const get_active_trivia_question = async(req, res) => {
 }
 
 /**
- * check player trivia question
- * 
- */
-const check_player_trivia_answer = (req, res) => {
-    const id = req.params.id;
-    const answer = req.body;
-    console.log(answer)
-    try {
-        //we want to check the answer against the correct answer
-        //but this may require a rework of the active triva question
-        //part of the gamestate model
-        // res.status(200).json(question);
-    } catch (error) {
-        res.status(400).json({
-            message: error.message
-        });
-    }
-}
-
-/**
  * update gamestate
  * 
  * update the lobby's gamestate and return updated gamestate
@@ -137,7 +125,15 @@ const check_player_trivia_answer = (req, res) => {
     })
 }
 
+/**
+ * get players
+ * 
+ */
 const get_players = async(req, res) => {
+    /**
+     * find the lobby to get the players from
+     * then return the players and isTurn for each player
+     */
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then((lobby) => {
@@ -154,7 +150,17 @@ const get_players = async(req, res) => {
     })
 }
 
+/**
+ * update position
+ * 
+ */
 const update_position = async(req, res) => {
+    /**
+     * find the loby
+     * find the player to update and update the position
+     * 
+     * return all the player and isTurn for all players
+     */
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then(async (lobby) => {
@@ -191,7 +197,18 @@ const update_position = async(req, res) => {
         
 }
 
+/**
+ * update scores
+ * 
+ */
 const update_scores = async(req, res) => {
+    /**
+     * find the lobby to update
+     * 
+     * update the scores for each player in the lobby
+     * update the whole lobby
+     * return the lobby
+     */
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then(async(lobby) => {
@@ -221,7 +238,17 @@ const update_scores = async(req, res) => {
 
 }
 
+/**
+ * get trivia
+ * 
+ */
 const get_trivia = async(req, res) => {
+    /**
+     * find lobby
+     * 
+     * get a trivia question from the open trivia api
+     * format the question and return it
+     */
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then((lobby) => {
@@ -241,7 +268,14 @@ const get_trivia = async(req, res) => {
 
 }
 
+/**
+ * get messages
+ */
 const get_messages = async(req, res) => {
+    /**
+     * find the lobby
+     * return the lobby's gamestate's mesage array
+     */
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then(async(lobby) => {
@@ -254,7 +288,15 @@ const get_messages = async(req, res) => {
     })
 }
 
+/**
+ * update messages
+ * 
+ */
 const update_messages = async(req, res) => {
+    /**
+     * find the lobby and update the lobby's gamestate's messages array
+     * return the message array
+     */
     const lobby_id = req.params.id;
     await LobbyData.findOneAndUpdate({'id': lobby_id}, lobby.gamestate.messages, {new: true})
     .then(() => {
@@ -267,7 +309,19 @@ const update_messages = async(req, res) => {
     })
 }
 
+/**
+ * get next player
+ * 
+ */
 const get_next_player = async(req, res) => {
+    /**
+     * find the lobby
+     * find the index of the current player
+     * set the gamestate's active_player_uid to the uid of the next player
+     * increment the turn counter
+     * update the lobby
+     *  return all the player and isTurn for all players
+     */
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
     .then(async(lobby) => {
@@ -307,7 +361,6 @@ module.exports = {
     get_active_player,
     get_gamestate,
     get_active_trivia_question,
-    check_player_trivia_answer,
     update_gamestate,
     update_position,
     get_players,

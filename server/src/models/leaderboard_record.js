@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
  * leaderboard record shcema
  *      - player name
  *      - each score
+ * 
+ * Requirement 3.5
  */
 const leaderboardRecordSchema = mongoose.Schema({
     player_name: String, 

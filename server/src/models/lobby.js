@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
  *      - bot difficulty
  *      - player array
  *      - gamestate
+ * 
+ * Requirement 3.2
  */
 const lobbySchema = mongoose.Schema({
     name: String,
