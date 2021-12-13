@@ -157,7 +157,7 @@ const get_players = async(req, res) => {
 const update_position = async(req, res) => {
     const lobby_id = req.params.id;
     await LobbyData.findOne({'id': lobby_id})
-    .then((lobby) => {
+    .then(async (lobby) => {
         //redo
         var updatedPlayer = lobby.players.find(player=>player.player_uid === req.body.player_uid)
         lobby.players = lobby.players.map(player=>{
@@ -165,22 +165,27 @@ const update_position = async(req, res) => {
                 player.position = req.body.position
             }
         })
-    })
-
-    //player list
-    await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
-    .then((lobby) => {
-        const players = lobby.players.map(player=>{
-            return({
-                'player': player, 
-                'isTurn': (lobby.gamestate.active_player_uid === player.player_uid)
+        await LobbyData.updateOne({'id': lobby_id}, lobby, {new: true})
+        .then((lobby) => {
+            const players = lobby.players.map(player=>{
+                return({
+                    'player': player, 
+                    'isTurn': (lobby.gamestate.active_player_uid === player.player_uid)
+                })
             })
+            res.status(200).json(players);
         })
-        res.status(200).json(players);
+        .catch(error=>{
+            res.status(400).json({message:error.message});
+        })
     })
     .catch(error=>{
         res.status(400).json({message:error.message});
     })
+
+
+    //player list
+    
         
 }
 
