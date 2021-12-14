@@ -5,7 +5,7 @@ var env = require('dotenv').config();
 /**
  * set connection string and connect to the database
  */
-const CONNECTION_URL = 'mongodb+srv://user:user@puzzlingpipestest.ezifi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const CONNECTION_URL = `${process.env.COSMOSDB_CONNECTION_STRING}`;
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(CONNECTION_URL, {
