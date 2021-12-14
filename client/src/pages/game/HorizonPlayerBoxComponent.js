@@ -2,12 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import PlayerComponent from './PlayerComponent';
 
+/**
+ * [req 3.7.3.1] Show each player in the lobby
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 export default function HorizonPlayerBoxComponent(props){
-    //const lobby = useSelector(selectLobby);
-    //const status = useSelector(selectStatus);
     const players = (typeof props.players === 'undefined')?[{}]:props.players;
-
-
     return(
         <>
             <Box>

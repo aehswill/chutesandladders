@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios';
 
-
+// redux slice to share information between components
 const initialState = {
     isHost: false, 
     lobbyNickname: 'empty', 

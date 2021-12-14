@@ -5,6 +5,10 @@ import StartButton from '../../common/StartButton'
 import { useDispatch} from 'react-redux'
 import { setLobbyID } from './gamesetupSlice'
 
+
+/**
+ * [req 3.4.3 & 3.7.1.2] Join a lobby using a lobby ID string
+ */
 const input = /^([A-Za-z0-9]{1,6})$/;
 const helpText = "Lobby ID must only contain the following characters: A-Z 0-9"
 
@@ -14,6 +18,7 @@ export default function JoinComponent(props){
 
     var inputValue;
 
+    // req 3.7.1.2.1 - 3.7.1.2.5 Input validation
     const handleUserInput = (evt)=>{
         if((evt.target.value).length > 0 && input.test(evt.target.value)){
             setIsInputValid(true);

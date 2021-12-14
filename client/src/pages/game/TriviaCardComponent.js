@@ -9,7 +9,12 @@ import './latinise'
 import axios from 'axios'
 var he = require('he');
 
-
+/**
+ * [reqs 3.3 & 3.7.3.4] Modal trivia card window
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 export default function TriviaCardComponent(props){
     const dispatch = useDispatch();
     const [message, setMessage] = useState("");

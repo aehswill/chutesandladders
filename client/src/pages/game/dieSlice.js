@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+// state to control the die animation
 const initialState = {
     transformTo: 1
 }

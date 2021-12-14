@@ -5,11 +5,16 @@ import Human from '../../assets/icons/Human.png'
 import { useDispatch} from 'react-redux'
 import { setLobbyID, setLobbyNickname} from './gamesetupSlice'
 
+
+/**
+ * [reqs 3.7.1.3.1.1 - 3.7.1.3.1.3] Lobby entry list item
+ * @param {*} props click handler to launch Enter Name popup
+ * @returns JSX lobby entry
+ */
 export default function LobbyEntryComponent(props){
   const dispatch = useDispatch();
 
   function onClick(){
-
     dispatch(setLobbyID(props.lobbyID));
     dispatch(setLobbyNickname(props.lobbyName));
     // isHost = false by default

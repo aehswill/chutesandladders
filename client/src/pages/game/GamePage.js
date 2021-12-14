@@ -19,6 +19,10 @@ import axios from 'axios';
 export const lobbyID = window.location.href.split("/")[4];
 
 
+/**
+ * [reqs 3.6 (all) & 3.7.3] Game page top-level component, game logic
+ *
+ */
 function useInterval(callback, delay){
     const savedCallback = useRef();
     useEffect(()=>{

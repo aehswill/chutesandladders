@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 
+// [req 3.7.4.1] Leaderboard component
+
 export default function LeaderBoardComponent(props){
     // can I use the same list for each stripe and just sort it differently?
     return(

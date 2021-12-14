@@ -16,7 +16,12 @@ import Modal from "../../common/Modal"
 import StartButton from '../../common/StartButton'
 import axios from 'axios'
 
-// get lobby info here
+/**
+ * [req 3.2, 3.7.2] Lobby page
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 export default function LobbyPage(props){
     const [navigated, setNavigated] = useState(false);
     const dispatch = useDispatch();

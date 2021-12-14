@@ -15,7 +15,9 @@ import Player from '../../model/Player';
 import Lobby from '../../model/Lobby';
 import GameState from '../../model/GameState';
 
-
+/**
+ * [req 3.1.2 & 3.7.1.4] Modal Enter Name popup window
+ */
 
 const nanoid = customAlphabet("ABCDEF0123456789", 36);
 const input = /^([A-Za-z0-9]{1,10})$/

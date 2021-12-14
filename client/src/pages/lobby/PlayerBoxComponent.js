@@ -11,6 +11,13 @@ import { yellow, orange, purple, blue} from './lobbysetupSlice'
 import Cookie from 'universal-cookie';
 import { navigate } from 'hookrouter';
 
+/**
+ * [req 3.7.2.3] List of players in lobby
+ * 
+ * @param {*} props 
+ * @returns 
+ */
+
 export default function PlayerBoxComponent(props){
     const dispatch = useDispatch();
     const [players, setPlayersLocal] = useState([]);

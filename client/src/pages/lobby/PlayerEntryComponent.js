@@ -2,6 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import Bot from '../../assets/icons/Bot_w.png'
 
+/**
+ * [req 3.7.2.3] Players within lobby list
+ * 
+ * @param {player} props 
+ * @returns JSX component
+ */
 export default function PlayerEntryComponent(props){
     const color = props.player.color;
     const name = props.player.nickname;

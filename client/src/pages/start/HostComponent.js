@@ -6,6 +6,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setIsHost, setLobbyNickname, setLobbyID} from './gamesetupSlice'
 import { customAlphabet } from 'nanoid'
 
+
+/**
+ * [req 3.4.1, 3.4.4, & 3.7.1.1] Host a game component
+ */
 const input = /^([A-Za-z0-9', _-]{1,10})$/;
 const helpText = "Nickname must only contain the following characters: A-Z a-z 0-9 - _ , '"
 const nanoid = customAlphabet("ABCDEF0123456789", 6); // lobby ID will be uppercase hex, searches need to ignore case
@@ -15,6 +19,7 @@ export default function HostComponent(props){
     const [isInputValid, setIsInputValid] = React.useState(true);
 
     var inputValue;
+    // req 3.7.1.1.1 - 3.7.1.1.5 Input validation
     const handleUserInput = (evt)=>{
         if((evt.target.value).length > 0 && input.test(evt.target.value)){
             setIsInputValid(true);

@@ -7,7 +7,12 @@ import { selectIsBlueTaken, selectIsOrangeTaken, selectIsPurpleTaken, selectIsYe
 import { yellow, orange, purple, blue} from './lobbysetupSlice'
 
 
-
+/**
+ * [req 3.7.2.1] Color selector
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 export default function ColorSelectorComponent(props){
     const [blueSelected, setBlue] = React.useState(false);
     const [orangeSelected, setOrange] = React.useState(false);

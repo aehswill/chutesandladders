@@ -6,6 +6,12 @@ import LeaderBoardComponent from "./LeaderBoardComponent";
 // useEffect, pull leaderboard from the API once on load
 // also pull players from lobby
 
+/**
+ * [req 3.5, 3.7.4] Leaderboard page
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 export default function LeaderboardPage(props){
     const winner = "Tara";
     const trivia = "Kevin";

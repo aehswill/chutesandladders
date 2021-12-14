@@ -6,6 +6,7 @@ import purpleT from '../../assets/tokens/token_purple.svg'
 import yellowT from '../../assets/tokens/token_yellow.svg'
 import orangeT from '../../assets/tokens/token_orange.svg'
 
+// part of [req 3.7.3], Game Board styling
 export default function BoardComponent(props){
     const array = []
     const rowStarts=[100,90,80,70,60,50,40,30,20,10]

@@ -6,6 +6,9 @@ import LobbyPage from './pages/lobby/LobbyPage'
 import GamePage from './pages/game/GamePage'
 import LeaderboardPage from './pages/leaderboard/LeaderboardPage'
 
+/**
+ *  Navigation
+ */
 const routes = {
   "/":()=><StartPage />,
   "/lobby/:id":()=><LobbyPage />,

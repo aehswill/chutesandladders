@@ -1,4 +1,4 @@
-// I'm the main page component, I house all of the other components you see on the main page.
+// I'm the start page component, I house all of the other components you see on the start page.
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
@@ -9,9 +9,18 @@ import { openModal } from '../../common/modalSlice'
 import Modal from '../../common/Modal'
 import EnterNameComponent from './EnterNameComponent'
 
+
+/**
+ * [req 3.7.1] Start Page top-level component
+ * 
+ * @param {*} props 
+ * @returns JSX for the start page components
+ */
+
 export default function StartPage(props){
   const dispatch = useDispatch();
 
+  // req 3.7.1.3.1.5: Open Enter Nickname window
   const click = () => {
     dispatch(openModal());
   }

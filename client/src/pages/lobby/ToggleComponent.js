@@ -3,6 +3,13 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsPublicGame, selectIsPublicGame } from './lobbysetupSlice';
 
+
+/**
+ * [req 3.4.2, 3.4.3, & 3.7.2.2] Privacy toggle switch
+ * 
+ * @param {*} props 
+ * @returns JSX component
+ */
 export default function ToggleComponent(props){
     const dispatch = useDispatch();
     const getIsPublicGame = useSelector(selectIsPublicGame);

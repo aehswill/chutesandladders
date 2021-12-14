@@ -5,10 +5,20 @@ import styled from 'styled-components'
 import LobbyEntryComponent from './LobbyEntryComponent';
 import axios from 'axios'
 
+
+/**
+ * [req 3.4.2 & 3.7.1.3] Lobby list
+ * 
+ * @param {*} props click handler to open Enter Name popup, passed to each list item
+ * @returns lobby table jsx
+ */
 export default function LobbyTable(props){
     const dispatch = useDispatch();
     const lobbies = useSelector(selectLobbies);
 
+    /*
+    * [req 3.7.1.3.1] Lobby list will populate with public lobbies in the database
+    */
     React.useEffect(() => {
         const interval = setInterval(()=>{
             axios.get('https://puzzlingpipes-api.azurewebsites.net/api/v1/lobbies/public/',{
@@ -29,13 +39,6 @@ export default function LobbyTable(props){
             }
         },1000);
     })
-
-    async function snooze(){
-        await sleep(5000);
-    }
-    function sleep(ms){
-        return new Promise(resolve=>setTimeout(resolve, ms));
-    }
 
     return(
         <ListBox>

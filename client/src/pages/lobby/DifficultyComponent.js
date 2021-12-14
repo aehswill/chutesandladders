@@ -12,6 +12,12 @@ import { selectLobbyID, selectUserID } from '../start/gamesetupSlice';
 import { navigate } from 'hookrouter'
 import axios from 'axios';
 
+/**
+ * [req 3.7.2.5.1 & 3.7.2.5.2] Modal difficulty selection window
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 export default function DifficultyComponent(props){
     const dispatch = useDispatch();
     const getUserID = useSelector(selectUserID);

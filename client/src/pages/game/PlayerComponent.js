@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+// part of [req 3.7.3.1] Show each player in the lobby with active indicator
 export default function PlayerComponent(props){
     const color = props.player.color;
     const name = props.player.nickname;

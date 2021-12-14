@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+// NOT IMPLEMENTED FULLY
 export default function MessageBoxComponent(props){
     //const messages = props.messages;
     const messages = [];

@@ -7,6 +7,12 @@ import die4 from '../../assets/die/die4.png'
 import die5 from '../../assets/die/die5.png'
 import die6 from '../../assets/die/die6.png'
 
+/**
+ * [reqs 3.6.3, 3.7.3.2] Die component
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 export default function DieComponent(props){
     const [isClicked, setIsClicked] = useState(false);
     const isActive = props.isActive;

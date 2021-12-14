@@ -1,4 +1,5 @@
-// shameless copy/paste from stack overflow
+// To avoid character mishaps on the trivia cards
+// using hardcoded file to avoid bloating our packages
 // credit to Ed. and Martin https://stackoverflow.com/questions/286921/efficiently-replace-all-accented-characters-in-a-string
 var Latinise={};
 Latinise.latin_map={
